@@ -1,0 +1,193 @@
+{
+  "info": {
+    "name": "Lead API with Fixed Token",
+    "description": "API endpoints for creating leads with fixed token authentication",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Lead (Success)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{API_TOKEN}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"+1234567890\",\n  \"title\": \"Mr.\",\n  \"lead_postalcode\": \"12345\",\n  \"opportunity_amount\": 5000,\n  \"status\": 0,\n  \"source\": 1,\n  \"lead_country\": \"USA\",\n  \"lead_state\": \"California\",\n  \"lead_city\": \"Los Angeles\",\n  \"lead_address\": \"123 Main St\",\n  \"website\": \"https://example.com\",\n  \"campaign\": 1,\n  \"industry\": 1,\n  \"description\": \"Potential client from website\",\n  \"account\": 1,\n  \"user_id\": 2\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/leads/create",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "api",
+            "leads",
+            "create"
+          ]
+        },
+        "description": "Creates a new lead with all optional fields populated"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Lead (Minimal)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{API_TOKEN}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Jane Smith\",\n  \"email\": \"jane@example.com\",\n  \"phone\": \"+0987654321\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/leads/create",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "api",
+            "leads",
+            "create"
+          ]
+        },
+        "description": "Creates a new lead with only required fields"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Lead (Invalid Token)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer invalid-token",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Lead\",\n  \"email\": \"test@example.com\",\n  \"phone\": \"+1234567890\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/leads/create",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "api",
+            "leads",
+            "create"
+          ]
+        },
+        "description": "Test with invalid token - should return 401"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Lead (Validation Error)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{API_TOKEN}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Lead\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/leads/create",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "api",
+            "leads",
+            "create"
+          ]
+        },
+        "description": "Test validation - missing required fields"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Lead (Token in Body)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"api_token\": \"{{API_TOKEN}}\",\n  \"name\": \"API Token Test\",\n  \"email\": \"tokentest@example.com\",\n  \"phone\": \"+1234567890\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/leads/create",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "api",
+            "leads",
+            "create"
+          ]
+        },
+        "description": "Send API token in request body instead of header"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost",
+      "type": "string"
+    },
+    {
+      "key": "API_TOKEN",
+      "value": "your-secret-api-token-here",
+      "type": "string"
+    }
+  ]
+}
+
+

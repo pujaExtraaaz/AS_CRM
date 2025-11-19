@@ -1,0 +1,258 @@
+# Lead Form API Documentation
+
+This document provides information on how to integrate your website forms with the Lead Management System.
+
+## API Endpoint
+
+**URL:** `/api/leads/form`  
+**Method:** `POST`  
+**Content-Type:** `application/json`
+
+## Request Parameters
+
+The API accepts form data from different types of forms. Below are the parameters for each form type:
+
+### Common Parameters (Required)
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `name` or `fullName` | string | The name of the lead |
+| `email` | string | Email address of the lead |
+| `phone` or `mobile` | string | Contact number of the lead |
+| `formType` | string | Type of form (`contact`, `partner`, or `blueprint`) |
+
+### Contact Form Parameters
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `message` | string | Message from the lead |
+| `business` or `businessType` | string | Type of business |
+| `location` | string | Location of the lead |
+
+### Partner Form Parameters
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `applyingFor` | string | "Channel Sales Partner" or "Franchisee" |
+| `businessBackground` | string | Background of the business |
+| `cityState` | string | City and state of the lead |
+| `message` | string | Additional message |
+
+### Blueprint Form Parameters
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `businessType` | string | Type of business |
+
+## Example Requests
+
+### Contact Form
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone": "1234567890",
+  "message": "I would like to know more about your services",
+  "businessType": "E-commerce",
+  "location": "New York",
+  "formType": "contact"
+}
+```
+
+### Partner Form
+
+```json
+{
+  "fullName": "Jane Smith",
+  "email": "jane@example.com",
+  "mobile": "9876543210",
+  "cityState": "Chicago, IL",
+  "applyingFor": "Channel Sales Partner",
+  "businessBackground": "10 years in retail business",
+  "message": "Interested in partnership opportunities",
+  "formType": "partner"
+}
+```
+
+### Blueprint Form
+
+```json
+{
+  "name": "Robert Johnson",
+  "email": "robert@example.com",
+  "phone": "5551234567",
+  "businessType": "SaaS",
+  "formType": "blueprint"
+}
+```
+
+## Response Format
+
+### Success Response
+
+```json
+{
+  "status": "success",
+  "message": "Lead successfully created",
+  "data": {
+    "lead_id": 123
+  }
+}
+```
+
+### Error Response
+
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "errors": {
+    "email": ["The email field is required."]
+  }
+}
+```
+
+## Lead Visibility and Assignment
+
+When a lead is submitted through this API:
+
+1. The lead is automatically assigned to the admin user (user_id = 1)
+2. The lead is created with created_by = 3
+3. The lead has source set to 'website'
+4. By default, these leads will only be visible to admin users in the CRM
+5. Regular users cannot see the leads until they are explicitly reassigned by an admin
+6. Admins can reassign leads to specific users through the CRM interface
+
+This visibility restriction ensures that new leads are properly reviewed by administrators before being assigned to sales representatives or other team members.
+
+## Integration Guide
+
+### React Component Integration
+
+To integrate this API with your React components, add the following code to your form submission handler:
+
+```javascript
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  
+  try {
+    const response = await fetch('/api/leads/form', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        // Add other form fields as needed
+        formType: 'contact' // Change based on form type
+      }),
+    });
+    
+    const result = await response.json();
+    
+    if (result.status === 'success') {
+      // Show success message
+      setSuccessMessage('Thank you for your submission!');
+      resetForm();
+    } else {
+      // Handle errors
+      setErrorMessage(result.message);
+    }
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    setErrorMessage('An error occurred. Please try again later.');
+  }
+};
+```
+
+## Form Component Examples
+
+### ContactModal.jsx
+```jsx
+// Add form submission handler to your component
+const handleSubmit = async (formData) => {
+  const response = await fetch('/api/leads/form', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      message: formData.message,
+      businessType: formData.businessType,
+      formType: 'contact'
+    }),
+  });
+  
+  // Handle response
+};
+```
+
+### GrowthBlueprint.jsx
+```jsx
+// Add form submission handler to your component
+const handleSubmit = async (formData) => {
+  const response = await fetch('/api/leads/form', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      businessType: formData.businessType,
+      formType: 'blueprint'
+    }),
+  });
+  
+  // Handle response
+};
+```
+
+### Contact.jsx
+```jsx
+// Add form submission handler to your component
+const handleSubmit = async (formData) => {
+  const response = await fetch('/api/leads/form', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: formData.name,
+      email: formData.email,
+      mobile: formData.mobile,
+      location: formData.location,
+      business: formData.business,
+      message: formData.message,
+      captchaInput: formData.captchaInput,
+      formType: 'contact'
+    }),
+  });
+  
+  // Handle response
+};
+```
+
+### BecomePartner.jsx
+```jsx
+// Add form submission handler to your component
+const handleSubmit = async (formData) => {
+  const response = await fetch('/api/leads/form', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      fullName: formData.fullName,
+      email: formData.email,
+      mobile: formData.mobile,
+      cityState: formData.cityState,
+      applyingFor: formData.applyingFor,
+      businessBackground: formData.businessBackground,
+      message: formData.message,
+      formType: 'partner'
+    }),
+  });
+  
+  // Handle response
+};
+```
+
+## Need Help?
+
+For any issues or questions regarding the API integration, please contact the development team. 

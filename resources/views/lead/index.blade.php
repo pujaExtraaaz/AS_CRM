@@ -42,16 +42,18 @@
                     <table class="table datatable" id="datatable">
                         <thead>
                             <tr>
-                                <!-- <th scope="col" class="sort" data-sort="name">{{__('Lead Name')}}</th> -->
+                                <th scope="col" class="sort" data-sort="name">{{__('Year')}}</th>
+                                <th scope="col" class="sort" data-sort="completion">{{__('Make')}}</th> 
+                                <th scope="col" class="sort" data-sort="completion">{{__('Model')}}</th> 
                                 <th scope="col" class="sort" data-sort="cust_name">{{__('Customer Name')}}</th>
                                 <th scope="col" class="sort" data-sort="contact">{{__('Contact')}}</th>
-                                <!-- <th scope="col" class="sort" data-sort="completion">{{__('Account')}}</th> -->
-                                <th scope="col" class="sort" data-sort="lead_type">{{__('Lead Type')}}</th>
-                                <th scope="col" class="sort" data-sort="budget">{{__('Email')}}</th>
+                                <th scope="col" class="sort" data-sort="completion">{{__('Disposition')}}</th>
+                                <!-- <th scope="col" class="sort" data-sort="lead_type">{{__('Lead Type')}}</th> -->
+                                <!-- <th scope="col" class="sort" data-sort="budget">{{__('Email')}}</th> -->
                                 <!-- <th scope="col" class="sort" data-sort="status">{{__('Phone')}}</th> -->
                                 <!-- <th scope="col" class="sort" data-sort="status">{{__('Product')}}</th> -->
-                                <th scope="col" class="sort" data-sort="status">{{__('Disposition')}}</th>
-                                <th scope="col" class="sort" data-sort="status">{{__('Assign user')}}</th>
+                                <!-- <th scope="col" class="sort" data-sort="status">{{__('Disposition')}}</th> -->
+                                <!-- <th scope="col" class="sort" data-sort="status">{{__('Assign user')}}</th> -->
                                 @if(Gate::check('Show Lead') ||  Gate::check('Delete Lead'))
                                 <th scope="col" class="text-end">{{__('Action')}}</th>
                                 @endif
@@ -66,20 +68,32 @@
                                     </a>
                                 </td> -->
                                 <td>
+                                    <span class="budget">{{ ucfirst($lead->product->year ?: '--') }}</span>
+                                </td>
+                                <td>
+                                    <span class="budget">{{ ucfirst($lead->product->make ?: '--') }}</span>
+                                </td>
+                                <td>
+                                    <span class="budget">{{ ucfirst($lead->product->model ?: '--') }}</span>
+                                </td>
+                                <td>
                                     <span class="budget">{{ ucfirst($lead->cust_name ?: '--') }}</span>
                                 </td>
                                 <td>
                                     <span class="budget">{{ ucfirst($lead->contact ?: '--') }}</span>
                                 </td>
+                                <td>
+                                    <span class="col-sm-12"><span class="text-sm">{{ ucfirst($lead->product->disposition ?$status[$lead->product->disposition]: '--') }}</span></span>
+                                </td>
                                 <!-- <td>
                                     <span class="budget">{{ ucfirst(!empty($lead->accounts)?$lead->accounts->name:'--')}}</span>
                                 </td> -->
-                                <td>
+                                <!-- <td>
                                     <span class="budget">{{ !empty($lead->leadType)?$lead->leadType->name:'--'}}</span>
                                 </td>
                                 <td>
                                     <span class="budget">{{ $lead->email ?: '--' }}</span>
-                                </td>
+                                </td> -->
                                 <!-- <td>
                                     <span class="budget">
                                         {{ $lead->phone ?: '--' }}
@@ -88,12 +102,10 @@
                                 <!-- <td>
                                     <span class="col-sm-12"><span class="text-sm">{{ ucfirst(!empty($lead->product_id)?$lead->product->name:'--')}}</span></span>
                                 </td> -->
-                                <td>
-                                    <span class="col-sm-12"><span class="text-sm">{{ ucfirst($lead->disposition ?$status[$lead->disposition]: '--') }}</span></span>
-                                </td>
-                                <td>
+                                
+                                <!-- <td>
                                     <span class="col-sm-12"><span class="text-sm">{{ ucfirst(!empty($lead->assign_user)?$lead->assign_user->name:'--')}}</span></span>
-                                </td>
+                                </td> -->
                                 @if(Gate::check('Show Lead') || Gate::check('Edit Lead') || Gate::check('Delete Lead'))
                                 <td class="text-end">   
                                     @can('Show Lead')

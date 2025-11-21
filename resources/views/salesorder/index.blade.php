@@ -3,11 +3,11 @@
 {{ __('Sales Order') }}
 @endsection
 @section('title')
-{{ __('Sales Order') }}
+{{ __('Sales') }}
 @endsection
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('Home') }}</a></li>
-<li class="breadcrumb-item">{{ __('Sales Order') }}</li>
+<li class="breadcrumb-item">{{ __('Sales') }}</li>
 @endsection
 @section('action-btn')
 <div class="action-btn ms-2">

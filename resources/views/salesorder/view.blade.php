@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 @section('page-title')
-{{ __('Sales Order') }}
+{{ __('Sales') }}
 @endsection
 @section('title')
-{{ __('Sales Order') }} {{ '(' . $salesOrder->lead->cust_name . ')' }}
+{{ __('Sales') }} {{ '(' . $salesOrder->lead->cust_name . ')' }}
 @endsection
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('Home') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('salesorder.index') }}">{{ __('Sales Order') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('salesorder.index') }}">{{ __('Sales') }}</a></li>
 <li class="breadcrumb-item">{{ __('Details') }}</li>
 @endsection
 @section('action-btn')
@@ -29,7 +29,7 @@
 @can('Edit SalesOrder')
 <div class="action-btn ms-2">
     <a href="{{ route('salesorder.edit', $salesOrder->id) }}" class="btn btn-sm btn-info btn-icon m-1"
-       data-bs-toggle="tooltip" data-title="{{ __('Sales order Edit') }}" title="{{ __('Edit') }}"><i
+       data-bs-toggle="tooltip" data-title="{{ __('Sales Edit') }}" title="{{ __('Edit') }}"><i
             class="ti ti-edit"></i>
     </a>
 </div>
@@ -58,8 +58,8 @@
                                 <div class="card-header">
                                     <div class="row align-items-center">
                                         <div class="col">
-                                            <h5 class="mb-0">{{ __('Sales Order Details') }}</h5>
-                                            <small class="text-muted">{{ __('Complete sales order information') }}</small>
+                                            <h5 class="mb-0">{{ __('Sales Details') }}</h5>
+                                            <small class="text-muted">{{ __('Complete sales information') }}</small>
                                         </div>
                                     </div>
                                 </div>

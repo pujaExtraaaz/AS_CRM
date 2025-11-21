@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 @section('page-title')
-{{ __('Product') }}
+{{ __('Dispute') }}
 @endsection
 @section('title')
-{{ __('Create Product / Service') }}
+{{ __('Create Dispute / Service') }}
 @endsection
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('Home') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('product.index') }}">{{ __('Product') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('product.index') }}">{{ __('Dispute') }}</a></li>
 <li class="breadcrumb-item">{{ __('Create') }}</li>
 @endsection
 @section('content')
@@ -15,8 +15,8 @@
     <div class="col-sm-12">
         <div class="card">
             <div class="card-header">
-                <h5>{{ __('Create Product / Service') }}</h5>
-                <small class="text-muted">{{ __('Add new product information') }}</small>
+                <h5>{{ __('Create Dispute / Service') }}</h5>
+                <small class="text-muted">{{ __('Add new Dispute information') }}</small>
             </div>
             <div class="card-body">
                 @php

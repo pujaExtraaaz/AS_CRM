@@ -44,7 +44,7 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                     @can('Manage SalesOrder')
                     <li class="dash-item {{ \Request::route()->getName() == 'salesorder' || \Request::route()->getName() == 'salesorder.show' || \Request::route()->getName() == 'salesorder.edit' ? ' active' : '' }}">
                         <a href="{{ route('salesorder.index') }}" class="dash-link">
-                            <span class="dash-micon"><i class="ti ti-file-invoice"></i></span><span class="dash-mtext">{{ __('Sales Orders') }}</span>
+                            <span class="dash-micon"><i class="ti ti-file-invoice"></i></span><span class="dash-mtext">{{ __('Sales') }}</span>
                         </a>
                     </li>
                     @endcan
@@ -94,7 +94,7 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                         </a> --}}
                         <a href="{{ array_key_exists('product',$defaultView) ? route($defaultView['product']) : route('product.index')}}"
                            class="dash-link">
-                            <span class="dash-micon"><i class="ti ti-brand-producthunt"></i></span><span class="dash-mtext">{{ __('Products') }}</span>
+                            <span class="dash-micon"><i class="ti ti-brand-producthunt"></i></span><span class="dash-mtext">{{ __('Dispute') }}</span>
                         </a>
                     </li>
                     @endcan
@@ -103,6 +103,16 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                         <a class="dash-link " href="{{ route('lead_source.index') }}"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext">{{ __('Lead Source') }}</span></a>
                     </li>
                     @endif
+                     <!-- @if (Gate::check('Manage LeadSource')) -->
+                    <li class="dash-item {{ \Request::route()->getName() == 'part_type' ? 'active' : ''}}"">
+                        <a class="dash-link " href="{{ route('part_type.index') }}"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext">{{ __('Part Type') }}</span></a>
+                    </li>
+                    <!-- @endif -->
+                       <!-- @if (Gate::check('Manage LeadSource')) -->
+                    <li class="dash-item {{ \Request::route()->getName() == 'payment_type' ? 'active' : ''}}"">
+                        <a class="dash-link " href="{{ route('payment_type.index') }}"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext">{{ __('Payment Type') }}</span></a>
+                    </li>
+                    <!-- @endif -->
                                                       
                     <!--                    @can('Manage Quote')
                                         <li class="dash-item {{ \Request::route()->getName() == 'quote' || \Request::route()->getName() == 'quote.show' || \Request::route()->getName() == 'quote.edit' ? ' active' : '' }}">

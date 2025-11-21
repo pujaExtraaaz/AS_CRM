@@ -83,7 +83,7 @@
                                     <span class="budget">{{ ucfirst($lead->contact ?: '--') }}</span>
                                 </td>
                                 <td>
-                                    <span class="col-sm-12"><span class="text-sm">{{ ucfirst($lead->product->disposition ?$status[$lead->product->disposition]: '--') }}</span></span>
+                                    <span class="col-sm-12"><span class="text-sm">{{ __(\App\Models\Lead::$disposition[$lead->disposition]) }}</span></span>
                                 </td>
                                 <!-- <td>
                                     <span class="budget">{{ ucfirst(!empty($lead->accounts)?$lead->accounts->name:'--')}}</span>

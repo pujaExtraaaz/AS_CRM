@@ -1,14 +1,14 @@
 <?php $__env->startSection('page-title'); ?>
-<?php echo e(__('Product')); ?>
+<?php echo e(__('Dispute')); ?>
 
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('title'); ?>
-<?php echo e(__('Product')); ?>
+<?php echo e(__('Dispute')); ?>
 
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('breadcrumb'); ?>
 <li class="breadcrumb-item"><a href="<?php echo e(route('dashboard')); ?>"><?php echo e(__('Home')); ?></a></li>
-<li class="breadcrumb-item"><?php echo e(__('Products / Services')); ?></li>
+<li class="breadcrumb-item"><?php echo e(__('Dispute / Services')); ?></li>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('action-btn'); ?>
 <div class="action-btn ms-2">
@@ -97,7 +97,7 @@
                                         <a href="#" data-size="md"
                                            data-url="<?php echo e(route('product.show', $product->id)); ?>"
                                            data-bs-toggle="tooltip" title="<?php echo e(__('Quick View')); ?>"
-                                           data-ajax-popup="true" data-title="<?php echo e(__('Product Details')); ?>"
+                                           data-ajax-popup="true" data-title="<?php echo e(__('Dispute Details')); ?>"
                                            class="mx-3 btn btn-sm d-inline-flex align-items-center text-white">
                                             <i class="ti ti-eye"></i>
                                         </a>

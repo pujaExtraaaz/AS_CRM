@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('page-title'); ?>
 <?php echo e(__('Lead')); ?>
 
@@ -85,7 +86,7 @@
                                     <span class="budget"><?php echo e(ucfirst($lead->contact ?: '--')); ?></span>
                                 </td>
                                 <td>
-                                    <span class="col-sm-12"><span class="text-sm"><?php echo e(ucfirst($lead->product->disposition ?$status[$lead->product->disposition]: '--')); ?></span></span>
+                                    <span class="col-sm-12"><span class="text-sm"><?php echo e(__(\App\Models\Lead::$disposition[$lead->disposition])); ?></span></span>
                                 </td>
                                 <!-- <td>
                                     <span class="budget"><?php echo e(ucfirst(!empty($lead->accounts)?$lead->accounts->name:'--')); ?></span>

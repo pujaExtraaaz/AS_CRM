@@ -521,14 +521,14 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                     @endif
                     @if (\Auth::user()->type == 'super admin')
                     @include('landingpage::menu.landingpage')
-                    @endif
+                    @endif-->
                     @if (\Auth::user()->type == 'super admin' || \Auth::user()->type == 'owner')
                     <li class="dash-item  {{ Request::route()->getName() == 'settings' ? 'active' : '' }}">
                         <a href="{{ route('settings') }}" class="dash-link">
                             <span class="dash-micon"><i class="ti ti-settings"></i></span><span class="dash-mtext">{{ __('Settings') }}</span>
                         </a>
                     </li>
-                    @endif-->
+                    @endif
                 </ul>
             </div>
         </div>

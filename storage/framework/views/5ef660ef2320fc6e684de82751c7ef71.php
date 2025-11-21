@@ -45,6 +45,7 @@
                             <tr>
                                 <!-- <th scope="col" class="sort" data-sort="name"><?php echo e(__('Lead Name')); ?></th> -->
                                 <th scope="col" class="sort" data-sort="cust_name"><?php echo e(__('Customer Name')); ?></th>
+                                 <th scope="col" class="sort" data-sort="name"><?php echo e(__('Date')); ?></th>
                                 <th scope="col" class="sort" data-sort="contact"><?php echo e(__('Contact')); ?></th>
                                 <!-- <th scope="col" class="sort" data-sort="completion"><?php echo e(__('Account')); ?></th> -->
                                 <th scope="col" class="sort" data-sort="lead_type"><?php echo e(__('Lead Type')); ?></th>
@@ -53,6 +54,7 @@
                                 <!-- <th scope="col" class="sort" data-sort="status"><?php echo e(__('Product')); ?></th> -->
                                 <th scope="col" class="sort" data-sort="status"><?php echo e(__('Disposition')); ?></th>
                                 <th scope="col" class="sort" data-sort="status"><?php echo e(__('Assign user')); ?></th>
+                                <th scope="col" class="sort" data-sort="status"><?php echo e(__('Status')); ?></th>
                                 <?php if(Gate::check('Show Lead') ||  Gate::check('Delete Lead')): ?>
                                 <th scope="col" class="text-end"><?php echo e(__('Action')); ?></th>
                                 <?php endif; ?>
@@ -69,6 +71,9 @@
                                 </td> -->
                                 <td>
                                     <span class="budget"><?php echo e(ucfirst($lead->cust_name ?: '--')); ?></span>
+                                </td>
+                                 <td>
+                                    <span class="budget"><?php echo e(\Auth::user()->dateFormat($lead->created_at)); ?></a></span>
                                 </td>
                                 <td>
                                     <span class="budget"><?php echo e(ucfirst($lead->contact ?: '--')); ?></span>
@@ -97,11 +102,32 @@
                                 <td>
                                     <span class="col-sm-12"><span class="text-sm"><?php echo e(ucfirst(!empty($lead->assign_user)?$lead->assign_user->name:'--')); ?></span></span>
                                 </td>
+                                <td>
+                                    <span class="col-sm-12"><span class="text-sm">
+                                        <?php if(!empty($lead->status)): ?>
+                                            <?php if($lead->status == 0): ?>
+                                                <span class="badge bg-success p-2 px-3 rounded"><?php echo e(__(\App\Models\Lead::$status[$lead->status])); ?></span>
+                                            <?php elseif($lead->status == 1): ?>
+                                                <span class="badge bg-info p-2 px-3 rounded"><?php echo e(__(\App\Models\Lead::$status[$lead->status])); ?></span>
+                                            <?php elseif($lead->status == 2): ?>
+                                                <span class="badge bg-warning p-2 px-3 rounded"><?php echo e(__(\App\Models\Lead::$status[$lead->status])); ?></span>
+                                            <?php elseif($lead->status == 3): ?>
+                                                <span class="badge bg-danger p-2 px-3 rounded"><?php echo e(__(\App\Models\Lead::$status[$lead->status])); ?></span>
+                                            <?php elseif($lead->status == 4): ?>
+                                                <span class="badge bg-danger p-2 px-3 rounded"><?php echo e(__(\App\Models\Lead::$status[$lead->status])); ?></span>
+                                            <?php elseif($lead->status == 5): ?>
+                                                <span class="badge bg-warning p-2 px-3 rounded"><?php echo e(__(\App\Models\Lead::$status[$lead->status])); ?></span>
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                            --
+                                        <?php endif; ?>
+                                    </span></span>
+                                </td>
                                 <?php if(Gate::check('Show Lead') || Gate::check('Edit Lead') || Gate::check('Delete Lead')): ?>
                                 <td class="text-end">   
                                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Show Lead')): ?>
                                     <div class="action-btn bg-warning ms-2">
-                                        <a href="#" data-size="md" data-url="<?php echo e(route('lead.status.logs',$lead->id)); ?>" data-bs-toggle="tooltip" title="<?php echo e(__('Status Logs')); ?>" data-ajax-popup="true" data-title="<?php echo e(__('Status Logs')); ?>" class="mx-3 btn btn-sm d-inline-flex align-items-center text-white ">
+                                        <a href="#" data-size="md" data-url="<?php echo e(route('lead.status.logs',$lead->id)); ?>" data-bs-toggle="tooltip" title="<?php echo e(__("Follow Up's")); ?>" data-ajax-popup="true" data-title="<?php echo e(__("Follow Up's")); ?>" class="mx-3 btn btn-sm d-inline-flex align-items-center text-white ">
                                             <i class="ti ti-history"></i>
                                         </a>
                                     </div>

@@ -495,14 +495,14 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                     <?php endif; ?>
                     <?php if(\Auth::user()->type == 'super admin'): ?>
                     <?php echo $__env->make('landingpage::menu.landingpage', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                    <?php endif; ?>
+                    <?php endif; ?>-->
                     <?php if(\Auth::user()->type == 'super admin' || \Auth::user()->type == 'owner'): ?>
                     <li class="dash-item  <?php echo e(Request::route()->getName() == 'settings' ? 'active' : ''); ?>">
                         <a href="<?php echo e(route('settings')); ?>" class="dash-link">
                             <span class="dash-micon"><i class="ti ti-settings"></i></span><span class="dash-mtext"><?php echo e(__('Settings')); ?></span>
                         </a>
                     </li>
-                    <?php endif; ?>-->
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>

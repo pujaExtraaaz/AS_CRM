@@ -12,6 +12,7 @@ class LeadStatuses extends Model {
     protected $fillable = [
         'lead_id',
         'lead_status',
+        'followup_note',
         'created_by',
     ];
     protected $casts = [

@@ -88,7 +88,7 @@ $plansettings = App\Models\Utility::plansettings();
                 <div id="useradd-1" class="card">
                     {{ Form::model($lead, ['route' => ['lead.update', $lead->id], 'method' => 'PUT']) }}
                     <div class="card-header">
-                        @if (isset($plansettings['enable_chatgpt']) && $plansettings['enable_chatgpt'] == 'on')
+<!--                        @if (isset($plansettings['enable_chatgpt']) && $plansettings['enable_chatgpt'] == 'on')
                         <div class="float-end">
                             <a href="#" data-size="md" class="btn btn-sm btn-primary "
                                data-ajax-popup-over="true" data-size="md"
@@ -99,7 +99,7 @@ $plansettings = App\Models\Utility::plansettings();
                                         class="robot">{{ __('Generate With AI') }}</span></i>
                             </a>
                         </div>
-                        @endif
+                        @endif-->
                         <h5>{{ __('Overview') }}</h5>
                         <small class="text-muted">{{ __('Edit About Your Lead Information') }}</small>
                     </div>
@@ -110,9 +110,20 @@ $plansettings = App\Models\Utility::plansettings();
                                 <div class="col-6">
                                     <div class="form-group">
                                         {{ Form::label('cust_name', __('Customer Name'), ['class' => 'form-label']) }}
-                                        {{ Form::text('cust_name', null, ['class' => 'form-control', 'placeholder' => __('Enter Customer Name')]) }}
+                                        {{ Form::text('cust_name', null, ['class' => 'form-control', 'placeholder' => __('Enter Customer Name'),'readonly'=>'true']) }}
                                         @error('cust_name')
                                         <span class="invalid-cust_name" role="alert">
+                                            <strong class="text-danger">{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        {{ Form::label('product', __('Product / Service'), ['class' => 'form-label']) }}
+                                        {!! Form::select('product', $product, $lead->product_id, ['class' => 'form-control', 'id' => 'product-select','disabled']) !!}
+                                        @error('product_id')
+                                        <span class="invalid-product_id" role="alert">
                                             <strong class="text-danger">{{ $message }}</strong>
                                         </span>
                                         @enderror
@@ -156,19 +167,8 @@ $plansettings = App\Models\Utility::plansettings();
                                         {{ Form::label('lead_type_id', __('Lead Type'), ['class' => 'form-label']) }}
                                         {!! Form::select('lead_type_id', $leadTypes, $lead->lead_type_id, ['class' => 'form-control']) !!}
                                     </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        {{ Form::label('product', __('Product / Service'), ['class' => 'form-label']) }}
-                                        {!! Form::select('product', $product, $lead->product_id, ['class' => 'form-control', 'id' => 'product-select']) !!}
-                                        @error('product_id')
-                                        <span class="invalid-product_id" role="alert">
-                                            <strong class="text-danger">{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-6">
+                                </div>                                
+                                <div class="col-12">
                                     <div class="form-group">
                                         {{ Form::label('disposition', __('Disposition'), ['class' => 'form-label']) }}
                                         {!! Form::select('disposition', $status, $lead->disposition, ['class' => 'form-control']) !!}

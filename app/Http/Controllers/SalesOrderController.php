@@ -22,6 +22,8 @@ use App\Models\YardLog;
 use App\Models\Lead;
 use App\Models\LeadSource;
 use App\Models\LeadType;
+use App\Models\PartType;
+use App\Models\PaymentType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Facades\Excel;
@@ -312,35 +314,17 @@ class SalesOrderController extends Controller {
             $sourceTypes->prepend('--', '');
 
             // Payment gateway options
-            $paymentGateways = [
-                '' => '--',
-                'card' => 'Card',
-                'paypal' => 'PayPal',
-                'zelle' => 'Zelle',
-                'bank_transfer' => 'Bank Transfer',
-                'ach' => 'ACH',
-                'invoice' => 'Invoice'
-            ];
-
+            $paymentGateways = PaymentType::pluck('PaymentType', 'id');
+            $paymentGateways->prepend('--', '');
             // Part type options
-            $partTypes = [
-                '' => '--',
-                'engine' => 'Engine',
-                'transmission' => 'Transmission',
-                'electronic' => 'Electronic',
-                'wiring' => 'Wiring',
-                'mechanical' => 'Mechanical',
-                'electrical' => 'Electrical',
-                'interior_part' => 'Interior Part',
-                'body_part' => 'Body Part'
-            ];
-
+            $partTypes = PartType::pluck('part_type_name', 'id');
+            $partTypes->prepend('--', '');
             // get previous user id
 //            $previous = Quote::where('id', '<', $salesOrder->id)->max('id');
             // get next user id
 //            $next = Quote::where('id', '>', $salesOrder->id)->min('id');
 
-            return view('salesorder.edit', compact('salesOrder', 'shipping_provider', 'user', 'leadTypes', 'sourceTypes', 'paymentGateways', 'partTypes', 'lastSaleId','yards'));
+            return view('salesorder.edit', compact('salesOrder', 'shipping_provider', 'user', 'leadTypes', 'sourceTypes', 'paymentGateways', 'partTypes', 'lastSaleId', 'yards'));
         } else {
             return redirect()->back()->with('error', 'Permission Denied');
         }

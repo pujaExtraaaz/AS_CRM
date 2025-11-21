@@ -110,7 +110,7 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                     <!-- @endif -->
                        <!-- @if (Gate::check('Manage LeadSource')) -->
                     <li class="dash-item {{ \Request::route()->getName() == 'payment_type' ? 'active' : ''}}"">
-                        <a class="dash-link " href="{{ route('payment_type.index') }}"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext">{{ __('Payment Type') }}</span></a>
+                        <a class="dash-link " href="{{ route('payment_type.index') }}"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext">{{ __('Payment Gateway') }}</span></a>
                     </li>
                     <!-- @endif -->
                                                       

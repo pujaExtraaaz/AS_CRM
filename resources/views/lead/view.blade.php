@@ -50,7 +50,7 @@
                     <dd class="col-md-8"><span class="text-md">{{ !empty($lead->accounts)?$lead->accounts->name:'-'}}</span></dd> -->
 
                     <dt class="col-md-4"><span class="h6 text-md mb-0">{{__('Disposition')}}</span></dt>
-                    <dd class="col-md-8"><span class="text-md">{{ $lead->disposition ?$status[$lead->disposition]: '-' }}</span></dd>
+                    <dd class="col-md-8"><span class="text-md">{{ __(\App\Models\Lead::$disposition[$lead->disposition]) }}</span></dd>
 
                     <!-- <dt class="col-md-4"><span class="h6 text-md mb-0">{{__('Opportunity Amount')}}</span></dt>
                     <dd class="col-md-8"><span class="text-md">{{ $lead->opportunity_amount ? '$' . number_format($lead->opportunity_amount, 2) : '-' }}</span></dd> -->

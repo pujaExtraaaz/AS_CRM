@@ -88,6 +88,8 @@ use App\Http\Controllers\YooKassaController;
 use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\YardController;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\PartTypeController;
+use App\Http\Controllers\PaymentTypeController;
 
 /*
   |--------------------------------------------------------------------------
@@ -1213,4 +1215,24 @@ Route::group(['middleware' => ['verified']], function () {
 
     // Storage setting
     Route::post('storage-settings', [SettingController::class, 'storageSettingStore'])->name('storage.setting.store')->middleware(['auth', 'XSS']);
+
+    //Part Type Route
+   Route::group(
+    [
+        'middleware' => ['auth', 'XSS'],
+    ],
+    function () {
+        Route::resource('part_type', PartTypeController::class);
+    }
+);
+
+//Payment Type Route
+  Route::group(
+    [
+        'middleware' => ['auth', 'XSS'],
+    ],
+    function () {
+        Route::resource('payment_type', PaymentTypeController::class);
+    }
+);
 });

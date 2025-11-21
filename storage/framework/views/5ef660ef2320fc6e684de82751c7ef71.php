@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('page-title'); ?>
 <?php echo e(__('Lead')); ?>
 
@@ -43,18 +44,18 @@
                     <table class="table datatable" id="datatable">
                         <thead>
                             <tr>
-                                <!-- <th scope="col" class="sort" data-sort="name"><?php echo e(__('Lead Name')); ?></th> -->
+                                <th scope="col" class="sort" data-sort="name"><?php echo e(__('Year')); ?></th>
+                                <th scope="col" class="sort" data-sort="completion"><?php echo e(__('Make')); ?></th> 
+                                <th scope="col" class="sort" data-sort="completion"><?php echo e(__('Model')); ?></th> 
                                 <th scope="col" class="sort" data-sort="cust_name"><?php echo e(__('Customer Name')); ?></th>
-                                 <th scope="col" class="sort" data-sort="name"><?php echo e(__('Date')); ?></th>
+                                 <th scope="col" class="sort" data-sort="date"><?php echo e(__('Date')); ?></th>
                                 <th scope="col" class="sort" data-sort="contact"><?php echo e(__('Contact')); ?></th>
-                                <!-- <th scope="col" class="sort" data-sort="completion"><?php echo e(__('Account')); ?></th> -->
-                                <th scope="col" class="sort" data-sort="lead_type"><?php echo e(__('Lead Type')); ?></th>
-                                <th scope="col" class="sort" data-sort="budget"><?php echo e(__('Email')); ?></th>
+                                <th scope="col" class="sort" data-sort="completion"><?php echo e(__('Disposition')); ?></th>
+                                <!-- <th scope="col" class="sort" data-sort="lead_type"><?php echo e(__('Lead Type')); ?></th> -->
+                                <!-- <th scope="col" class="sort" data-sort="budget"><?php echo e(__('Email')); ?></th> -->
                                 <!-- <th scope="col" class="sort" data-sort="status"><?php echo e(__('Phone')); ?></th> -->
                                 <!-- <th scope="col" class="sort" data-sort="status"><?php echo e(__('Product')); ?></th> -->
-                                <th scope="col" class="sort" data-sort="status"><?php echo e(__('Disposition')); ?></th>
                                 <th scope="col" class="sort" data-sort="status"><?php echo e(__('Assign user')); ?></th>
-                                <th scope="col" class="sort" data-sort="status"><?php echo e(__('Status')); ?></th>
                                 <?php if(Gate::check('Show Lead') ||  Gate::check('Delete Lead')): ?>
                                 <th scope="col" class="text-end"><?php echo e(__('Action')); ?></th>
                                 <?php endif; ?>
@@ -63,65 +64,29 @@
                         <tbody>
                             <?php $__currentLoopData = $leads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lead): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-<!--                                 <td>
-                                    <a href="<?php echo e(route('lead.edit',$lead->id)); ?>" data-size="md" data-title="<?php echo e(__('Lead Details')); ?>" class="action-item text-primary">
-                                        <?php echo e(ucfirst($lead->name)); ?>
-
-                                    </a>
-                                </td> -->
+                                <td>
+                                    <span class="budget"><?php echo e(ucfirst($lead->product ? $lead->product->year : '--')); ?></span>
+                                </td>
+                                <td>
+                                    <span class="budget"><?php echo e(ucfirst($lead->product ? $lead->product->make : '--')); ?></span>
+                                </td>
+                                <td>
+                                    <span class="budget"><?php echo e(ucfirst($lead->product ? $lead->product->model : '--')); ?></span>
+                                </td>
                                 <td>
                                     <span class="budget"><?php echo e(ucfirst($lead->cust_name ?: '--')); ?></span>
                                 </td>
                                  <td>
-                                    <span class="budget"><?php echo e(\Auth::user()->dateFormat($lead->created_at)); ?></a></span>
+                                    <span class="budget"><?php echo e(\Auth::user()->dateFormat($lead->date)); ?></a></span>
                                 </td>
                                 <td>
                                     <span class="budget"><?php echo e(ucfirst($lead->contact ?: '--')); ?></span>
                                 </td>
-                                <!-- <td>
-                                    <span class="budget"><?php echo e(ucfirst(!empty($lead->accounts)?$lead->accounts->name:'--')); ?></span>
-                                </td> -->
                                 <td>
-                                    <span class="budget"><?php echo e(!empty($lead->leadType)?$lead->leadType->name:'--'); ?></span>
+                                    <span class="col-sm-12"><span class="text-sm"><?php echo e(__(\App\Models\Lead::$disposition[$lead->disposition])); ?></span></span>
                                 </td>
-                                <td>
-                                    <span class="budget"><?php echo e($lead->email ?: '--'); ?></span>
-                                </td>
-                                <!-- <td>
-                                    <span class="budget">
-                                        <?php echo e($lead->phone ?: '--'); ?>
-
-                                    </span>
-                                </td> -->
-                                <!-- <td>
-                                    <span class="col-sm-12"><span class="text-sm"><?php echo e(ucfirst(!empty($lead->product_id)?$lead->product->name:'--')); ?></span></span>
-                                </td> -->
-                                <td>
-                                    <span class="col-sm-12"><span class="text-sm"><?php echo e(ucfirst($lead->disposition ?$status[$lead->disposition]: '--')); ?></span></span>
-                                </td>
-                                <td>
+                               <td>
                                     <span class="col-sm-12"><span class="text-sm"><?php echo e(ucfirst(!empty($lead->assign_user)?$lead->assign_user->name:'--')); ?></span></span>
-                                </td>
-                                <td>
-                                    <span class="col-sm-12"><span class="text-sm">
-                                        <?php if(!empty($lead->status)): ?>
-                                            <?php if($lead->status == 0): ?>
-                                                <span class="badge bg-success p-2 px-3 rounded"><?php echo e(__(\App\Models\Lead::$status[$lead->status])); ?></span>
-                                            <?php elseif($lead->status == 1): ?>
-                                                <span class="badge bg-info p-2 px-3 rounded"><?php echo e(__(\App\Models\Lead::$status[$lead->status])); ?></span>
-                                            <?php elseif($lead->status == 2): ?>
-                                                <span class="badge bg-warning p-2 px-3 rounded"><?php echo e(__(\App\Models\Lead::$status[$lead->status])); ?></span>
-                                            <?php elseif($lead->status == 3): ?>
-                                                <span class="badge bg-danger p-2 px-3 rounded"><?php echo e(__(\App\Models\Lead::$status[$lead->status])); ?></span>
-                                            <?php elseif($lead->status == 4): ?>
-                                                <span class="badge bg-danger p-2 px-3 rounded"><?php echo e(__(\App\Models\Lead::$status[$lead->status])); ?></span>
-                                            <?php elseif($lead->status == 5): ?>
-                                                <span class="badge bg-warning p-2 px-3 rounded"><?php echo e(__(\App\Models\Lead::$status[$lead->status])); ?></span>
-                                            <?php endif; ?>
-                                        <?php else: ?>
-                                            --
-                                        <?php endif; ?>
-                                    </span></span>
                                 </td>
                                 <?php if(Gate::check('Show Lead') || Gate::check('Edit Lead') || Gate::check('Delete Lead')): ?>
                                 <td class="text-end">   

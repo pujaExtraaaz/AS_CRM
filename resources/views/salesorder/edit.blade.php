@@ -3,7 +3,7 @@
 {{ __('Sales Orders Edit') }}
 @endsection
 @section('title')
-{{ __('Edit Sales Order') }} {{ '(' . $salesOrder->lead->cust_name . ')' }}
+{{ __('Edit Sales') }} {{ '(' . $salesOrder->lead->cust_name . ')' }}
 @endsection
 @php
 $plansettings = App\Models\Utility::plansettings();

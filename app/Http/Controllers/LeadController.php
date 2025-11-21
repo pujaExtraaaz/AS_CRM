@@ -391,7 +391,7 @@ class LeadController extends Controller {
                 $lead['cust_name'] = $request->cust_name;
                 $lead['lead_type_id'] = ($request->lead_type_id && $request->lead_type_id != '0') ? $request->lead_type_id : null;
                 $lead['contact'] = $request->contact;
-                $lead['product_id'] = $request->product;
+//                $lead['product_id'] = $request->product;
                 $lead['email'] = $request->email;
                 $lead['date'] = $request->date;
                 $lead['disposition'] = $request->disposition;

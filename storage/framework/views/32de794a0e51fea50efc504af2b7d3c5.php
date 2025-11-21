@@ -1,9 +1,10 @@
+
 <?php $__env->startSection('page-title'); ?>
 <?php echo e(__('Sales Orders Edit')); ?>
 
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('title'); ?>
-<?php echo e(__('Edit Sales Order')); ?> <?php echo e('(' . $salesOrder->lead->cust_name . ')'); ?>
+<?php echo e(__('Edit Sales')); ?> <?php echo e('(' . $salesOrder->lead->cust_name . ')'); ?>
 
 <?php $__env->stopSection(); ?>
 <?php

@@ -38,14 +38,14 @@ class LeadController extends Controller {
     public function index() {
         if (\Auth::user()->can('Manage Lead')) {
             if (\Auth::user()->type == 'owner') {
-                $leads = Lead::with('assign_user', 'leadType', 'product')->where('disposition', '!=', 1)->where('user_id', \Auth::user()->id)->get();
+                $leads = Lead::with('assign_user', 'leadType', 'product', 'LeadSource')->where('disposition', '!=', 1)->where('user_id', \Auth::user()->id)->latest()->get();
                 $defualtView = new UserDefualtView();
                 $defualtView->route = \Request::route()->getName();
                 $defualtView->module = 'lead';
                 $defualtView->view = 'list';
                 User::userDefualtView($defualtView);
             } else {
-                $leads = Lead::with('assign_user', 'leadType', 'product')->where('disposition', '!=', 1)->where('user_id', \Auth::user()->id)->get();
+                $leads = Lead::with('assign_user', 'leadType', 'product', 'LeadSource')->where('disposition', '!=', 1)->where('user_id', \Auth::user()->id)->latest()->get();
                 $defualtView = new UserDefualtView();
                 $defualtView->route = \Request::route()->getName();
                 $defualtView->module = 'lead';
@@ -333,9 +333,9 @@ class LeadController extends Controller {
 
             // Updated product selection to match create method
             $products = Product::all();
-            $product = ['' => '--'];
+            $product = [];
             foreach ($products as $product_value) {
-                $product[$product_value['id']] = $product_value->model . ' ( ' . $product_value->part_name . ' )';
+                $product[$product_value['id']] = $product_value->year.' - '.$product_value->make.' - ( '.$product_value->model . ' ' . $product_value->part_name . ' )';
             }
             $leadTypes = LeadType::pluck('name', 'id');
             $leadTypes->prepend('--', 0);
@@ -391,7 +391,7 @@ class LeadController extends Controller {
                 $lead['cust_name'] = $request->cust_name;
                 $lead['lead_type_id'] = ($request->lead_type_id && $request->lead_type_id != '0') ? $request->lead_type_id : null;
                 $lead['contact'] = $request->contact;
-                $lead['product_id'] = $request->product;
+//                $lead['product_id'] = $request->product;
                 $lead['email'] = $request->email;
                 $lead['date'] = $request->date;
                 $lead['disposition'] = $request->disposition;
@@ -418,7 +418,8 @@ class LeadController extends Controller {
                         [
                             'created_by' => \Auth::user()->id,
                             'lead_id' => $lead->id,
-                            'lead_status' => $request->disposition
+                            'lead_status' => $request->disposition,
+                            'followup_note' => $request->note
                         ]
                 );
                 if ($request->disposition == 1) {

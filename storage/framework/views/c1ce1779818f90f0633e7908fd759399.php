@@ -88,7 +88,7 @@ buttonClass: 'btn',
 <script src="<?php echo e(asset('assets/js/plugins/dropzone-amd-module.min.js')); ?>"></script>
 <script src="<?php echo e(asset('assets/js/plugins/choices.min.js')); ?>"></script>
 
-<script src="<?php echo e(asset('public/libs/select2/dist/css/select2.min.css')); ?>"></script>
+<script src="<?php echo e(asset('public/libs/select2/dist/js/select2.min.js')); ?>"></script>
 
 
 <script src="<?php echo e(asset ('assets/js/plugins/simple-datatables.js')); ?>"></script>

@@ -3,9 +3,9 @@
 		<thead>
 			<tr>
 				<th><?php echo e(__('Date/Time')); ?></th>
-				<th><?php echo e(__('Status')); ?></th>
+				<th><?php echo e(__('Disposition')); ?></th>
 				<th><?php echo e(__('Sales User')); ?></th>
-				<th><?php echo e(__('Remark')); ?></th>
+				<th><?php echo e(__('Followup Note')); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -14,11 +14,11 @@
 					<td><?php echo e(optional($log->created_at)->format('Y-m-d H:i')); ?></td>
 					<td><?php echo e($status[$log->lead_status]); ?></td>
 					<td><?php echo e(optional($log->creator)->name ?? '-'); ?></td>
-					<td><?php echo e($log->remark); ?></td>
+					<td><?php echo e($log->followup_note); ?></td>
 				</tr>
 			<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 				<tr>
-					<td colspan="4" class="text-center text-muted"><?php echo e(__('No status logs found.')); ?></td>
+					<td colspan="4" class="text-center text-muted"><?php echo e(__("No Follow Up's found.")); ?></td>
 				</tr>
 			<?php endif; ?>
 		</tbody>

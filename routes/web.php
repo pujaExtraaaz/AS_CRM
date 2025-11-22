@@ -701,8 +701,9 @@ Route::group(['middleware' => ['verified']], function () {
                 ],
             ],
             function () {
-                Route::resource('yards', YardController::class);
+                
                 Route::get('yards/search', [YardController::class, 'search'])->name('yards.search');
+                Route::resource('yards', YardController::class);
             }
     );
     Route::group(

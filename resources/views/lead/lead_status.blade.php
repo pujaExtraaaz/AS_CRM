@@ -3,9 +3,9 @@
 		<thead>
 			<tr>
 				<th>{{ __('Date/Time') }}</th>
-				<th>{{ __('Status') }}</th>
+				<th>{{ __('Disposition') }}</th>
 				<th>{{ __('Sales User') }}</th>
-				<!--<th>{{ __('Remark') }}</th>-->
+				<th>{{ __('Followup Note') }}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -14,11 +14,11 @@
 					<td>{{ optional($log->created_at)->format('Y-m-d H:i') }}</td>
 					<td>{{ $status[$log->lead_status] }}</td>
 					<td>{{ optional($log->creator)->name ?? '-' }}</td>
-					<!--<td>{{ $log->remark }}</td>-->
+					<td>{{ $log->followup_note }}</td>
 				</tr>
 			@empty
 				<tr>
-					<td colspan="4" class="text-center text-muted">{{ __('No status logs found.') }}</td>
+					<td colspan="4" class="text-center text-muted">{{ __("No Follow Up's found.") }}</td>
 				</tr>
 			@endforelse
 		</tbody>

@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('page-title'); ?>
 <?php echo e(__('Lead Edit')); ?>
 
@@ -90,7 +91,7 @@ $plansettings = App\Models\Utility::plansettings();
                     <?php echo e(Form::model($lead, ['route' => ['lead.update', $lead->id], 'method' => 'PUT'])); ?>
 
                     <div class="card-header">
-                        <?php if(isset($plansettings['enable_chatgpt']) && $plansettings['enable_chatgpt'] == 'on'): ?>
+<!--                        <?php if(isset($plansettings['enable_chatgpt']) && $plansettings['enable_chatgpt'] == 'on'): ?>
                         <div class="float-end">
                             <a href="#" data-size="md" class="btn btn-sm btn-primary "
                                data-ajax-popup-over="true" data-size="md"
@@ -101,7 +102,7 @@ $plansettings = App\Models\Utility::plansettings();
                                         class="robot"><?php echo e(__('Generate With AI')); ?></span></i>
                             </a>
                         </div>
-                        <?php endif; ?>
+                        <?php endif; ?>-->
                         <h5><?php echo e(__('Overview')); ?></h5>
                         <small class="text-muted"><?php echo e(__('Edit About Your Lead Information')); ?></small>
                     </div>
@@ -113,7 +114,7 @@ $plansettings = App\Models\Utility::plansettings();
                                     <div class="form-group">
                                         <?php echo e(Form::label('cust_name', __('Customer Name'), ['class' => 'form-label'])); ?>
 
-                                        <?php echo e(Form::text('cust_name', null, ['class' => 'form-control', 'placeholder' => __('Enter Customer Name')])); ?>
+                                        <?php echo e(Form::text('cust_name', null, ['class' => 'form-control', 'placeholder' => __('Enter Customer Name'),'readonly'=>'true'])); ?>
 
                                         <?php $__errorArgs = ['cust_name'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -121,6 +122,26 @@ if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
                                         <span class="invalid-cust_name" role="alert">
+                                            <strong class="text-danger"><?php echo e($message); ?></strong>
+                                        </span>
+                                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <?php echo e(Form::label('product', __('Product / Service'), ['class' => 'form-label'])); ?>
+
+                                        <?php echo Form::select('product', $product, $lead->product_id, ['class' => 'form-control', 'id' => 'product-select','disabled']); ?>
+
+                                        <?php $__errorArgs = ['product_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="invalid-product_id" role="alert">
                                             <strong class="text-danger"><?php echo e($message); ?></strong>
                                         </span>
                                         <?php unset($message);
@@ -196,28 +217,8 @@ unset($__errorArgs, $__bag); ?>
                                         <?php echo Form::select('lead_type_id', $leadTypes, $lead->lead_type_id, ['class' => 'form-control']); ?>
 
                                     </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <?php echo e(Form::label('product', __('Product / Service'), ['class' => 'form-label'])); ?>
-
-                                        <?php echo Form::select('product', $product, $lead->product_id, ['class' => 'form-control', 'id' => 'product-select']); ?>
-
-                                        <?php $__errorArgs = ['product_id'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                        <span class="invalid-product_id" role="alert">
-                                            <strong class="text-danger"><?php echo e($message); ?></strong>
-                                        </span>
-                                        <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                    </div>
-                                </div>
-                                <div class="col-6">
+                                </div>                                
+                                <div class="col-12">
                                     <div class="form-group">
                                         <?php echo e(Form::label('disposition', __('Disposition'), ['class' => 'form-label'])); ?>
 

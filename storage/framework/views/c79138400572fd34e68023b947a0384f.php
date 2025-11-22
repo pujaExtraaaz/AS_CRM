@@ -30,6 +30,51 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                         <a href="<?php echo e(route('dashboard')); ?>" class="dash-link">
                             <span class="dash-micon"><i class="ti ti-home-2"></i></span><span class="dash-mtext"><?php echo e(__('Dashboard')); ?></span></a>
                     </li>
+                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Manage Lead')): ?>
+                    <li class="dash-item <?php echo e(\Request::route()->getName() == 'lead' || \Request::route()->getName() == 'lead.edit' ? ' active' : ''); ?>">
+                        
+                        <a href="<?php echo e(array_key_exists('lead',$defaultView) ? route($defaultView['lead']) : route('lead.index')); ?>"   class="dash-link">
+                            <span class="dash-micon"><i class="ti ti-filter"></i></span><span class="dash-mtext"><?php echo e(__('Leads')); ?></span>
+                        </a>
+                    </li>
+                    <?php endif; ?> 
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Manage SalesOrder')): ?>
+                    <li class="dash-item <?php echo e(\Request::route()->getName() == 'salesorder' || \Request::route()->getName() == 'salesorder.show' || \Request::route()->getName() == 'salesorder.edit' ? ' active' : ''); ?>">
+                        <a href="<?php echo e(route('salesorder.index')); ?>" class="dash-link">
+                            <span class="dash-micon"><i class="ti ti-file-invoice"></i></span><span class="dash-mtext"><?php echo e(__('Sales')); ?></span>
+                        </a>
+                    </li>
+                    <?php endif; ?>
+                     <?php if(Gate::check('Manage SalesOrder')): ?>
+                    <li class="dash-item <?php echo e(Request::route()->getName() == 'salesorder' ? 'active' : ''); ?>">
+                        <a class="dash-link" href="<?php echo e(route('sales_return.index')); ?>"><span class="dash-micon"><i class="fas fa-history"></i></span><span class="dash-mtext"><?php echo e(__('Return / Refund')); ?></span></a>
+                    </li>
+                    <?php endif; ?>
+                    
+                    <?php if(\Auth::user()->type == 'super admin'): ?>
+<!--                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Manage User')): ?>
+                    <li class="dash-item <?php echo e(\Request::route()->getName() == 'user' || \Request::route()->getName() == 'user.edit' ? ' active' : ''); ?>">
+                        
+                        <a class="dash-link" href="<?php echo e(array_key_exists('user',$defaultView) ? route($defaultView['user']) : route('user.index')); ?>">
+                            <span class="dash-micon"><i class="ti ti-user"></i></span><span class="dash-mtext"><?php echo e(__('Companies')); ?></span></a>
+                    </li>
+                    <?php endif; ?>-->
+                    <?php else: ?>
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Manage User')): ?>
+                    <li class="dash-item <?php echo e(\Request::route()->getName() == 'user' || \Request::route()->getName() == 'user.edit' ? ' active' : ''); ?>">
+                        
+                        <a class="dash-link" href="<?php echo e(array_key_exists('user',$defaultView) ? route($defaultView['user']) : route('user.index')); ?>">
+                            <span class="dash-micon"><i class="ti ti-user"></i></span><span class="dash-mtext"><?php echo e(__('Profile Setting')); ?></span></a>
+                    </li>
+                    <?php endif; ?>
+                    <?php endif; ?>
+                     <?php if(\Auth::user()->type != 'super admin'): ?>
+                    <li class="dash-item <?php echo e(\Request::route()->getName() == 'messages' ? ' active' : ''); ?>">
+                        <a href="<?php echo e(url('chats')); ?>" class="dash-link <?php echo e(Request::segment(1) == 'messages' ? 'active' : ''); ?>">
+                            <span class="dash-micon"><i class="ti ti-brand-messenger"></i></span><span class="dash-mtext"><?php echo e(__('Messenger')); ?></span>
+                        </a>
+                    </li>
+                    <?php endif; ?>
                   
                     <li class="dash-item <?php echo e(\Request::route()->getName() == 'yards' || \Request::route()->getName() == 'yards.edit' ? ' active' : ''); ?>">
                         <a href="<?php echo e(array_key_exists('yards',$defaultView) ? route($defaultView['yards']) : route('yards.index')); ?>"
@@ -43,7 +88,7 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                         
                         <a href="<?php echo e(array_key_exists('product',$defaultView) ? route($defaultView['product']) : route('product.index')); ?>"
                            class="dash-link">
-                            <span class="dash-micon"><i class="ti ti-brand-producthunt"></i></span><span class="dash-mtext"><?php echo e(__('Products')); ?></span>
+                            <span class="dash-micon"><i class="ti ti-brand-producthunt"></i></span><span class="dash-mtext"><?php echo e(__('Dispute')); ?></span>
                         </a>
                     </li>
                     <?php endif; ?>
@@ -52,14 +97,17 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                         <a class="dash-link " href="<?php echo e(route('lead_source.index')); ?>"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext"><?php echo e(__('Lead Source')); ?></span></a>
                     </li>
                     <?php endif; ?>
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Manage Lead')): ?>
-                    <li class="dash-item <?php echo e(\Request::route()->getName() == 'lead' || \Request::route()->getName() == 'lead.edit' ? ' active' : ''); ?>">
-                        
-                        <a href="<?php echo e(array_key_exists('lead',$defaultView) ? route($defaultView['lead']) : route('lead.index')); ?>"   class="dash-link">
-                            <span class="dash-micon"><i class="ti ti-filter"></i></span><span class="dash-mtext"><?php echo e(__('Leads')); ?></span>
-                        </a>
+                     <!-- <?php if(Gate::check('Manage LeadSource')): ?> -->
+                    <li class="dash-item <?php echo e(\Request::route()->getName() == 'part_type' ? 'active' : ''); ?>"">
+                        <a class="dash-link " href="<?php echo e(route('part_type.index')); ?>"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext"><?php echo e(__('Part Type')); ?></span></a>
                     </li>
-                    <?php endif; ?>                                    
+                    <!-- <?php endif; ?> -->
+                       <!-- <?php if(Gate::check('Manage LeadSource')): ?> -->
+                    <li class="dash-item <?php echo e(\Request::route()->getName() == 'payment_type' ? 'active' : ''); ?>"">
+                        <a class="dash-link " href="<?php echo e(route('payment_type.index')); ?>"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext"><?php echo e(__('Payment Type')); ?></span></a>
+                    </li>
+                    <!-- <?php endif; ?> -->
+                                                      
                     <!--                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Manage Quote')): ?>
                                         <li class="dash-item <?php echo e(\Request::route()->getName() == 'quote' || \Request::route()->getName() == 'quote.show' || \Request::route()->getName() == 'quote.edit' ? ' active' : ''); ?>">
                                             <a href="<?php echo e(route('quote.index')); ?>" class="dash-link">
@@ -67,13 +115,7 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                                             </a>
                                         </li>
                                         <?php endif; ?>-->
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Manage SalesOrder')): ?>
-                    <li class="dash-item <?php echo e(\Request::route()->getName() == 'salesorder' || \Request::route()->getName() == 'salesorder.show' || \Request::route()->getName() == 'salesorder.edit' ? ' active' : ''); ?>">
-                        <a href="<?php echo e(route('salesorder.index')); ?>" class="dash-link">
-                            <span class="dash-micon"><i class="ti ti-file-invoice"></i></span><span class="dash-mtext"><?php echo e(__('Sales Orders')); ?></span>
-                        </a>
-                    </li>
-                    <?php endif; ?>
+                    
                     <!--                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Manage Invoice')): ?>
                                         <li class="dash-item <?php echo e(\Request::route()->getName() == 'invoice' || \Request::route()->getName() == 'invoice.show' || \Request::route()->getName() == 'invoice.edit' ? ' active' : ''); ?>">
                                             <a href="<?php echo e(route('invoice.index')); ?>" class="dash-link">
@@ -256,23 +298,6 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                     </li>
                     <?php endif; ?>
 
-                    <?php if(\Auth::user()->type == 'super admin'): ?>
-<!--                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Manage User')): ?>
-                    <li class="dash-item <?php echo e(\Request::route()->getName() == 'user' || \Request::route()->getName() == 'user.edit' ? ' active' : ''); ?>">
-                        
-                        <a class="dash-link" href="<?php echo e(array_key_exists('user',$defaultView) ? route($defaultView['user']) : route('user.index')); ?>">
-                            <span class="dash-micon"><i class="ti ti-user"></i></span><span class="dash-mtext"><?php echo e(__('Companies')); ?></span></a>
-                    </li>
-                    <?php endif; ?>-->
-                    <?php else: ?>
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Manage User')): ?>
-                    <li class="dash-item <?php echo e(\Request::route()->getName() == 'user' || \Request::route()->getName() == 'user.edit' ? ' active' : ''); ?>">
-                        
-                        <a class="dash-link" href="<?php echo e(array_key_exists('user',$defaultView) ? route($defaultView['user']) : route('user.index')); ?>">
-                            <span class="dash-micon"><i class="ti ti-user"></i></span><span class="dash-mtext"><?php echo e(__('User')); ?></span></a>
-                    </li>
-                    <?php endif; ?>
-                    <?php endif; ?>
                     <!--                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Manage Contract')): ?>
                                         <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Manage Contract')): ?>
                                         <li class="dash-item  <?php echo e((Request::route()->getName() == 'contract.index' || Request::route()->getName() == 'contract.show') ? 'active' : ''); ?>">
@@ -304,18 +329,8 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                         <a class="dash-link" href="<?php echo e(route('shipping_provider.index')); ?>"><span class="dash-micon"><i class="ti ti-truck"></i></span><span class="dash-mtext"><?php echo e(__('Shipping Provider')); ?></span></a>
                     </li>
                     <?php endif; ?>-->
-                    <?php if(Gate::check('Manage SalesOrder')): ?>
-                    <li class="dash-item <?php echo e(Request::route()->getName() == 'salesorder' ? 'active' : ''); ?>">
-                        <a class="dash-link" href="<?php echo e(route('sales_return.index')); ?>"><span class="dash-micon"><i class="fas fa-history"></i></span><span class="dash-mtext"><?php echo e(__('Return / Refund')); ?></span></a>
-                    </li>
-                    <?php endif; ?>
-                    <?php if(\Auth::user()->type != 'super admin'): ?>
-                    <li class="dash-item <?php echo e(\Request::route()->getName() == 'messages' ? ' active' : ''); ?>">
-                        <a href="<?php echo e(url('chats')); ?>" class="dash-link <?php echo e(Request::segment(1) == 'messages' ? 'active' : ''); ?>">
-                            <span class="dash-micon"><i class="ti ti-brand-messenger"></i></span><span class="dash-mtext"><?php echo e(__('Messenger')); ?></span>
-                        </a>
-                    </li>
-                    <?php endif; ?>
+                   
+                   
 <!--                    <?php if(\Auth::user()->type == 'owner'): ?>
                     <li class="dash-item <?php echo e(\Request::route()->getName() == 'notification_templates' ? 'active' : ''); ?>">
                         <a class="dash-link" href=<?php echo e(url('notification-templates')); ?>>
@@ -495,14 +510,14 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                     <?php endif; ?>
                     <?php if(\Auth::user()->type == 'super admin'): ?>
                     <?php echo $__env->make('landingpage::menu.landingpage', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                    <?php endif; ?>
+                    <?php endif; ?>-->
                     <?php if(\Auth::user()->type == 'super admin' || \Auth::user()->type == 'owner'): ?>
                     <li class="dash-item  <?php echo e(Request::route()->getName() == 'settings' ? 'active' : ''); ?>">
                         <a href="<?php echo e(route('settings')); ?>" class="dash-link">
                             <span class="dash-micon"><i class="ti ti-settings"></i></span><span class="dash-mtext"><?php echo e(__('Settings')); ?></span>
                         </a>
                     </li>
-                    <?php endif; ?>-->
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>

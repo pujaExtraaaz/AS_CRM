@@ -67,7 +67,7 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                     <li class="dash-item {{ \Request::route()->getName() == 'user' || \Request::route()->getName() == 'user.edit' ? ' active' : '' }}">
                         {{-- <a class="dash-link" href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('user')) ? route(\Auth::user()->getDefualtViewRouteByModule('user')) : route('user.index') }}"> --}}
                         <a class="dash-link" href="{{ array_key_exists('user',$defaultView) ? route($defaultView['user']) : route('user.index') }}">
-                            <span class="dash-micon"><i class="ti ti-user"></i></span><span class="dash-mtext">{{ __('User') }}</span></a>
+                            <span class="dash-micon"><i class="ti ti-user"></i></span><span class="dash-mtext">{{ __('Profile Setting') }}</span></a>
                     </li>
                     @endcan
                     @endif
@@ -110,7 +110,7 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                     <!-- @endif -->
                        <!-- @if (Gate::check('Manage LeadSource')) -->
                     <li class="dash-item {{ \Request::route()->getName() == 'payment_type' ? 'active' : ''}}"">
-                        <a class="dash-link " href="{{ route('payment_type.index') }}"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext">{{ __('Payment Type') }}</span></a>
+                        <a class="dash-link " href="{{ route('payment_type.index') }}"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext">{{ __('Payment Gateway') }}</span></a>
                     </li>
                     <!-- @endif -->
                                                       
@@ -536,14 +536,14 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                     @endif
                     @if (\Auth::user()->type == 'super admin')
                     @include('landingpage::menu.landingpage')
-                    @endif
+                    @endif-->
                     @if (\Auth::user()->type == 'super admin' || \Auth::user()->type == 'owner')
                     <li class="dash-item  {{ Request::route()->getName() == 'settings' ? 'active' : '' }}">
                         <a href="{{ route('settings') }}" class="dash-link">
                             <span class="dash-micon"><i class="ti ti-settings"></i></span><span class="dash-mtext">{{ __('Settings') }}</span>
                         </a>
                     </li>
-                    @endif-->
+                    @endif
                 </ul>
             </div>
         </div>

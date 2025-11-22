@@ -106,8 +106,8 @@ class YardController extends Controller
         $search = $request->get('search', '');
         $limit = $request->get('limit', null);
         
-        $query = Yard::where('yard_name', 'like', '%' . $search . '%')
-            ->orWhere('yard_address', 'like', '%' . $search . '%');
+        $query = Yard::where('yard_name', 'like', '%' . $search . '%');
+//            ->orWhere('yard_address', 'like', '%' . $search . '%');
             
         if ($limit) {
             $yards = $query->limit($limit)->get(['id', 'yard_name', 'yard_address', 'contact', 'yard_email']);

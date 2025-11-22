@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('page-title'); ?>
 <?php echo e(__('Lead')); ?>
 
@@ -43,15 +44,17 @@
                     <table class="table datatable" id="datatable">
                         <thead>
                             <tr>
-                                <!-- <th scope="col" class="sort" data-sort="name"><?php echo e(__('Lead Name')); ?></th> -->
+                                <th scope="col" class="sort" data-sort="name"><?php echo e(__('Year')); ?></th>
+                                <th scope="col" class="sort" data-sort="completion"><?php echo e(__('Make')); ?></th> 
+                                <th scope="col" class="sort" data-sort="completion"><?php echo e(__('Model')); ?></th> 
                                 <th scope="col" class="sort" data-sort="cust_name"><?php echo e(__('Customer Name')); ?></th>
+                                 <th scope="col" class="sort" data-sort="date"><?php echo e(__('Date')); ?></th>
                                 <th scope="col" class="sort" data-sort="contact"><?php echo e(__('Contact')); ?></th>
-                                <!-- <th scope="col" class="sort" data-sort="completion"><?php echo e(__('Account')); ?></th> -->
-                                <th scope="col" class="sort" data-sort="lead_type"><?php echo e(__('Lead Type')); ?></th>
-                                <th scope="col" class="sort" data-sort="budget"><?php echo e(__('Email')); ?></th>
+                                <th scope="col" class="sort" data-sort="completion"><?php echo e(__('Disposition')); ?></th>
+                                <!-- <th scope="col" class="sort" data-sort="lead_type"><?php echo e(__('Lead Type')); ?></th> -->
+                                <!-- <th scope="col" class="sort" data-sort="budget"><?php echo e(__('Email')); ?></th> -->
                                 <!-- <th scope="col" class="sort" data-sort="status"><?php echo e(__('Phone')); ?></th> -->
                                 <!-- <th scope="col" class="sort" data-sort="status"><?php echo e(__('Product')); ?></th> -->
-                                <th scope="col" class="sort" data-sort="status"><?php echo e(__('Disposition')); ?></th>
                                 <th scope="col" class="sort" data-sort="status"><?php echo e(__('Assign user')); ?></th>
                                 <?php if(Gate::check('Show Lead') ||  Gate::check('Delete Lead')): ?>
                                 <th scope="col" class="text-end"><?php echo e(__('Action')); ?></th>
@@ -61,47 +64,35 @@
                         <tbody>
                             <?php $__currentLoopData = $leads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lead): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-<!--                                 <td>
-                                    <a href="<?php echo e(route('lead.edit',$lead->id)); ?>" data-size="md" data-title="<?php echo e(__('Lead Details')); ?>" class="action-item text-primary">
-                                        <?php echo e(ucfirst($lead->name)); ?>
-
-                                    </a>
-                                </td> -->
+                                <td>
+                                    <span class="budget"><?php echo e(ucfirst($lead->product ? $lead->product->year : '--')); ?></span>
+                                </td>
+                                <td>
+                                    <span class="budget"><?php echo e(ucfirst($lead->product ? $lead->product->make : '--')); ?></span>
+                                </td>
+                                <td>
+                                    <span class="budget"><?php echo e(ucfirst($lead->product ? $lead->product->model : '--')); ?></span>
+                                </td>
                                 <td>
                                     <span class="budget"><?php echo e(ucfirst($lead->cust_name ?: '--')); ?></span>
+                                </td>
+                                 <td>
+                                    <span class="budget"><?php echo e(\Auth::user()->dateFormat($lead->date)); ?></a></span>
                                 </td>
                                 <td>
                                     <span class="budget"><?php echo e(ucfirst($lead->contact ?: '--')); ?></span>
                                 </td>
-                                <!-- <td>
-                                    <span class="budget"><?php echo e(ucfirst(!empty($lead->accounts)?$lead->accounts->name:'--')); ?></span>
-                                </td> -->
                                 <td>
-                                    <span class="budget"><?php echo e(!empty($lead->leadType)?$lead->leadType->name:'--'); ?></span>
+                                    <span class="col-sm-12"><span class="text-sm"><?php echo e(__(\App\Models\Lead::$disposition[$lead->disposition])); ?></span></span>
                                 </td>
-                                <td>
-                                    <span class="budget"><?php echo e($lead->email ?: '--'); ?></span>
-                                </td>
-                                <!-- <td>
-                                    <span class="budget">
-                                        <?php echo e($lead->phone ?: '--'); ?>
-
-                                    </span>
-                                </td> -->
-                                <!-- <td>
-                                    <span class="col-sm-12"><span class="text-sm"><?php echo e(ucfirst(!empty($lead->product_id)?$lead->product->name:'--')); ?></span></span>
-                                </td> -->
-                                <td>
-                                    <span class="col-sm-12"><span class="text-sm"><?php echo e(ucfirst($lead->disposition ?$status[$lead->disposition]: '--')); ?></span></span>
-                                </td>
-                                <td>
+                               <td>
                                     <span class="col-sm-12"><span class="text-sm"><?php echo e(ucfirst(!empty($lead->assign_user)?$lead->assign_user->name:'--')); ?></span></span>
                                 </td>
                                 <?php if(Gate::check('Show Lead') || Gate::check('Edit Lead') || Gate::check('Delete Lead')): ?>
                                 <td class="text-end">   
                                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Show Lead')): ?>
                                     <div class="action-btn bg-warning ms-2">
-                                        <a href="#" data-size="md" data-url="<?php echo e(route('lead.status.logs',$lead->id)); ?>" data-bs-toggle="tooltip" title="<?php echo e(__('Status Logs')); ?>" data-ajax-popup="true" data-title="<?php echo e(__('Status Logs')); ?>" class="mx-3 btn btn-sm d-inline-flex align-items-center text-white ">
+                                        <a href="#" data-size="md" data-url="<?php echo e(route('lead.status.logs',$lead->id)); ?>" data-bs-toggle="tooltip" title="<?php echo e(__("Follow Up's")); ?>" data-ajax-popup="true" data-title="<?php echo e(__("Follow Up's")); ?>" class="mx-3 btn btn-sm d-inline-flex align-items-center text-white ">
                                             <i class="ti ti-history"></i>
                                         </a>
                                     </div>

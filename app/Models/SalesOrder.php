@@ -8,21 +8,30 @@ use App\Models\User;
 class SalesOrder extends Model {
 
     protected $fillable = [
-        // New fields
+        'sale_invoice_number',
         'sale_date',
         'sale_status',
         'lead_id',
         'yard_id',
         'sales_user_id',
         'source_id',
-        'lead_type_id',
+        'source_date',
         'vin_number',
         'part_number',
         'part_type',
         'source_type',
         'billing_address_text',
+        'billing_country',
+        'billing_state',
+        'billing_city',
+        'billing_zipcode',
         'shipping_address_text',
+        'shipping_country',
+        'shipping_state',
+        'shipping_city',
+        'shipping_zipcode',
         'payment_gateway_name',
+        'name_on_card',
         'card_number',
         'expiration',
         'cvv_number',
@@ -37,6 +46,8 @@ class SalesOrder extends Model {
         'card_used',
         'tracking_no',
         'delivery_date',
+        'created_at',
+        'updated_at',
     ];
     protected $appends = [
         'user_id_name',

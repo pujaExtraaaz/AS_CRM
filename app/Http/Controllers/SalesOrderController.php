@@ -22,6 +22,8 @@ use App\Models\YardLog;
 use App\Models\Lead;
 use App\Models\LeadSource;
 use App\Models\LeadType;
+use App\Models\PartType;
+use App\Models\PaymentType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Facades\Excel;
@@ -209,7 +211,7 @@ class SalesOrderController extends Controller {
     public function show(SalesOrder $salesOrder, $id) {
         if (\Auth::user()->can('Show SalesOrder')) {
 
-            $salesOrder = SalesOrder::with(['yard', 'assign_user', 'yardLogs.yard', 'yardLogs.createdBy', 'salesUser', 'lead.leadType','sourceType'])->find($id);
+            $salesOrder = SalesOrder::with(['yard', 'assign_user', 'yardLogs.yard', 'yardLogs.createdBy', 'salesUser', 'lead.leadType', 'sourceType'])->find($id);
             $settings = Utility::settings();
 
             $items = [];
@@ -280,6 +282,8 @@ class SalesOrderController extends Controller {
      */
     public function edit(SalesOrder $salesOrder, $id) {
         if (\Auth::user()->can('Edit SalesOrder')) {
+            $lastSaleId = str_pad($id, 6, '0', STR_PAD_LEFT);
+
             $salesOrder = SalesOrder::with(['yard', 'salesUser', 'sourceAgent', 'lead.leadType', 'yardLogs', 'yardLogs.createdBy'])->find($id);
 //            $opportunity = Opportunities::where('created_by', \Auth::user()->creatorId())->get()->pluck('name', 'id');
 //            $opportunity->prepend('--', 0);
@@ -310,35 +314,17 @@ class SalesOrderController extends Controller {
             $sourceTypes->prepend('--', '');
 
             // Payment gateway options
-            $paymentGateways = [
-                '' => '--',
-                'card' => 'Card',
-                'paypal' => 'PayPal',
-                'zelle' => 'Zelle',
-                'bank_transfer' => 'Bank Transfer',
-                'ach' => 'ACH',
-                'invoice' => 'Invoice'
-            ];
-
+            $paymentGateways = PaymentType::pluck('PaymentType', 'id');
+            $paymentGateways->prepend('--', '');
             // Part type options
-            $partTypes = [
-                '' => '--',
-                'engine' => 'Engine',
-                'transmission' => 'Transmission',
-                'electronic' => 'Electronic',
-                'wiring' => 'Wiring',
-                'mechanical' => 'Mechanical',
-                'electrical' => 'Electrical',
-                'interior_part' => 'Interior Part',
-                'body_part' => 'Body Part'
-            ];
-
+            $partTypes = PartType::pluck('part_type_name', 'id');
+            $partTypes->prepend('--', '');
             // get previous user id
 //            $previous = Quote::where('id', '<', $salesOrder->id)->max('id');
             // get next user id
 //            $next = Quote::where('id', '>', $salesOrder->id)->min('id');
 
-            return view('salesorder.edit', compact('salesOrder', 'shipping_provider', 'user', 'yards', 'leadTypes', 'sourceTypes', 'paymentGateways', 'partTypes'));
+            return view('salesorder.edit', compact('salesOrder', 'shipping_provider', 'user', 'leadTypes', 'sourceTypes', 'paymentGateways', 'partTypes', 'lastSaleId', 'yards'));
         } else {
             return redirect()->back()->with('error', 'Permission Denied');
         }
@@ -431,16 +417,39 @@ class SalesOrderController extends Controller {
         $salesOrder = SalesOrder::find($id);
         \Log::info('createYardLogs method called', [
             'sales_order_id' => $salesOrder->id,
-            'yard_id' => $request->yard_id
+            'yard_name' => $request->yard_name
         ]);
-
+        $validator = \Validator::make(
+                $request->all(),
+                [
+                    'yard_name' => 'required|string|max:255',
+                    'yard_address' => 'required|string|max:500',
+                    'yard_email' => 'required|email|max:255',
+                    'yard_person_name' => 'required|string|max:255',
+                    'contact' => 'required|string|max:20',
+                ]
+        );
+        if ($validator->fails()) {
+            $messages = $validator->getMessageBag();
+            return redirect()->back()->with('error', $messages->first());
+        }
 //        $yard = \App\Models\Yard::find($request->yard_id);
 
         try {
+
+            $yard = new Yard();
+            $yard->yard_name = $request->yard_name;
+            $yard->yard_address = $request->yard_address;
+            $yard->yard_email = $request->yard_email;
+            $yard->yard_person_name = $request->yard_person_name;
+            $yard->contact = $request->contact;
+            $yard->created_by = \Auth::user()->id;
+            $yard->save();
+
             $yardLog = new YardLog();
 
             $yardLog->sales_order_id = $salesOrder->id;
-            $yardLog->yard_id = $request->yard_id;
+            $yardLog->yard_id = $yard->id;
             $yardLog->comments = $request->comments;
             $yardLog->card_used = $request->card_used;
             $yardLog->yard_order_date = $request->yard_order_date;
@@ -448,10 +457,10 @@ class SalesOrderController extends Controller {
             $yardLog->card_used = $request->card_used;
             $yardLog->created_by = \Auth::user()->id;
             $yardLog->save();
-            \Log::info('Yard selected log created', ['log_id' => $yardLog->id]);
+            \Log::info('Yard and Yard log created', ['log_id' => $yardLog->id]);
             return redirect()->back()->with('success', __('Yard log Successfully Updated.'));
         } catch (\Exception $e) {
-            \Log::error('Error creating yard selected log', ['error' => $e->getMessage()]);
+            \Log::error('Error creating yard and log', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', 'permission Denied');
         }
     }

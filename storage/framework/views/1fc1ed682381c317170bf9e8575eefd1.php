@@ -64,7 +64,7 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                     <li class="dash-item <?php echo e(\Request::route()->getName() == 'user' || \Request::route()->getName() == 'user.edit' ? ' active' : ''); ?>">
                         
                         <a class="dash-link" href="<?php echo e(array_key_exists('user',$defaultView) ? route($defaultView['user']) : route('user.index')); ?>">
-                            <span class="dash-micon"><i class="ti ti-user"></i></span><span class="dash-mtext"><?php echo e(__('User')); ?></span></a>
+                            <span class="dash-micon"><i class="ti ti-user"></i></span><span class="dash-mtext"><?php echo e(__('Profile Setting')); ?></span></a>
                     </li>
                     <?php endif; ?>
                     <?php endif; ?>
@@ -104,7 +104,7 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                     <!-- <?php endif; ?> -->
                        <!-- <?php if(Gate::check('Manage LeadSource')): ?> -->
                     <li class="dash-item <?php echo e(\Request::route()->getName() == 'payment_type' ? 'active' : ''); ?>"">
-                        <a class="dash-link " href="<?php echo e(route('payment_type.index')); ?>"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext"><?php echo e(__('Payment Type')); ?></span></a>
+                        <a class="dash-link " href="<?php echo e(route('payment_type.index')); ?>"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext"><?php echo e(__('Payment Gateway')); ?></span></a>
                     </li>
                     <!-- <?php endif; ?> -->
                                                       
@@ -510,14 +510,14 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                     <?php endif; ?>
                     <?php if(\Auth::user()->type == 'super admin'): ?>
                     <?php echo $__env->make('landingpage::menu.landingpage', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                    <?php endif; ?>
+                    <?php endif; ?>-->
                     <?php if(\Auth::user()->type == 'super admin' || \Auth::user()->type == 'owner'): ?>
                     <li class="dash-item  <?php echo e(Request::route()->getName() == 'settings' ? 'active' : ''); ?>">
                         <a href="<?php echo e(route('settings')); ?>" class="dash-link">
                             <span class="dash-micon"><i class="ti ti-settings"></i></span><span class="dash-mtext"><?php echo e(__('Settings')); ?></span>
                         </a>
                     </li>
-                    <?php endif; ?>-->
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>

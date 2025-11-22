@@ -8,7 +8,7 @@ use App\Models\User;
 class SalesOrder extends Model {
 
     protected $fillable = [
-        'sale_invoice_number',
+        //        'sale_invoice_number',
         'sale_date',
         'sale_status',
         'lead_id',
@@ -48,10 +48,7 @@ class SalesOrder extends Model {
         'delivery_date',
         'created_at',
         'updated_at',
-    ];
-    protected $appends = [
-        'user_id_name',
-        'quote_name',
+        'ote_name',
         'opportunity_name',
     ];
     public static $status = [

@@ -22,7 +22,7 @@ use App\Models\YardLog;
 use App\Models\Lead;
 use App\Models\LeadSource;
 use App\Models\LeadType;
-use App\Models\PartType;
+use Illuminate\Http\Requuse App\Models\PartType;
 use App\Models\PaymentType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -461,63 +461,7 @@ class SalesOrderController extends Controller {
             return redirect()->back()->with('success', __('Yard log Successfully Updated.'));
         } catch (\Exception $e) {
             \Log::error('Error creating yard and log', ['error' => $e->getMessage()]);
-            return redirect()->back()->with('error', 'permission Denied');
-        }
-    }
-
-    /**
-     * Update yard log completion status
-     */
-    public function updateYardLogStatus(Request $request, $logId) {
-        if (\Auth::user()->can('Edit SalesOrder')) {
-            $yardLog = YardLog::find($logId);
-            \Log::info('saveYardDetails method called', [
-                'user_id' => \Auth::user()->id,
-                'sales_order_id' => $yardLog->sales_order_id,
-                'request_data' => $request->all()
-            ]);
-
-            $salesOrder = SalesOrder::find($yardLog->sales_order_id);
-
-            if (!$salesOrder) {
-                \Log::error('Sales order not found', ['id' => $id]);
-                return response()->json(['success' => false, 'message' => __('Sales order not found')]);
-            }
-
-            \Log::info('Updating sales order', ['sales_order_id' => $salesOrder->id]);
-
-            // Update sales order with yard details (without yard selection yet)
-            $salesOrder->yard_id = $yardLog->yard_id;
-            $salesOrder->yard_order_date = $yardLog->yard_order_date;
-            $salesOrder->comment = $yardLog->comment;
-            $salesOrder->card_used = $yardLog->card_used;
-            $salesOrder->delivery_date = $yardLog->delivery_date;
-            $salesOrder->save();
-
-            \Log::info('Sales order updated successfully');
-
-            return response()->json(['success' => true, 'message' => __('Yard log status updated successfully!')]);
-        } else {
-            return response()->json(['success' => false, 'message' => __('Permission denied')]);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\SalesOrder $salesOrder
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id) {
-        if (\Auth::user()->can('Delete SalesOrder')) {
-
-            $salesOrder = SalesOrder::find($id);
-            $salesOrder->delete();
-
-            return redirect()->back()->with('success', __('Sales Order Successfully delete.'));
-        } else {
-            return redirect()->back()->with('error', 'permission Denied');
+ed');
         }
     }
 

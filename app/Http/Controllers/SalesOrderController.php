@@ -22,7 +22,7 @@ use App\Models\YardLog;
 use App\Models\Lead;
 use App\Models\LeadSource;
 use App\Models\LeadType;
-use Illuminate\Http\Requuse App\Models\PartType;
+use App\Models\PartType;
 use App\Models\PaymentType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -461,7 +461,7 @@ class SalesOrderController extends Controller {
             return redirect()->back()->with('success', __('Yard log Successfully Updated.'));
         } catch (\Exception $e) {
             \Log::error('Error creating yard and log', ['error' => $e->getMessage()]);
-ed');
+
         }
     }
 

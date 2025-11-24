@@ -2,6 +2,6 @@
 /.vscode
 /vendor/srmklive/paypal/tests/Mocks/samples/sample2.pdf
 /vendor/srmklive/paypal/tests/Mocks/samples/sample.pdf 
-/nbproject
-/storage
-/vendor
+/nbproject/
+/storage/
+/vendor/

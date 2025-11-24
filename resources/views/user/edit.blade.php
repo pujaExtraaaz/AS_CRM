@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 @section('page-title')
-    {{ __('User Edit') }}
+    {{ __('Profile Setting Edit') }}
 @endsection
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('Home') }}</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('user.index') }}">{{ __('User') }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('user.index') }}">{{ __('Profile Setting') }}</a></li>
     <li class="breadcrumb-item">{{ __('Edit') }}</li>
 @endsection
 @section('action-btn')
@@ -43,7 +43,7 @@
 @endsection
 @section('title')
     <div class="d-inline-block">
-        <h5 class="h4 d-inline-block font-weight-400 mb-0 ">{{ __('Edit User (') }} {{ $user->name }}
+        <h5 class="h4 d-inline-block font-weight-400 mb-0 ">{{ __('Edit Profile Setting (') }} {{ $user->name }}
             {{ ')' }}</h5>
     </div>
 @endsection

@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('page-title')
-{{ __('User') }}
+{{ __('Profile Setting') }}
 @endsection
 @if (\Auth::user()->type == 'super admin')
 @section('title')
@@ -8,7 +8,7 @@
 @endsection
 @else
 @section('title')
-{{ __('Users') }}
+{{ __('Profile Settings') }}
 @endsection
 @endif
 
@@ -20,7 +20,7 @@
 @else
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('Home') }}</a></li>
-<li class="breadcrumb-item">{{ __('User') }}</li>
+<li class="breadcrumb-item">{{ __('Profile Setting') }}</li>
 @endsection
 @endif
 @section('action-btn')
@@ -34,7 +34,7 @@
 @endif
 @can('Create User')
 <a href="#" data-url="{{ route('user.create') }}" data-size="lg" data-ajax-popup="true" data-bs-toggle="tooltip"
-   title="{{ __('Create') }}"data-title="{{ __('Create New User') }}" class="btn btn-sm btn-primary btn-icon">
+   title="{{ __('Create') }}"data-title="{{ __('Create New Profile Setting') }}" class="btn btn-sm btn-primary btn-icon">
     <i class="ti ti-plus"></i>
 </a>
 @endcan

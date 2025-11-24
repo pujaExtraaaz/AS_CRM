@@ -2,8 +2,8 @@
 <div class="row">
     <div class="col-12">
         <div class="form-group">
-            {{Form::label('paymentType',__('Payment Type'),['class'=>'form-label']) }}
-            {{Form::text('paymentType',null,array('class'=>'form-control','placeholder'=>__('Enter Payment Type'),'required'=>'required'))}}
+            {{Form::label('paymentType',__('Payment Gateway'),['class'=>'form-label']) }}
+            {{Form::text('paymentType',null,array('class'=>'form-control','placeholder'=>__('Enter Payment Gateway'),'required'=>'required'))}}
         </div>
     </div>
     <div class="modal-footer">

@@ -2,8 +2,8 @@
 <div class="row">
     <div class="col-12">
         <div class="form-group">
-            {{Form::label('paymentType',__('Payment Type'),['class'=>'form-label'])}}
-            {{Form::text('paymentType',null,array('class'=>'form-control','placeholder'=>__('Enter Payment Type')))}}
+            {{Form::label('paymentType',__('Payment Gateway'),['class'=>'form-label'])}}
+            {{Form::text('paymentType',null,array('class'=>'form-control','placeholder'=>__('Enter Payment Gateway')))}}
             @error('name')
             <span class="invalid-name" role="alert">
                     <strong class="text-danger">{{ $message }}</strong>

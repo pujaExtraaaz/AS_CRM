@@ -4,7 +4,7 @@
 
 @extends('layouts.admin')
 @section('page-title')
-    {{ __('User') }}
+    {{ __('Profile Setting') }}
 @endsection
 
 
@@ -17,7 +17,7 @@
 @else
     @section('title')
         <div class="page-header-title">
-            <h4 class="m-b-10">{{ __('Users') }}</h4>
+            <h4 class="m-b-10">{{ __('Profile Settings') }}</h4>
         </div>
     @endsection
 @endif
@@ -30,7 +30,7 @@
 @else
     @section('breadcrumb')
         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('Home') }}</a></li>
-        <li class="breadcrumb-item">{{ __('User') }}</li>
+        <li class="breadcrumb-item">{{ __('Profile Setting') }}</li>
     @endsection
 @endif
 
@@ -81,8 +81,8 @@
                                             @if (Gate::check('Create User') || Gate::check('Edit User') || Gate::check('Delete User'))
                                                 @can('Edit User')
                                                     <a href="{{ route('user.edit', $user->id) }}" class="dropdown-item"
-                                                        data-bs-whatever="{{ __('Edit User') }}" data-bs-toggle="tooltip"
-                                                        data-title="{{ __('Edit User') }}"><i class="ti ti-edit"></i>
+                                                        data-bs-whatever="{{ __('Edit Profile Setting') }}" data-bs-toggle="tooltip"
+                                                        data-title="{{ __('Edit Profile Setting') }}"><i class="ti ti-edit"></i>
                                                         {{ __('Edit') }}</a>
                                                 @endcan
                                                 @can('Create User')
@@ -170,7 +170,7 @@
                 @endforeach
                 <div class="col-md-3">
                     <a href="#" class="btn-addnew-project" data-ajax-popup="true" data-size="md"
-                        data-title="{{ __('Create New User') }}" data-url="{{ route('user.create') }}">
+                        data-title="{{ __('Create New Profile Setting') }}" data-url="{{ route('user.create') }}">
                         <div class="badge bg-primary proj-add-icon">
                             <i class="ti ti-plus"></i>
                         </div>
@@ -199,8 +199,8 @@
 
                                                     @can('Edit User')
                                                         <a href="{{ route('user.edit', $user->id) }}" class="dropdown-item"
-                                                            data-bs-whatever="{{ __('Edit User') }}" data-bs-toggle="tooltip"
-                                                            data-title="{{ __('Edit User') }}"><i class="ti ti-edit"></i>
+                                                            data-bs-whatever="{{ __('Edit Profile Setting') }}" data-bs-toggle="tooltip"
+                                                            data-title="{{ __('Edit Profile Setting') }}"><i class="ti ti-edit"></i>
                                                             {{ __('Edit') }}</a>
                                                     @endcan
 
@@ -311,7 +311,7 @@
 
                                                                 <div class="col-4">
                                                                     <p class="text-muted text-sm mb-0"
-                                                                        data-bs-toggle="tooltip" title="{{ __('Users') }}">
+                                                                        data-bs-toggle="tooltip" title="{{ __('Profile Settings') }}">
                                                                         <i
                                                                             class="ti ti-user card-icon-text-space"></i>{{ $user->countUser($user->id) }}
                                                                     </p>
@@ -339,7 +339,7 @@
 
                                             {{-- <div class="col-4 text-center">
                                                         <span class="d-block h4 mb-0">{{ $user->countUser($user->id) }}</span>
-                                                        <span class="d-block text-sm text-muted">{{ __('User') }}</span>
+                                                        <span class="d-block text-sm text-muted">{{ __('Profile Setting') }}</span>
                                                     </div>
                                                     <div class="col-4 text-center">
                                                         <span class="d-block h4 mb-0">{{ $user->countAccount($user->id) }}</span>
@@ -358,12 +358,12 @@
                         @endforeach
                         <div class="col-md-3">
                             <a href="#" class="btn-addnew-project" data-ajax-popup="true" data-size="md"
-                                data-title="{{ __('Create New User') }}" data-url="{{ route('user.create') }}">
+                                data-title="{{ __('Create New Profile Setting') }}" data-url="{{ route('user.create') }}">
                                 <div class="badge bg-primary proj-add-icon">
                                     <i class="ti ti-plus"></i>
                                 </div>
-                                <h6 class="mt-4 mb-2">New User</h6>
-                                <p class="text-muted text-center">Click here to add New User</p>
+                                <h6 class="mt-4 mb-2">New Profile Setting</h6>
+                                <p class="text-muted text-center">Click here to add New Profile Setting</p>
                             </a>
                         </div>
                     </div>

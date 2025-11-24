@@ -1,20 +1,20 @@
 @extends('layouts.admin')
 @section('page-title')
-    {{ __('Payment Type') }}
+    {{ __('Payment Gateway') }}
 @endsection
 @section('title')
-    {{ __('Payment Type') }}
+    {{ __('Payment Gateway') }}
 @endsection
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('Home') }}</a></li>
     <li class="breadcrumb-item">{{ __('Constant') }}</li>
-    <li class="breadcrumb-item">{{ __('Payment Type') }}</li>
+    <li class="breadcrumb-item">{{ __('Payment Gateway') }}</li>
 @endsection
 @section('action-btn')
     @can('Create LeadSource')
         <div class="action-btn ms-2">
             <a href="#" data-size="md" data-url="{{ route('payment_type.create') }}" data-ajax-popup="true"
-                data-bs-toggle="tooltip" data-title="{{ __('Create New Payment Type') }}" title="{{ __('Create') }}"
+                data-bs-toggle="tooltip" data-title="{{ __('Create New Payment Gateway') }}" title="{{ __('Create') }}"
                 class="btn btn-sm btn-primary btn-icon m-1">
                 <i class="ti ti-plus"></i>
             </a>
@@ -33,7 +33,7 @@
                         <table id="datatable" class="table datatable align-items-center">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col" class="sort" data-sort="name">{{ __('Payment Type') }}</th>
+                                    <th scope="col" class="sort" data-sort="name">{{ __('Payment Gateway') }}</th>
                                     @if (Gate::check('Edit LeadSource') || Gate::check('Delete LeadSource'))
                                         <th class="text-end">{{ __('Action') }}</th>
                                     @endif
@@ -50,7 +50,7 @@
                                                         <a href="#" data-size="md"
                                                             data-url="{{ route('payment_type.edit', $payment_type->id) }}"
                                                             data-ajax-popup="true" data-bs-toggle="tooltip"
-                                                            data-title="{{ __('Edit Payment Type') }}"
+                                                            data-title="{{ __('Edit Payment Gateway') }}"
                                                             title="{{ __('Edit') }}"
                                                             class="mx-3 btn btn-sm d-inline-flex align-items-center text-white">
                                                             <i class="ti ti-edit"></i>

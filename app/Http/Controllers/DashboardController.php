@@ -46,10 +46,66 @@ class DashboardController extends Controller {
                 $data['totalUser'] = User::where('created_by', \Auth::user()->creatorId())->count();
                 $data['totalLead'] = Lead::count();
                 $data['totalSalesorder'] = $totalSalesOrder = SalesOrder::count();
-                $data['totalYard']  = Yard::count();
-                $data['totalSalesReturn']  = SalesReturn::count();
+                $data['totalYard'] = Yard::count();
+                $data['totalSalesReturn'] = SalesReturn::count();
                 $data['totalProduct'] = Product::count();
-                $users = User::find(\Auth::user()->creatorId());
+
+                // Calculate performance metrics
+                $currentMonth = Carbon::now()->startOfMonth();
+                $currentMonthEnd = Carbon::now()->endOfMonth();
+                $currentUserId = \Auth::user()->id;
+
+                // Top Performer - User with highest gross profit this month
+                $topPerformer = SalesOrder::select('sales_user_id', DB::raw('SUM(COALESCE(gross_profit, 0)) as total_gp'))->with('assign_user')
+                        ->whereNotNull('sales_user_id')
+                        ->whereNotNull('sale_date')
+                        ->whereBetween('sale_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])
+                        ->groupBy('sales_user_id')
+                        ->orderBy('total_gp', 'desc')
+                        ->first();
+
+                $data['topPerformer'] = ($topPerformer && $topPerformer->assign_user) ? $topPerformer->assign_user->name : 'N/A';
+                $data['topPerformerValue'] = \Auth::user()->priceFormat($topPerformer->total_gp ?? 0, 2);
+
+                $monthlyTarget = 10000; // This can be made configurable later
+                if (in_array(\Auth::user()->type, ['owner', 'super admin'])) {
+                    $userStandingGP = SalesOrder::whereNotNull('sale_date')
+                            ->whereBetween('sale_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])
+                            ->get()
+                            ->sum(function ($order) {
+                                return $order->gross_profit ?? 0;
+                            });
+                    $totalSales = SalesOrder::sum('charge_amount');
+                    $currentMonthSales = SalesOrder::whereNotNull('sale_date')
+                            ->whereBetween('sale_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])
+                            ->sum('total_amount_quoted');
+                    $data['targetText'] = 'Achieved';
+                    $data['targetTextColor']='';
+                    $data['targetAmount'] = \Auth::user()->priceFormat($currentMonthSales, 2);
+                } else {
+                    $userStandingGP = SalesOrder::where('sales_user_id', $currentUserId)
+                            ->whereNotNull('sale_date')
+                            ->whereBetween('sale_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])
+                            ->get()
+                            ->sum(function ($order) {
+                                return $order->gross_profit ?? 0;
+                            });
+                    $totalSales = SalesOrder::where('sales_user_id', $currentUserId)->sum('charge_amount');
+                    $currentMonthSales = SalesOrder::where('sales_user_id', $currentUserId)
+                            ->whereNotNull('sale_date')
+                            ->whereBetween('sale_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])
+                            ->sum('total_amount_quoted');
+                    $targetPending = max(0, $monthlyTarget - ($currentMonthSales ?? 0));
+                    $data['targetText'] = 'Pending';
+                    $data['targetTextColor'] = ($monthlyTarget<$targetPending)?'text-success':'text-danger';
+                    $data['targetAmount'] = \Auth::user()->priceFormat($targetPending, 2);
+                }
+                // Your Standing GP - Current user's gross profit this month
+                $data['standingGP'] = \Auth::user()->priceFormat($userStandingGP ?? 0, 2);
+                // Total Sales - All time total charge amount
+                $data['totalSales'] = \Auth::user()->priceFormat($totalSales ?? 0, 2);
+
+                $data['target'] = $users = User::find(\Auth::user()->creatorId());
                 return view('home', compact('data', 'users'));
             }
         } else {

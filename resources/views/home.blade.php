@@ -33,44 +33,85 @@
             min-height: 160px !important;
         }
     }
-   .btn-group .btn {
-    /* margin-left: 5px; */
-    border-radius: 6px !important;
-}
+    .btn-group .btn {
+        /* margin-left: 5px; */
+        border-radius: 6px !important;
+    }
 
-.btn-group .btn:hover {
-    transform: translateY(-2px);
-    transition: 0.2s;
-}
+    .btn-group .btn:hover {
+        transform: translateY(-2px);
+        transition: 0.2s;
+    }
 
 
 </style>
-<div class="card mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <!-- <h4 class="mb-0">Dashboard Menu</h4> -->
 
-        <div class="btn-group" role="group">
+<!-- Vertical Performance Metrics Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="row">
+            <!-- Top Performer Card -->
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="theme-avtar bg-primary">
+                            <i class="ti ti-trophy"></i>
+                        </div>
+                        <p class="text-muted text-sm mt-4 mb-2">{{ __('Top Performer') }}</p>
+                        <h6 class="mb-3">{{ __('This Month') }}</h6>
+                        <h3 class="mb-0">{{ $data['topPerformerValue'] ?? '0.00' }}</h3>
+                        <small class="text-muted">{{ $data['topPerformer'] ?? 'N/A' }}</small>
+                    </div>
+                </div>
+            </div>
 
-            <a href="{{ route('part_type.index') }}" class="btn btn-primary ms-2">
-                Top Performer
-            </a>
+            <!-- Your Standing GP Card -->
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="theme-avtar bg-success">
+                            <i class="ti ti-chart-line"></i>
+                        </div>
+                        <p class="text-muted text-sm mt-4 mb-2">{{ __('Your Standing GP') }}</p>
+                        <h6 class="mb-3">{{ __('Gross Profit') }}</h6>
+                        <h3 class="mb-0">{{ $data['standingGP'] ?? '0.00' }}</h3>
+                        <small class="text-muted">Current period performance</small>
+                    </div>
+                </div>
+            </div>
 
-            <a href="{{ route('part_type.index') }}" class="btn btn-success ms-2">
-                Your Standing Gp
-            </a>
+            <!-- Total Sales Card -->
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="theme-avtar bg-info">
+                            <i class="ti ti-shopping-cart"></i>
+                        </div>
+                        <p class="text-muted text-sm mt-4 mb-2">{{ __('Total Sales') }}</p>
+                        <h6 class="mb-3">{{ __('All Time') }}</h6>
+                        <h3 class="mb-0">{{ $data['totalSales'] ?? '0.00' }}</h3>
+                        <small class="text-muted">Cumulative sales amount</small>
+                    </div>
+                </div>
+            </div>
 
-            <a href="{{ route('part_type.index') }}" class="btn btn-info ms-2">
-                Total Sales
-            </a>
-
-            <a href="{{ route('part_type.index') }}" class="btn btn-warning ms-2">
-                Target Pending
-            </a>
-
+            <!-- Target Pending Card -->
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="theme-avtar bg-warning">
+                            <i class="ti ti-target"></i>
+                        </div>
+                        <p class="text-muted text-sm mt-4 mb-2">{{ __('Target '.$data['targetText']) }}</p>
+                        <h6 class="mb-3">{{ __($data['targetText']) }}</h6>
+                        <h3 class="mb-0 {{$data['targetTextColor']}}">{{ $data['targetAmount'] ?? '0.00' }}</h3>
+                        <small class="text-muted">Amount to reach target</small>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 
 <div class="row">
 

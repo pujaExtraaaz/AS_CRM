@@ -50,7 +50,7 @@
                                 <th scope="col" class="sort" data-sort="yard" style="width: 120px;">{{ __('Yard') }}</th>
                                 <th scope="col" class="sort" data-sort="payment_gateway" style="width: 140px;">{{ __('Payment Gateway') }}</th>
                                 <th scope="col" class="sort" data-sort="status" style="width: 100px;">{{ __('Status') }}</th>
-                                <th scope="col" class="sort" data-sort="completion" style="width: 120px;">{{ __('Amount') }}</th>
+                                <th scope="col" class="sort" data-sort="completion" style="width: 120px;">{{ __('Gross Profit') }}</th>
                                 <th scope="col" class="sort" data-sort="completion" style="width: 150px;">{{ __('Source User') }}</th>
                                 @if (Gate::check('Show SalesOrder') || Gate::check('Edit SalesOrder') || Gate::check('Delete SalesOrder'))
                                 <th scope="col" class="text-end" style="width: 150px;">{{ __('Action') }}</th>
@@ -108,7 +108,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <span class="budget">{{ \Auth::user()->priceFormat($salesorder->getTotal()) }}</span>
+                                    <span class="budget">{{ \Auth::user()->priceFormat($salesorder->gross_profit) }}</span>
                                 </td>
                                 <td>
                                     <span class="budget">{{ ucfirst(!empty($salesorder->sourceAgent) ? $salesorder->sourceAgent->name : '-') }}</span>

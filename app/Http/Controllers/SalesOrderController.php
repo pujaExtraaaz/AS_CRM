@@ -1139,4 +1139,16 @@ class SalesOrderController extends Controller {
             return response()->json(['success' => false, 'message' => __('Permission denied')]);
         }
     }
+    public function yardAutoSearch(Request $request)
+{
+    $search = $request->get('term');
+
+    $yards = Yard::where('yard_name', 'LIKE', "%{$search}%")
+        ->select('id', 'yard_name', 'yard_email', 'yard_person_name', 'contact','yard_address')
+        ->limit(10)
+        ->get();
+
+    return response()->json($yards);
+}
+
 }

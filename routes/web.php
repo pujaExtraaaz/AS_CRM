@@ -1235,4 +1235,7 @@ Route::group(['middleware' => ['verified']], function () {
         Route::resource('payment_type', PaymentTypeController::class);
     }
 );
+Route::get('/yard-autosearch', [SalesOrderController::class, 'yardAutoSearch'])
+     ->name('yard.autosearch');
+
 });

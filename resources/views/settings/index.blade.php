@@ -3863,7 +3863,7 @@
                             <div class="row mt-3">
                                 <div class="form-group col-md-6">
                                     {{ Form::label('site_currency', __('Currency *'), ['class' => 'form-label']) }}
-                                    {{ Form::text('site_currency', null, ['class' => 'form-control font-style']) }}
+                                    {{ Form::text('site_currency', old('site_currency', $settings->site_currency ?? 'USD'), ['class' => 'form-control font-style']) }}
                                     @error('site_currency')
                                         <span class="invalid-site_currency" role="alert">
                                             <strong class="text-danger">{{ $message }}</strong>
@@ -3872,7 +3872,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     {{ Form::label('site_currency_symbol', __('Currency Symbol *'), ['class' => 'form-label']) }}
-                                    {{ Form::text('site_currency_symbol', null, ['class' => 'form-control']) }}
+                                    {{ Form::text('site_currency_symbol', '$', ['class' => 'form-control']) }}
                                     @error('site_currency_symbol')
                                         <span class="invalid-site_currency_symbol" role="alert">
                                             <strong class="text-danger">{{ $message }}</strong>

@@ -33,7 +33,45 @@
             min-height: 160px !important;
         }
     }
+   .btn-group .btn {
+    /* margin-left: 5px; */
+    border-radius: 6px !important;
+}
+
+.btn-group .btn:hover {
+    transform: translateY(-2px);
+    transition: 0.2s;
+}
+
+
 </style>
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <!-- <h4 class="mb-0">Dashboard Menu</h4> -->
+
+        <div class="btn-group" role="group">
+
+            <a href="{{ route('part_type.index') }}" class="btn btn-primary ms-2">
+                Top Performer
+            </a>
+
+            <a href="{{ route('part_type.index') }}" class="btn btn-success ms-2">
+                Your Standing Gp
+            </a>
+
+            <a href="{{ route('part_type.index') }}" class="btn btn-info ms-2">
+                Total Sales
+            </a>
+
+            <a href="{{ route('part_type.index') }}" class="btn btn-warning ms-2">
+                Target Pending
+            </a>
+
+        </div>
+    </div>
+</div>
+
+
 <div class="row">
 
     <!-- [ sample-page ] start -->

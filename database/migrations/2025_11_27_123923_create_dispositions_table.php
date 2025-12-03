@@ -10,7 +10,7 @@ return new class extends Migration {
      * Run the migrations.
      */
     public function up(): void {
-        if (!Schema::hasTable('part_type')) {
+        if (!Schema::hasTable('dispositions')) {
             Schema::create('dispositions', function (Blueprint $table) {
                 $table->id();
                 $table->string('name')->nullable();

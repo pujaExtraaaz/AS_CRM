@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('page-title')
-{{ __('Profile Setting') }}
+{{ __('Users Setting') }}
 @endsection
 @if (\Auth::user()->type == 'super admin')
 @section('title')
@@ -8,7 +8,7 @@
 @endsection
 @else
 @section('title')
-{{ __('Profile Settings') }}
+{{ __('Users Settings') }}
 @endsection
 @endif
 
@@ -20,7 +20,7 @@
 @else
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('Home') }}</a></li>
-<li class="breadcrumb-item">{{ __('Profile Setting') }}</li>
+<li class="breadcrumb-item">{{ __('Users Setting') }}</li>
 @endsection
 @endif
 @section('action-btn')
@@ -34,7 +34,7 @@
 @endif
 @can('Create User')
 <a href="#" data-url="{{ route('user.create') }}" data-size="lg" data-ajax-popup="true" data-bs-toggle="tooltip"
-   title="{{ __('Create') }}"data-title="{{ __('Create New Profile Setting') }}" class="btn btn-sm btn-primary btn-icon">
+   title="{{ __('Create') }}"data-title="{{ __('Create New Users Setting') }}" class="btn btn-sm btn-primary btn-icon">
     <i class="ti ti-plus"></i>
 </a>
 @endcan
@@ -57,13 +57,14 @@
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col" class="sort" data-sort="username">{{ __('Avatar') }}</th>
-                                <th scope="col" class="sort" data-sort="username">{{ __('User Name') }}</th>
+                                <!--<th scope="col" class="sort" data-sort="username">{{ __('User Name') }}</th>-->
                                 <th scope="col" class="sort" data-sort="name">{{ __('Name') }}</th>
                                 <th scope="col" class="sort" data-sort="email">{{ __('Email') }}</th>
                                 @if (\Auth::user()->type != 'super admin')
-                                <th scope="col" class="sort" data-sort="title">{{ __('Type') }}</th>
+                                <th scope="col" class="sort" data-sort="type">{{ __('Designation') }}</th>                              
                                 <th scope="col" class="sort" data-sort="isactive">{{ __('Status') }}</th>
                                 @endif
+                                <th scope="col" >{{ __('Gross Profit') }}</th>
                                 @if (Gate::check('Edit User') || Gate::check('Delete User'))
                                 <th class="text-end" scope="col">{{ __('Action') }}</th>
                                 @endif
@@ -86,13 +87,6 @@
                                     <a href="#" data-size="md" data-url="{{ route('user.show', $user->id) }}"
                                        data-ajax-popup="true" data-title="{{ __('User Details') }}"
                                        class="action-item text-primary">
-                                        {{ ucfirst($user->username) }}
-                                    </a>
-                                </td>
-                                <td>
-                                     <a href="javascript:void(0);" data-size="md" data-url="{{ route('user.show', $user->id) }}"
-                                       data-ajax-popup="true" data-title="{{ __('User Details') }}"
-                                       class="action-item text-primary">
                                         {{ ucfirst($user->name) }}
                                     </a>
                                 </td>
@@ -113,6 +107,9 @@
                                     @endif
                                 </td>
                                 @endif
+                                 <td>
+                                    {{ number_format($user->gp,2) }}
+                                </td>
                                 @if (Gate::check('Edit User') || Gate::check('Delete User'))
                                 <td class="text-end">
                                     @if (\Auth::user()->type == 'super admin')

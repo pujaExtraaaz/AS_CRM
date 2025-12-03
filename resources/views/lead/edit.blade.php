@@ -121,7 +121,7 @@ $plansettings = App\Models\Utility::plansettings();
                                 <div class="col-6">
                                     <div class="form-group">
                                         {{ Form::label('product', __('Product / Service'), ['class' => 'form-label']) }}
-                                        {!! Form::select('product', $product, $lead->product_id, ['class' => 'form-control', 'id' => 'product-select','disabled']) !!}
+                                        {!! Form::select('product', $product, $lead->product_id, ['class' => 'form-control', 'id' => 'product-select']) !!}
                                         @error('product_id')
                                         <span class="invalid-product_id" role="alert">
                                             <strong class="text-danger">{{ $message }}</strong>
@@ -131,7 +131,7 @@ $plansettings = App\Models\Utility::plansettings();
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        {{ Form::label('contact', __('Contact Person'), ['class' => 'form-label']) }}
+                                        {{ Form::label('contact', __('Phone'), ['class' => 'form-label']) }}
                                         {{ Form::text('contact', null, ['class' => 'form-control', 'placeholder' => __('Enter Contact Person')]) }}
                                         @error('contact')
                                         <span class="invalid-contact" role="alert">
@@ -181,7 +181,7 @@ $plansettings = App\Models\Utility::plansettings();
                                 </div>
                                 <div class="col-12">
                                     <div class="form-group">
-                                        {{ Form::label('note', __('Note'), ['class' => 'form-label']) }}
+                                        {{ Form::label('note', __('Follow Up Note'), ['class' => 'form-label']) }}
                                         {{ Form::textarea('note', null, ['class' => 'form-control', 'rows' => 3, 'placeholder' => __('Enter Note')]) }}
                                         @error('note')
                                         <span class="invalid-note" role="alert">
@@ -202,7 +202,7 @@ $plansettings = App\Models\Utility::plansettings();
                 <div id="useradd-2" class="card">
                     {{ Form::open(['route' => ['streamstore', 'lead', $lead->id, $lead->name ?: 'Lead-' . $lead->id], 'method' => 'post', 'enctype' => 'multipart/form-data']) }}
                     <div class="card-header">
-                        <h5>{{ __('Stream') }}</h5>
+                        <h5>{{ __('Stream  / Follow Up') }}</h5>
                         <small class="text-muted">{{ __('Add stream comment') }}</small>
                     </div>
                     <div class="card-body">
@@ -210,7 +210,7 @@ $plansettings = App\Models\Utility::plansettings();
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        {{ Form::label('stream', __('Stream'), ['class' => 'form-label']) }}
+                                        {{ Form::label('stream', __('Stream / Follow Up'), ['class' => 'form-label']) }}
                                         {{ Form::text('stream_comment', null, ['class' => 'form-control', 'placeholder' => __('Enter Stream Comment'), 'required' => 'required']) }}
                                     </div>
                                 </div>

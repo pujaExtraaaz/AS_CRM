@@ -34,6 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail {
         'email_verified_at',
         'phone',
         'gender',
+        'monthly_target',
         'type',
         'is_active',
         'is_enable_login',
@@ -428,5 +429,15 @@ class User extends Authenticatable implements MustVerifyEmail {
         $settings = Utility::settings();
 
         return $settings["salesreturn_prefix"] . sprintf("%05d", $number);
+    }
+
+    public function disputeFormat($number) {
+        $settings = Utility::settings();
+
+        return ($settings["dispute_prefix"] ?? "DSP") . sprintf("%05d", $number);
+    }
+
+    public function sale_order() {
+        return $this->hasMany('App\Models\SalesOrder','sales_user_id','id');
     }
 }

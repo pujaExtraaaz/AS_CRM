@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Stream;
 use App\Models\Utility;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SalesReturnController extends Controller {
 
@@ -15,9 +16,9 @@ class SalesReturnController extends Controller {
         if (\Auth::user()->can('Manage SalesOrder')) {
             if (\Auth::user()->type == 'owner') {
 
-                $salesreturn = SalesReturn::with('source_user')->get();
+                $salesreturn = SalesReturn::with('source_user', 'sales_order', 'lead')->get();
             } else {
-                $salesreturn = SalesReturn::with('source_user')->where('user_id', \Auth::user()->id)->get();
+                $salesreturn = SalesReturn::with('source_user', 'sales_order', 'lead')->where('user_id', \Auth::user()->id)->get();
             }
             return view('sales_return.index', compact('salesreturn'));
         } else {
@@ -29,13 +30,11 @@ class SalesReturnController extends Controller {
         if (\Auth::user()->can('Create SalesOrder')) {
             $request_type = collect(SalesReturn::$request_type);
             $request_type->prepend('--', '');
+
+            $case_status = collect(SalesReturn::$case_status);
+            $case_status->prepend('--', '');
             $salesreturn_no = $this->salesreturnNumber();
-            $salesorders = SalesOrder::get();
-            $salesorder = ['--', ''];
-            foreach ($salesorders as $sales_order) {
-                $salesorder[$sales_order['id']] = $sales_order['name'] . ' (' . \Auth::user()->salesorderNumberFormat($sales_order['salesorder_id']) . ')';
-            }
-            return view('sales_return.create', compact('salesorder', 'request_type', 'salesreturn_no'));
+            return view('sales_return.create', compact('request_type', 'case_status', 'salesreturn_no'));
         } else {
             return redirect()->back()->with('error', 'permission Denied');
         }
@@ -46,11 +45,10 @@ class SalesReturnController extends Controller {
             $validator = \Validator::make(
                     $request->all(),
                     [
-                        'salesorder' => 'required',
+                        'salesorder_id' => 'required|unique:sales_return,salesorder_id',
                         'return_date' => 'required',
                         'request_type' => 'required',
-                        'refund_amount' => 'required',
-                    //    'tax' => 'required',
+                        'refund_received' => 'required',
                     ]
             );
             if ($validator->fails()) {
@@ -58,16 +56,22 @@ class SalesReturnController extends Controller {
                 return redirect()->back()->with('error', $messages->first());
             }
             try {
-                $salesorder = SalesOrder::find($request->salesorder);
+                $salesorder = SalesOrder::find($request->salesorder_id);
 
                 $salesreturn = new SalesReturn();
                 $salesreturn['user_id'] = \Auth::user()->id;
                 $salesreturn['lead_id'] = $salesorder->lead_id;
-                $salesreturn['salesorder_id'] = $request->salesorder;
+                $salesreturn['salesorder_id'] = $request->salesorder_id;
                 $salesreturn['salesreturn_id'] = $request->salesreturn_id;
                 $salesreturn['return_date'] = $request->return_date;
+                $salesreturn['salesreturn_tracknumber'] = $request->salesreturn_tracknumber;
                 $salesreturn['request_type'] = $request->request_type;
-                $salesreturn['refund_amount'] = $request->refund_amount;
+                $salesreturn['case_status'] = $request->case_status;
+                $salesreturn['refund_received'] = $request->refund_received;
+                $salesreturn['refund_issued'] = $request->refund_issued;
+                $salesreturn['gp_deduction'] = $request->gp_deduction;
+                $salesreturn['loss'] = $request->loss;
+                $salesreturn['total_deduction'] = ($request->gp_deduction + $request->loss);
                 $salesreturn['reason'] = $request->reason;
                 $salesreturn['created_by'] = \Auth::user()->creatorId();
                 $salesreturn->save();
@@ -122,12 +126,16 @@ class SalesReturnController extends Controller {
             $salesreturn = SalesReturn::find($id);
             $request_type = collect(SalesReturn::$request_type);
             $request_type->prepend('--', '');
-            $salesorders = SalesOrder::get();
-            $salesorder = ['--', ''];
-            foreach ($salesorders as $sales_order) {
-                $salesorder[$sales_order['id']] = $sales_order['name'] . ' (' . \Auth::user()->salesorderNumberFormat($sales_order['salesorder_id']) . ')';
+
+            $case_status = collect(SalesReturn::$case_status);
+            $case_status->prepend('--', '');
+
+            $salesOrder = null;
+            if ($salesreturn->salesorder_id) {
+                $salesOrder = SalesOrder::with(['lead', 'sourceAgent'])->find($salesreturn->salesorder_id);
             }
-            return view('sales_return.edit', compact('salesorder', 'request_type', 'salesreturn'));
+
+            return view('sales_return.edit', compact('request_type', 'case_status', 'salesreturn', 'salesOrder'));
         } else {
             return redirect()->back()->with('error', 'permission Denied');
         }
@@ -140,10 +148,10 @@ class SalesReturnController extends Controller {
             $validator = \Validator::make(
                     $request->all(),
                     [
-                        'salesorder' => 'required',
+                        // 'salesorder_id' => 'required|unique:sales_return,salesorder_id,' . $id,
                         'return_date' => 'required',
                         'request_type' => 'required',
-                        'refund_amount' => 'required',
+                        'refund_received' => 'required',
                     ]
             );
             if ($validator->fails()) {
@@ -151,16 +159,20 @@ class SalesReturnController extends Controller {
                 return redirect()->back()->with('error', $messages->first());
             }
             try {
-                $salesorder = SalesOrder::find($request->salesorder);
-                
-                
-                 $salesreturn['user_id'] = \Auth::user()->id;
-                $salesreturn['lead_id'] = $salesorder->lead_id;
-                $salesreturn['salesorder_id'] = $request->salesorder;
-                $salesreturn['salesreturn_id'] = $request->salesreturn_id;
+                // $salesorder = SalesOrder::find($salesreturn->salesorder_id);               
+                $salesreturn['user_id'] = \Auth::user()->id;
+                // $salesreturn['lead_id'] = $salesorder->lead_id;
+                // $salesreturn['salesorder_id'] = $request->salesorder_id;
+                // $salesreturn['salesreturn_id'] = $request->salesreturn_id;
                 $salesreturn['return_date'] = $request->return_date;
+                $salesreturn['salesreturn_tracknumber'] = $request->salesreturn_tracknumber;
                 $salesreturn['request_type'] = $request->request_type;
-                $salesreturn['refund_amount'] = $request->refund_amount;
+                $salesreturn['case_status'] = $request->case_status;
+                $salesreturn['refund_received'] = $request->refund_received;
+                $salesreturn['refund_issued'] = $request->refund_issued;
+                $salesreturn['gp_deduction'] = $request->gp_deduction;
+                $salesreturn['loss'] = $request->loss;
+                $salesreturn['total_deduction'] = ($request->gp_deduction + $request->loss);
                 $salesreturn['reason'] = $request->reason;
                 $salesreturn->save();
 

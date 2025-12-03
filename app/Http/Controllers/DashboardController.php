@@ -21,6 +21,7 @@ use App\Models\Utility;
 use App\Models\LandingPageSections;
 use App\Models\Yard;
 use App\Models\SalesReturn;
+use App\Models\SalesDispute;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,10 +46,21 @@ class DashboardController extends Controller {
             } else {
                 $data['totalUser'] = User::where('created_by', \Auth::user()->creatorId())->count();
                 $data['totalLead'] = Lead::count();
-                $data['totalSalesorder'] = $totalSalesOrder = SalesOrder::count();
+                $data['totalSalesorder'] = SalesOrder::count();
                 $data['totalYard'] = Yard::count();
-                $data['totalSalesReturn'] = SalesReturn::count();
-                $data['totalProduct'] = Product::count();
+
+                // Calculate total_sales_return and total_dispute counts - filter by user if not owner
+                if (\Auth::user()->type == 'owner') {
+                    $data['totalSalesReturn'] = SalesReturn::count();
+                    $data['totalDispute'] = SalesDispute::count();
+                } else {
+                    $data['totalSalesReturn'] = SalesReturn::where('user_id', \Auth::user()->id)->count();
+                    $data['totalDispute'] = SalesDispute::where('user_id', \Auth::user()->id)->count();
+
+                    // Calculate total deduction amounts for regular user
+                    $data['total_sales_return_deduction'] = SalesReturn::where('user_id', \Auth::user()->id)->sum('total_deduction') ?? 0;
+                    $data['total_dispute_deduction'] = SalesDispute::where('user_id', \Auth::user()->id)->sum('total_deduction') ?? 0;
+                }
 
                 // Calculate performance metrics
                 $currentMonth = Carbon::now()->startOfMonth();
@@ -67,8 +79,12 @@ class DashboardController extends Controller {
                 $data['topPerformer'] = ($topPerformer && $topPerformer->assign_user) ? $topPerformer->assign_user->name : 'N/A';
                 $data['topPerformerValue'] = \Auth::user()->priceFormat($topPerformer->total_gp ?? 0, 2);
 
-                $monthlyTarget = 10000; // This can be made configurable later
+                $monthlyTarget = \Auth::user()->monthly_target; // This can be made configurable later
                 if (in_array(\Auth::user()->type, ['owner', 'super admin'])) {
+                    // Calculate total deduction amounts for owner
+                    $total_sales_return_deduction = SalesReturn::whereBetween('return_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])->sum('total_deduction') ?? 0;
+                    $total_dispute_deduction = SalesDispute::whereBetween('dispute_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])->sum('total_deduction') ?? 0;
+
                     $userStandingGP = SalesOrder::whereNotNull('sale_date')
                             ->whereBetween('sale_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])
                             ->get()
@@ -76,13 +92,17 @@ class DashboardController extends Controller {
                                 return $order->gross_profit ?? 0;
                             });
                     $totalSales = SalesOrder::sum('charge_amount');
+                    $totalSalesReturn = SalesReturn::sum('refund_received');
+                    $totalSalesDispute = SalesDispute::sum('disputed_amount');
                     $currentMonthSales = SalesOrder::whereNotNull('sale_date')
                             ->whereBetween('sale_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])
                             ->sum('total_amount_quoted');
                     $data['targetText'] = 'Achieved';
-                    $data['targetTextColor']='';
+                    $data['targetTextColor'] = '';
                     $data['targetAmount'] = \Auth::user()->priceFormat($currentMonthSales, 2);
                 } else {
+                    $total_sales_return_deduction = SalesReturn::where('user_id', \Auth::user()->id)->whereBetween('return_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])->sum('total_deduction') ?? 0;
+                    $total_dispute_deduction = SalesDispute::where('user_id', \Auth::user()->id)->whereBetween('dispute_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])->sum('total_deduction') ?? 0;
                     $userStandingGP = SalesOrder::where('sales_user_id', $currentUserId)
                             ->whereNotNull('sale_date')
                             ->whereBetween('sale_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])
@@ -91,19 +111,25 @@ class DashboardController extends Controller {
                                 return $order->gross_profit ?? 0;
                             });
                     $totalSales = SalesOrder::where('sales_user_id', $currentUserId)->sum('charge_amount');
+                    $totalSalesReturn = SalesReturn::where('sales_user_id', $currentUserId)->sum('refund_received');
+                    $totalSalesDispute = SalesDispute::where('sales_user_id', $currentUserId)->sum('disputed_amount');
                     $currentMonthSales = SalesOrder::where('sales_user_id', $currentUserId)
                             ->whereNotNull('sale_date')
                             ->whereBetween('sale_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])
                             ->sum('total_amount_quoted');
                     $targetPending = max(0, $monthlyTarget - ($currentMonthSales ?? 0));
                     $data['targetText'] = 'Pending';
-                    $data['targetTextColor'] = ($monthlyTarget<$targetPending)?'text-success':'text-danger';
+                    $data['targetTextColor'] = ($monthlyTarget < $targetPending) ? 'text-success' : 'text-danger';
                     $data['targetAmount'] = \Auth::user()->priceFormat($targetPending, 2);
                 }
+                $totalDeduction = $total_sales_return_deduction + $total_dispute_deduction;
+                $totalStandingGP = $userStandingGP - $totalDeduction;
                 // Your Standing GP - Current user's gross profit this month
-                $data['standingGP'] = \Auth::user()->priceFormat($userStandingGP ?? 0, 2);
+                $data['standingGP'] = \Auth::user()->priceFormat($totalStandingGP ?? 0, 2);
                 // Total Sales - All time total charge amount
                 $data['totalSales'] = \Auth::user()->priceFormat($totalSales ?? 0, 2);
+                $data['totalSalesReturn'] = \Auth::user()->priceFormat($totalSalesReturn ?? 0, 2);
+                $data['totalSalesDispute'] = \Auth::user()->priceFormat($totalSalesDispute ?? 0, 2);
 
                 $data['target'] = $users = User::find(\Auth::user()->creatorId());
                 return view('home', compact('data', 'users'));

@@ -6,13 +6,12 @@ use App\Models\Yard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class YardController extends Controller
-{
+class YardController extends Controller {
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index() {
         $yards = Yard::orderBy('created_at', 'desc')->paginate(10);
         return view('yards.index', compact('yards'));
     }
@@ -20,16 +19,14 @@ class YardController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
+    public function create() {
         return view('yards.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $request->validate([
             'yard_name' => 'required|string|max:255',
             'yard_address' => 'required|string|max:500',
@@ -53,24 +50,21 @@ class YardController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Yard $yard)
-    {
+    public function show(Yard $yard) {
         return view('yards.show', compact('yard'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Yard $yard)
-    {
+    public function edit(Yard $yard) {
         return view('yards.edit', compact('yard'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Yard $yard)
-    {
+    public function update(Request $request, Yard $yard) {
         $request->validate([
             'yard_name' => 'required|string|max:255',
             'yard_address' => 'required|string|max:500',
@@ -92,8 +86,7 @@ class YardController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Yard $yard)
-    {
+    public function destroy(Yard $yard) {
         $yard->delete();
         return redirect()->route('yards.index')->with('success', 'Yard deleted successfully.');
     }
@@ -101,20 +94,16 @@ class YardController extends Controller
     /**
      * Search yards for AJAX requests
      */
-    public function search(Request $request)
-    {
-        $search = $request->get('search', '');
-        $limit = $request->get('limit', null);
-        
-        $query = Yard::where('yard_name', 'like', '%' . $search . '%');
-//            ->orWhere('yard_address', 'like', '%' . $search . '%');
-            
-        if ($limit) {
-            $yards = $query->limit($limit)->get(['id', 'yard_name', 'yard_address', 'contact', 'yard_email']);
-        } else {
-            $yards = $query->get(['id', 'yard_name', 'yard_address', 'contact', 'yard_email']);
-        }
-            
-        return response()->json(['yards' => $yards]);
+    public function search(Request $request) {
+        $search = $request->get('term');
+        $yards = Yard::where('yard_name', 'LIKE', "%{$search}%")
+                ->orWhere('yard_email', 'LIKE', "%{$search}%")
+                ->orWhere('yard_person_name', 'LIKE', "%{$search}%")
+                ->orWhere('contact', 'LIKE', "%{$search}%")
+                ->orWhere('yard_address', 'LIKE', "%{$search}%")
+                ->select('id', 'yard_name', 'yard_email', 'yard_person_name', 'contact', 'yard_address')
+                ->limit(10)
+                ->get();
+        return response()->json($yards);
     }
 }

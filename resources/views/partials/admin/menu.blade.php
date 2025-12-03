@@ -31,7 +31,7 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                         <a href="{{ route('dashboard') }}" class="dash-link">
                             <span class="dash-micon"><i class="ti ti-home-2"></i></span><span class="dash-mtext">{{ __('Dashboard') }}</span></a>
                     </li>
-                     @can('Manage Lead')
+                    @can('Manage Lead')
                     <li class="dash-item {{ \Request::route()->getName() == 'lead' || \Request::route()->getName() == 'lead.edit' ? ' active' : '' }}">
                         {{-- <a href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('lead')) ? route(\Auth::user()->getDefualtViewRouteByModule('lead')) : route('lead.index') }}" class="dash-link">
                         <span class="dash-micon"><i class="ti ti-filter"></i></span><span class="dash-mtext">{{ __('Leads') }}</span>
@@ -48,72 +48,71 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                         </a>
                     </li>
                     @endcan
-                     @if (Gate::check('Manage SalesOrder'))
-                    <li class="dash-item {{ Request::route()->getName() == 'salesorder' ? 'active' : '' }}">
+                    @if (Gate::check('Manage SalesReturn'))
+                    <li class="dash-item {{ Request::route()->getName() == 'sales_return' ? 'active' : '' }}">
                         <a class="dash-link" href="{{ route('sales_return.index') }}"><span class="dash-micon"><i class="fas fa-history"></i></span><span class="dash-mtext">{{ __('Return / Refund') }}</span></a>
                     </li>
                     @endif
-                    
-                    @if(\Auth::user()->type == 'super admin')
-<!--                    @can('Manage User')
-                    <li class="dash-item {{ \Request::route()->getName() == 'user' || \Request::route()->getName() == 'user.edit' ? ' active' : '' }}">
-                        {{-- <a class="dash-link" href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('user')) ? route(\Auth::user()->getDefualtViewRouteByModule('user')) : route('user.index') }}"> --}}
-                        <a class="dash-link" href="{{ array_key_exists('user',$defaultView) ? route($defaultView['user']) : route('user.index') }}">
-                            <span class="dash-micon"><i class="ti ti-user"></i></span><span class="dash-mtext">{{ __('Companies') }}</span></a>
+                    @if (Gate::check('Manage Dispute'))
+                    <li class="dash-item {{ Request::route()->getName() == 'dispute' ? 'active' : '' }}">
+                        <a class="dash-link" href="{{ route('dispute.index') }}"><span class="dash-micon"><i class="ti ti-package"></i></span><span class="dash-mtext">{{ __('Sales Dispute') }}</span></a>
                     </li>
-                    @endcan-->
-                    @else
-                    @can('Manage User')
-                    <li class="dash-item {{ \Request::route()->getName() == 'user' || \Request::route()->getName() == 'user.edit' ? ' active' : '' }}">
-                        {{-- <a class="dash-link" href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('user')) ? route(\Auth::user()->getDefualtViewRouteByModule('user')) : route('user.index') }}"> --}}
-                        <a class="dash-link" href="{{ array_key_exists('user',$defaultView) ? route($defaultView['user']) : route('user.index') }}">
-                            <span class="dash-micon"><i class="ti ti-user"></i></span><span class="dash-mtext">{{ __('Profile Setting') }}</span></a>
-                    </li>
-                    @endcan
                     @endif
-                     @if (\Auth::user()->type != 'super admin')
+
+                    @if(\Auth::user()->type == 'super admin')
+                    <!--                    @can('Manage User')
+                                        <li class="dash-item {{ \Request::route()->getName() == 'user' || \Request::route()->getName() == 'user.edit' ? ' active' : '' }}">
+                                            {{-- <a class="dash-link" href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('user')) ? route(\Auth::user()->getDefualtViewRouteByModule('user')) : route('user.index') }}"> --}}
+                                            <a class="dash-link" href="{{ array_key_exists('user',$defaultView) ? route($defaultView['user']) : route('user.index') }}">
+                                                <span class="dash-micon"><i class="ti ti-user"></i></span><span class="dash-mtext">{{ __('Companies') }}</span></a>
+                                        </li>
+                                        @endcan-->
+                    @else
+
+                    @endif
+                    @if (\Auth::user()->type != 'super admin')
                     <li class="dash-item {{ \Request::route()->getName() == 'messages' ? ' active' : '' }}">
                         <a href="{{ url('chats') }}" class="dash-link {{ Request::segment(1) == 'messages' ? 'active' : '' }}">
                             <span class="dash-micon"><i class="ti ti-brand-messenger"></i></span><span class="dash-mtext">{{ __('Messenger') }}</span>
                         </a>
                     </li>
                     @endif
-                  
+
                     <li class="dash-item {{ \Request::route()->getName() == 'yards' || \Request::route()->getName() == 'yards.edit' ? ' active' : '' }}">
                         <a href="{{ array_key_exists('yards',$defaultView) ? route($defaultView['yards']) : route('yards.index')}}"
                            class="dash-link">
                             <span class="dash-micon"><i class="fas fa-house-damage"></i></span><span class="dash-mtext">{{ __('Yard') }}</span>
                         </a>
                     </li>
-                  
+
                     @can('Manage Product')
                     <li class="dash-item {{ \Request::route()->getName() == 'product' || \Request::route()->getName() == 'product.edit' ? ' active' : '' }}">
-                        {{-- <a href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('product')) ? route(\Auth::user()->getDefualtViewRouteByModule('product')) : route('product.index') }}"
-                        class="dash-link">
-                        <span class="dash-micon"><i class="ti ti-brand-producthunt"></i></span><span class="dash-mtext">{{ __('Products / Services') }}</span>
-                        </a> --}}
-                        <a href="{{ array_key_exists('product',$defaultView) ? route($defaultView['product']) : route('product.index')}}"
-                           class="dash-link">
-                            <span class="dash-micon"><i class="ti ti-brand-producthunt"></i></span><span class="dash-mtext">{{ __('Dispute') }}</span>
-                        </a>
+                        <a href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('product')) ? route(\Auth::user()->getDefualtViewRouteByModule('product')) : route('product.index') }}" class="dash-link">
+                            <span class="dash-micon"><i class="ti ti-brand-producthunt"></i></span><span class="dash-mtext">{{ __('Products / Services') }}</span>
+                        </a>                       
                     </li>
                     @endcan
-                    @if (Gate::check('Manage LeadSource'))
+                    @can('Manage LeadSource')
                     <li class="dash-item {{ \Request::route()->getName() == 'lead_source' ? 'active' : ''}}"">
                         <a class="dash-link " href="{{ route('lead_source.index') }}"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext">{{ __('Lead Source') }}</span></a>
                     </li>
                     @endif
-                     <!-- @if (Gate::check('Manage LeadSource')) -->
+                    @can('Manage Disposition')
+                    <li class="dash-item {{ \Request::route()->getName() == 'disposition' ? 'active' : '' }}">
+                        <a class="dash-link " href="{{ route('disposition.index') }}"><span class="dash-micon"><i class="ti ti-vector"></i></span><span class="dash-mtext">{{ __('Disposition') }}</span></a>
+                    </li>
+                    @endif
+                    @can('Manage Part Type') 
                     <li class="dash-item {{ \Request::route()->getName() == 'part_type' ? 'active' : ''}}"">
-                        <a class="dash-link " href="{{ route('part_type.index') }}"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext">{{ __('Part Type') }}</span></a>
+                        <a class="dash-link " href="{{ route('part_type.index') }}"><span class="dash-micon"><i class="ti ti-rocket"></i></span><span class="dash-mtext">{{ __('Part Type') }}</span></a>
                     </li>
-                    <!-- @endif -->
-                       <!-- @if (Gate::check('Manage LeadSource')) -->
+                    @endif 
+                    @can('Manage Payment Gateway')
                     <li class="dash-item {{ \Request::route()->getName() == 'payment_type' ? 'active' : ''}}"">
-                        <a class="dash-link " href="{{ route('payment_type.index') }}"><span class="dash-micon"><i class="ti ti-circle-square"></i></span><span class="dash-mtext">{{ __('Payment Gateway') }}</span></a>
+                        <a class="dash-link " href="{{ route('payment_type.index') }}"><span class="dash-micon"><i class="ti ti-wallet"></i></span><span class="dash-mtext">{{ __('Payment Gateway') }}</span></a>
                     </li>
-                    <!-- @endif -->
-                                                      
+                    @endif 
+
                     <!--                    @can('Manage Quote')
                                         <li class="dash-item {{ \Request::route()->getName() == 'quote' || \Request::route()->getName() == 'quote.show' || \Request::route()->getName() == 'quote.edit' ? ' active' : '' }}">
                                             <a href="{{ route('quote.index') }}" class="dash-link">
@@ -121,7 +120,7 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                                             </a>
                                         </li>
                                         @endcan-->
-                    
+
                     <!--                    @can('Manage Invoice')
                                         <li class="dash-item {{ \Request::route()->getName() == 'invoice' || \Request::route()->getName() == 'invoice.show' || \Request::route()->getName() == 'invoice.edit' ? ' active' : '' }}">
                                             <a href="{{ route('invoice.index') }}" class="dash-link">
@@ -138,44 +137,44 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                                         </li>
                                         @endcan
                                         @endif-->
-<!--                    @if (Gate::check('Manage Report'))
-                    <li class="dash-item dash-hasmenu  {{ \Request::route()->getName() == 'report.index' || \Request::route()->getName() == 'report.show' || \Request::route()->getName() == 'report.edit' ? ' active dash-trigger' : '' }}">
-                        <a class="dash-link collapsed">
-                            <span class="dash-micon"><i class="ti ti-trending-up"></i></span>{{ __('Reports') }}<span class="dash-arrow"><i data-feather="chevron-right"></i></span>
-                        </a>
-
-                        <ul class="dash-submenu">
-                            <li class="dash-item {{ \Request::route()->getName() == 'report.index' || \Request::route()->getName() == 'report.show' || \Request::route()->getName() == 'report.edit' ? ' active ' : '' }}">
-                                <a href="{{ route('report.index') }}" class="dash-link">
-                                    {{ __('Custom Report') }}</a>
-                            </li>
-                            @can('Manage Report')
-                            <li class="dash-item {{ \Request::route()->getName() == 'report.leadsanalytic' ? ' active ' : '' }}">
-                                <a href="{{ route('report.leadsanalytic') }}" class="dash-link">
-                                    {{ __('Leads Analytics') }}</a>
-                            </li>
-                            @endcan
-                                                        @can('Manage Report')
-                                                        <li class="dash-item {{ \Request::route()->getName() == 'leadsanalytic' ? ' active ' : '' }}">
-                                                            <a href="{{ route('report.invoiceanalytic') }}" class="dash-link">
-                                                                {{ __('Invoice Analytics') }}</a>
-                                                        </li>
-                                                        @endcan
-                            @can('Manage Report')
-                            <li class="dash-item {{ \Request::route()->getName() == 'salesorderanalytic' ? ' active ' : '' }}">
-                                <a href="{{ route('report.salesorderanalytic') }}" class="dash-link">
-                                    {{ __('Sales Order Analytics') }}</a>
-                            </li>
-                            @endcan
-                                                        @can('Manage Report')
-                                                        <li class="dash-item  {{ \Request::route()->getName() == 'quoteanalytic' ? ' active ' : '' }}">
-                                                            <a href="{{ route('report.quoteanalytic') }}" class="dash-link">
-                                                                {{ __('Quote Analytics') }}</a>
-                                                        </li>
-                                                        @endcan
-                        </ul>
-                    </li>
-                    @endif  -->
+                    <!--                    @if (Gate::check('Manage Report'))
+                                        <li class="dash-item dash-hasmenu  {{ \Request::route()->getName() == 'report.index' || \Request::route()->getName() == 'report.show' || \Request::route()->getName() == 'report.edit' ? ' active dash-trigger' : '' }}">
+                                            <a class="dash-link collapsed">
+                                                <span class="dash-micon"><i class="ti ti-trending-up"></i></span>{{ __('Reports') }}<span class="dash-arrow"><i data-feather="chevron-right"></i></span>
+                                            </a>
+                    
+                                            <ul class="dash-submenu">
+                                                <li class="dash-item {{ \Request::route()->getName() == 'report.index' || \Request::route()->getName() == 'report.show' || \Request::route()->getName() == 'report.edit' ? ' active ' : '' }}">
+                                                    <a href="{{ route('report.index') }}" class="dash-link">
+                                                        {{ __('Custom Report') }}</a>
+                                                </li>
+                                                @can('Manage Report')
+                                                <li class="dash-item {{ \Request::route()->getName() == 'report.leadsanalytic' ? ' active ' : '' }}">
+                                                    <a href="{{ route('report.leadsanalytic') }}" class="dash-link">
+                                                        {{ __('Leads Analytics') }}</a>
+                                                </li>
+                                                @endcan
+                                                                            @can('Manage Report')
+                                                                            <li class="dash-item {{ \Request::route()->getName() == 'leadsanalytic' ? ' active ' : '' }}">
+                                                                                <a href="{{ route('report.invoiceanalytic') }}" class="dash-link">
+                                                                                    {{ __('Invoice Analytics') }}</a>
+                                                                            </li>
+                                                                            @endcan
+                                                @can('Manage Report')
+                                                <li class="dash-item {{ \Request::route()->getName() == 'salesorderanalytic' ? ' active ' : '' }}">
+                                                    <a href="{{ route('report.salesorderanalytic') }}" class="dash-link">
+                                                        {{ __('Sales Order Analytics') }}</a>
+                                                </li>
+                                                @endcan
+                                                                            @can('Manage Report')
+                                                                            <li class="dash-item  {{ \Request::route()->getName() == 'quoteanalytic' ? ' active ' : '' }}">
+                                                                                <a href="{{ route('report.quoteanalytic') }}" class="dash-link">
+                                                                                    {{ __('Quote Analytics') }}</a>
+                                                                            </li>
+                                                                            @endcan
+                                            </ul>
+                                        </li>
+                                        @endif  -->
                     <!--                    @can('Manage Opportunities')
                                         <li class="dash-item {{ \Request::route()->getName() == 'opportunities' || \Request::route()->getName() == 'opportunities.edit' ? ' active' : '' }}">
                                             {{-- <a href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('opportunities')) ? route(\Auth::user()->getDefualtViewRouteByModule('opportunities')) : route('opportunities.index') }}"
@@ -188,26 +187,26 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                                             </a>
                                         </li>
                                         @endcan   -->
-<!--                    @can('Manage Account')
-                    <li class="dash-item {{ \Request::route()->getName() == 'account' || \Request::route()->getName() == 'account.edit' ? ' active' : '' }}">
-                        {{-- <a href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('account')) ? route(\Auth::user()->getDefualtViewRouteByModule('account')) : route('account.index') }}" class="dash-link">
-                        <span class="dash-micon"> <i class="ti ti-building"></i></span><span class="dash-mtext">{{ __('Accounts') }}</span>
-                        </a> --}}
-                        <a href="{{array_key_exists('account',$defaultView) ? route($defaultView['account']) : route('account.index') }}" class="dash-link">
-                            <span class="dash-micon"> <i class="ti ti-building"></i></span><span class="dash-mtext">{{ __('Accounts') }}</span>
-                        </a>
-                    </li>
-                    @endcan
-                    @can('Manage Contact')
-                    <li class="dash-item {{ \Request::route()->getName() == 'contact' || \Request::route()->getName() == 'contact.edit' ? ' active' : '' }}">
-                        {{-- <a href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('contact')) ? route(\Auth::user()->getDefualtViewRouteByModule('contact')) : route('contact.index') }}" class="dash-link ">
-                        <span class="dash-micon"><i class="ti ti-file-phone"></i></span><span class="dash-mtext">{{ __('Contacts') }}</span>
-                        </a> --}}
-                        <a href="{{ array_key_exists('contact',$defaultView) ? route($defaultView['contact']) : route('contact.index') }}"  class="dash-link ">
-                            <span class="dash-micon"><i class="ti ti-file-phone"></i></span><span class="dash-mtext">{{ __('Contacts') }}</span>
-                        </a>
-                    </li>
-                    @endcan-->
+                    <!--                    @can('Manage Account')
+                                        <li class="dash-item {{ \Request::route()->getName() == 'account' || \Request::route()->getName() == 'account.edit' ? ' active' : '' }}">
+                                            {{-- <a href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('account')) ? route(\Auth::user()->getDefualtViewRouteByModule('account')) : route('account.index') }}" class="dash-link">
+                                            <span class="dash-micon"> <i class="ti ti-building"></i></span><span class="dash-mtext">{{ __('Accounts') }}</span>
+                                            </a> --}}
+                                            <a href="{{array_key_exists('account',$defaultView) ? route($defaultView['account']) : route('account.index') }}" class="dash-link">
+                                                <span class="dash-micon"> <i class="ti ti-building"></i></span><span class="dash-mtext">{{ __('Accounts') }}</span>
+                                            </a>
+                                        </li>
+                                        @endcan
+                                        @can('Manage Contact')
+                                        <li class="dash-item {{ \Request::route()->getName() == 'contact' || \Request::route()->getName() == 'contact.edit' ? ' active' : '' }}">
+                                            {{-- <a href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('contact')) ? route(\Auth::user()->getDefualtViewRouteByModule('contact')) : route('contact.index') }}" class="dash-link ">
+                                            <span class="dash-micon"><i class="ti ti-file-phone"></i></span><span class="dash-mtext">{{ __('Contacts') }}</span>
+                                            </a> --}}
+                                            <a href="{{ array_key_exists('contact',$defaultView) ? route($defaultView['contact']) : route('contact.index') }}"  class="dash-link ">
+                                                <span class="dash-micon"><i class="ti ti-file-phone"></i></span><span class="dash-mtext">{{ __('Contacts') }}</span>
+                                            </a>
+                                        </li>
+                                        @endcan-->
                     <!--                    @can('Manage CommonCase')
                                         <li class="dash-item {{ \Request::route()->getName() == 'commoncases' || \Request::route()->getName() == 'commoncases.show' || \Request::route()->getName() == 'commoncases.edit' ? ' active' : '' }}">
                                             {{-- <a href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('commoncases')) ? route(\Auth::user()->getDefualtViewRouteByModule('commoncases')) : route('commoncases.index') }}" class="dash-link">
@@ -270,13 +269,13 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                                       </a>
                                   </li>
                                   @endcan-->
-<!--                    @if (\Auth::user()->type != 'super admin')
-                    <li class="dash-item {{ \Request::route()->getName() == 'stream' ? ' active' : '' }}">
-                        <a href="{{ route('stream.index') }}" class="dash-link">
-                            <span class="dash-micon"><i class="ti ti-rss"></i></span><span class="dash-mtext">{{ __('Stream') }}</span>
-                        </a>
-                    </li>
-                    @endif-->
+                    <!--                    @if (\Auth::user()->type != 'super admin')
+                                        <li class="dash-item {{ \Request::route()->getName() == 'stream' ? ' active' : '' }}">
+                                            <a href="{{ route('stream.index') }}" class="dash-link">
+                                                <span class="dash-micon"><i class="ti ti-rss"></i></span><span class="dash-mtext">{{ __('Stream') }}</span>
+                                            </a>
+                                        </li>
+                                        @endif-->
                     <!--                    @if (\Auth::user()->type == 'super admin' || \Auth::user()->type == 'owner')
                                         <li class="dash-item {{ \Request::route()->getName() == 'plan' || \Request::route()->getName() == 'plan.show' || \Request::route()->getName() == 'plan.payment' || \Request::route()->getName() == 'plan.edit' ? ' active' : '' }}">
                                             <a href="{{ route('plan.index') }}" class="dash-link">
@@ -308,13 +307,13 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                                         </li>
                                         @endif-->
 
-<!--                    @if (\Auth::user()->type == 'super admin')
-                    <li class="dash-item {{ (Request::route()->getName() == 'email_template.index' || Request::segment(1) == 'email_template_lang' || Request::route()->getName() == 'manageemail.lang') ? 'active' : '' }}">
-                        <a href="{{ route('manage.email.language',[$emailTemplate ->id,\Auth::user()->lang]) }}" class="dash-link"><span
-                                class="dash-micon"><i class="ti ti-template"></i></span><span
-                                class="dash-mtext">{{ __('Email Template') }}</span></a>
-                    </li>
-                    @endif-->
+                    <!--                    @if (\Auth::user()->type == 'super admin')
+                                        <li class="dash-item {{ (Request::route()->getName() == 'email_template.index' || Request::segment(1) == 'email_template_lang' || Request::route()->getName() == 'manageemail.lang') ? 'active' : '' }}">
+                                            <a href="{{ route('manage.email.language',[$emailTemplate ->id,\Auth::user()->lang]) }}" class="dash-link"><span
+                                                    class="dash-micon"><i class="ti ti-template"></i></span><span
+                                                    class="dash-mtext">{{ __('Email Template') }}</span></a>
+                                        </li>
+                                        @endif-->
                     @can('Manage Role')
                     <li class="dash-item {{ \Request::route()->getName() == 'role' ? ' active' : '' }}">
                         <a href="{{ route('role.index') }}" class="dash-link"><span class="dash-micon">
@@ -349,20 +348,20 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
                                         </li>
                                         @endif-->
 
-                    
-<!--                    @if (Gate::check('Manage ShippingProvider'))
-                    <li class="dash-item {{ Request::route()->getName() == 'shipping_provider' ? 'active' : '' }}">
-                        <a class="dash-link" href="{{ route('shipping_provider.index') }}"><span class="dash-micon"><i class="ti ti-truck"></i></span><span class="dash-mtext">{{ __('Shipping Provider') }}</span></a>
-                    </li>
-                    @endif-->
-                   
-                   
-<!--                    @if(\Auth::user()->type == 'owner')
-                    <li class="dash-item {{ \Request::route()->getName() == 'notification_templates' ? 'active' : ''}}">
-                        <a class="dash-link" href={{url('notification-templates')}}>
-                            <span class="dash-micon"><i class="ti ti-notification"></i></span><span class="dash-mtext">{{ __('Notification Template') }}</span></a>
-                    </li>
-                    @endif-->
+
+                    <!--                    @if (Gate::check('Manage ShippingProvider'))
+                                        <li class="dash-item {{ Request::route()->getName() == 'shipping_provider' ? 'active' : '' }}">
+                                            <a class="dash-link" href="{{ route('shipping_provider.index') }}"><span class="dash-micon"><i class="ti ti-truck"></i></span><span class="dash-mtext">{{ __('Shipping Provider') }}</span></a>
+                                        </li>
+                                        @endif-->
+
+
+                    <!--                    @if(\Auth::user()->type == 'owner')
+                                        <li class="dash-item {{ \Request::route()->getName() == 'notification_templates' ? 'active' : ''}}">
+                                            <a class="dash-link" href={{url('notification-templates')}}>
+                                                <span class="dash-micon"><i class="ti ti-notification"></i></span><span class="dash-mtext">{{ __('Notification Template') }}</span></a>
+                                        </li>
+                                        @endif-->
                     <!--                    @can('Manage Form Builder')
                                         <li class="dash-item  {{ \Request::route()->getName() == 'form_builder' || \Request::route()->getName() == 'form_builder.show' || \Request::route()->getName() == 'form.response' ? ' active' : '' }}">
                                             <a href="{{ route('form_builder.index') }}" class="dash-link">
@@ -503,44 +502,51 @@ $defaultView = App\Models\UserDefualtView::select('module','route')->where('user
             </li>
             @endif -->  
                     <!-- Changes by Puja On date 09-10-2025 --> 
-<!--                    @if(\Auth::user()->type!='super admin')
-                    <li class="dash-item dash-hasmenu  {{ \Request::route()->getName() == 'calendar' || \Request::route()->getName() == 'calendar.index' || \Request::route()->getName() == 'calendar.edit' ? ' active dash-trigger' : '' }}">
-                        <a class="dash-link collapsed">
-                            <span class="dash-micon"><i class="ti ti-trending-up"></i></span>{{ __('Schedule Settings') }}<span class="dash-arrow"><i data-feather="chevron-right"></i></span>
-                        </a>
-                        <ul class="dash-submenu">
-                            <li class="dash-item {{ \Request::route()->getName() == 'calendar.index' || \Request::route()->getName() == 'calendar.show' || \Request::route()->getName() == 'calendar.edit' ? ' active ' : '' }}">
-                                <a href="{{ route('calendar.index') }}" class="dash-link">
-                                    <span class="dash-calendar"></span> {{ __('Calendar') }}</a>
-                            </li>
-                            @can('Manage Task')
-                            <li class="dash-item  {{ \Request::route()->getName() == 'task' || \Request::route()->getName() == 'task.show' || \Request::route()->getName() == 'task.edit' || \Request::route()->getName() == 'task.gantt.chart' ? ' active' : '' }}">
-                                <a href="{{ array_key_exists('task',$defaultView) ? route($defaultView['task']) : route('task.index') }}" class="dash-link">
-                                    {{ __('Task') }}</a>
-                            </li>
-                            @endcan
-                            @can('Manage Meeting')
-                            <li class="dash-item {{ \Request::route()->getName() == 'meeting' || \Request::route()->getName() == 'meeting.show' || \Request::route()->getName() == 'meeting.edit' ? ' active' : '' }}">
-                                <a href="{{ array_key_exists('meeting',$defaultView) ? route($defaultView['meeting']) : route('meeting.index') }}" class="dash-link">
-                                    {{ __('Meeting') }}</a>
-                            </li>
-                            @endcan
-                            @can('Manage Call')
-                            <li class="dash-item {{ \Request::route()->getName() == 'call' || \Request::route()->getName() == 'call.show' || \Request::route()->getName() == 'call.edit' ? ' active' : '' }}">
-                                <a href="{{ array_key_exists('call',$defaultView) ? route($defaultView['call']) : route('call.index') }}" class="dash-link">
-                                    {{ __('Call') }}</a>
-                            </li>
-                            @endcan
-                        </ul>
+                    <!--                    @if(\Auth::user()->type!='super admin')
+                                        <li class="dash-item dash-hasmenu  {{ \Request::route()->getName() == 'calendar' || \Request::route()->getName() == 'calendar.index' || \Request::route()->getName() == 'calendar.edit' ? ' active dash-trigger' : '' }}">
+                                            <a class="dash-link collapsed">
+                                                <span class="dash-micon"><i class="ti ti-trending-up"></i></span>{{ __('Schedule Settings') }}<span class="dash-arrow"><i data-feather="chevron-right"></i></span>
+                                            </a>
+                                            <ul class="dash-submenu">
+                                                <li class="dash-item {{ \Request::route()->getName() == 'calendar.index' || \Request::route()->getName() == 'calendar.show' || \Request::route()->getName() == 'calendar.edit' ? ' active ' : '' }}">
+                                                    <a href="{{ route('calendar.index') }}" class="dash-link">
+                                                        <span class="dash-calendar"></span> {{ __('Calendar') }}</a>
+                                                </li>
+                                                @can('Manage Task')
+                                                <li class="dash-item  {{ \Request::route()->getName() == 'task' || \Request::route()->getName() == 'task.show' || \Request::route()->getName() == 'task.edit' || \Request::route()->getName() == 'task.gantt.chart' ? ' active' : '' }}">
+                                                    <a href="{{ array_key_exists('task',$defaultView) ? route($defaultView['task']) : route('task.index') }}" class="dash-link">
+                                                        {{ __('Task') }}</a>
+                                                </li>
+                                                @endcan
+                                                @can('Manage Meeting')
+                                                <li class="dash-item {{ \Request::route()->getName() == 'meeting' || \Request::route()->getName() == 'meeting.show' || \Request::route()->getName() == 'meeting.edit' ? ' active' : '' }}">
+                                                    <a href="{{ array_key_exists('meeting',$defaultView) ? route($defaultView['meeting']) : route('meeting.index') }}" class="dash-link">
+                                                        {{ __('Meeting') }}</a>
+                                                </li>
+                                                @endcan
+                                                @can('Manage Call')
+                                                <li class="dash-item {{ \Request::route()->getName() == 'call' || \Request::route()->getName() == 'call.show' || \Request::route()->getName() == 'call.edit' ? ' active' : '' }}">
+                                                    <a href="{{ array_key_exists('call',$defaultView) ? route($defaultView['call']) : route('call.index') }}" class="dash-link">
+                                                        {{ __('Call') }}</a>
+                                                </li>
+                                                @endcan
+                                            </ul>
+                                        </li>
+                                        @endif
+                                        @if (\Auth::user()->type == 'super admin')
+                                        @include('landingpage::menu.landingpage')
+                                        @endif-->
+                    @can('Manage User')
+                    <li class="dash-item {{ \Request::route()->getName() == 'user' || \Request::route()->getName() == 'user.edit' ? ' active' : '' }}">
+                        {{-- <a class="dash-link" href="{{ !empty(\Auth::user()->getDefualtViewRouteByModule('user')) ? route(\Auth::user()->getDefualtViewRouteByModule('user')) : route('user.index') }}"> --}}
+                        <a class="dash-link" href="{{ array_key_exists('user',$defaultView) ? route($defaultView['user']) : route('user.index') }}">
+                            <span class="dash-micon"><i class="ti ti-user"></i></span><span class="dash-mtext">{{ __('Users Setting') }}</span></a>
                     </li>
-                    @endif
-                    @if (\Auth::user()->type == 'super admin')
-                    @include('landingpage::menu.landingpage')
-                    @endif-->
+                    @endcan
                     @if (\Auth::user()->type == 'super admin' || \Auth::user()->type == 'owner')
                     <li class="dash-item  {{ Request::route()->getName() == 'settings' ? 'active' : '' }}">
                         <a href="{{ route('settings') }}" class="dash-link">
-                            <span class="dash-micon"><i class="ti ti-settings"></i></span><span class="dash-mtext">{{ __('Settings') }}</span>
+                            <span class="dash-micon"><i class="ti ti-settings"></i></span><span class="dash-mtext">{{ __('Profile Settings') }}</span>
                         </a>
                     </li>
                     @endif

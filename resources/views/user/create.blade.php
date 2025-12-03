@@ -66,7 +66,12 @@
                 {!! Form::select('gender', $gender, null, ['class' => 'form-control', 'required' => 'required']) !!}
             </div>
         </div>
-
+         <div class="col-6">
+            <div class="form-group">
+                {{ Form::label('monthly_target', __('Monthly Target'), ['class' => 'form-label']) }}
+                {{ Form::text('monthly_target', null, ['class' => 'form-control', 'placeholder' => __('Enter Monthly Target'), 'required' => 'required']) }}
+            </div>
+        </div>
         <div class="col-12 p-0">
             <hr class="m-0 mb-3">
             <h6>{{ __('Login Details') }}</h6>

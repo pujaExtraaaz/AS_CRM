@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 @section('page-title')
-{{ __('Dispute') }}
+{{ __('Products') }}
 @endsection
 @section('title')
-{{ __('Dispute') }}
+{{ __('Products') }}
 @endsection
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('Home') }}</a></li>
-<li class="breadcrumb-item">{{ __('Dispute / Services') }}</li>
+<li class="breadcrumb-item">{{ __('Products / Services') }}</li>
 @endsection
 @section('action-btn')
 <div class="action-btn ms-2">
@@ -95,7 +95,7 @@
                                         <a href="#" data-size="md"
                                            data-url="{{ route('product.show', $product->id) }}"
                                            data-bs-toggle="tooltip" title="{{ __('Quick View') }}"
-                                           data-ajax-popup="true" data-title="{{ __('Dispute Details') }}"
+                                           data-ajax-popup="true" data-title="{{ __('Products Details') }}"
                                            class="mx-3 btn btn-sm d-inline-flex align-items-center text-white">
                                             <i class="ti ti-eye"></i>
                                         </a>

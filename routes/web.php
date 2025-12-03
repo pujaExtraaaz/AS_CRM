@@ -18,6 +18,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\LeadSourceController;
+use App\Http\Controllers\DispositionController;
 use App\Http\Controllers\OpportunitiesStageController;
 use App\Http\Controllers\CommonCaseController;
 use App\Http\Controllers\OpportunitiesController;
@@ -86,6 +87,7 @@ use App\Http\Controllers\SspayController;
 use App\Http\Controllers\XenditPaymentController;
 use App\Http\Controllers\YooKassaController;
 use App\Http\Controllers\SalesReturnController;
+use App\Http\Controllers\SalesDisputeController;
 use App\Http\Controllers\YardController;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\PartTypeController;
@@ -393,6 +395,7 @@ Route::group(['middleware' => ['verified']], function () {
             ],
             function () {
                 Route::resource('lead_source', LeadSourceController::class);
+                Route::resource('disposition', DispositionController::class);
             }
     );
     Route::group(
@@ -1235,7 +1238,24 @@ Route::group(['middleware' => ['verified']], function () {
         Route::resource('payment_type', PaymentTypeController::class);
     }
 );
-Route::get('/yard-autosearch', [SalesOrderController::class, 'yardAutoSearch'])
-     ->name('yard.autosearch');
+Route::get('/sales-search', [SalesOrderController::class, 'SaleAutoSearch'])
+     ->name('sales.search');
+
+Route::get('/sales-order/{id}', [SalesOrderController::class, 'getSalesOrderById'])
+     ->name('sales.order.get');
 
 });
+// create route for sales return by puja on date 16-10-2025
+    Route::group(
+            ['middleware' => [ 'auth', 'XSS', ] ],
+            function () {
+                Route::resource('sales_return', SalesReturnController::class);
+            }
+    );
+// create route for dispute
+    Route::group(
+            ['middleware' => [ 'auth', 'XSS'] ],
+            function () {
+                Route::resource('dispute', SalesDisputeController::class);
+            }
+    );

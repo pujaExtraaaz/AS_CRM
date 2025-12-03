@@ -32,10 +32,12 @@
                     <table class="table datatable" id="datatable">
                         <thead>
                             <tr>
-                                <th scope="col" class="sort" data-sort="id">{{ __('ID') }}</th>
-                                <th scope="col" class="sort" data-sort="name">{{ __('Sales Order No') }}</th>
+                                <th scope="col" class="sort" data-sort="id">{{ __('Return ID') }}</th>
+                                <th scope="col" class="sort" data-sort="name">{{ __('Invoice No') }}</th>
+                                <th scope="col" class="sort" data-sort="name">{{ __('Customer') }}</th>
                                 <th scope="col" class="sort" data-sort="completion">{{ __('Return Date') }} </th>
                                 <th scope="col" class="sort" data-sort="completion">{{ __('Request Type') }}</th>
+                                <th scope="col" class="sort" data-sort="completion">{{ __('Case Status') }}</th>
                                 <th scope="col" class="sort" data-sort="completion">{{ __('Return By User') }}</th>
                                 @if (Gate::check('Show SalesOrder') || Gate::check('Edit SalesOrder') || Gate::check('Delete SalesOrder'))
                                 <th scope="col" class="text-end">{{ __('Action') }}</th>
@@ -51,11 +53,11 @@
                                         {{ \Auth::user()->salesReturnFormat($sales_return->id) }}
                                     </a>
                                 </td>
+                                <th>
+                                        {{ (($sales_return->sales_order)?$sales_return->sales_order->sale_invoice_number:'') }}
+                                </th>
                                 <td>
-                                    <span class="budget">
-                                        {{ \Auth::user()->salesorderNumberFormat($sales_return->salesorder_id) }}
-
-                                    </span>
+                                        {{ (($sales_return->lead)? $sales_return->lead->cust_name.' ('.$sales_return->lead->contact.')':'') }}
                                 </td>
                                 <td>
                                     <span class="budget">{{ \Auth::user()->dateFormat($sales_return->return_date) }}</span>
@@ -64,6 +66,7 @@
                                     <span class="badge bg-warning p-2 px-3 rounded"
                                           style="width: 91px;">{{ __(\App\Models\SalesReturn::$request_type[$sales_return->request_type]) }}</span>
                                 </td>   
+                                <td>{{ $sales_return->case_status }} </td>   
                                 <td>
                                     <span
                                         class="budget">{{ ucfirst(!empty($sales_return->source_user) ? $sales_return->source_user->name : '-') }}</span>

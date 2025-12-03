@@ -127,12 +127,12 @@ $plansettings = App\Models\Utility::plansettings();
                                 <div class="col-6">
                                     <div class="form-group">
                                         {{ Form::label('Sale Date', __('Sale Date'), ['class' => 'form-label']) }}
-                                        {{ Form::text('sale_invoice_number', \Auth::user()->dateFormat($salesOrder->sale_date), ['class' => 'form-control', 'placeholder' => __('VIN Number'),'readonly'=>'true']) }}                                         
+                                        {{ Form::text('sale_date', \Auth::user()->dateFormat($salesOrder->sale_date), ['class' => 'form-control', 'placeholder' => __('Sale Date'),'readonly'=>'true']) }}                                         
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        {{ Form::label('user', __('Source User'), ['class' => 'form-label']) }}
+                                        {{ Form::label('user', __('Sourceing Agent'), ['class' => 'form-label']) }}
                                         {!! Form::select('user', $user, $salesOrder->source_id, ['class' => 'form-control ']) !!}
                                         @error('user')
                                         <span class="invalid-user" role="alert">
@@ -145,7 +145,7 @@ $plansettings = App\Models\Utility::plansettings();
                                 <div class="col-6">
                                     <div class="form-group">
                                         {{ Form::label('invoice_number', __('Invoice Number'), ['class' => 'form-label']) }}
-                                        {{ Form::text('sale_invoice_number', 'INV-' . $lastSaleId, ['class' => 'form-control', 'placeholder' => __('VIN Number')]) }}
+                                        {{ Form::text('sale_invoice_number', 'INV-VAS-' . $lastSaleId, ['class' => 'form-control', 'placeholder' => __('VIN Number')]) }}
                                     </div>
                                 </div>    
                                 <!-- M. VIN Number -->
@@ -227,20 +227,24 @@ $plansettings = App\Models\Utility::plansettings();
                                 </div>
                                 <!-- Shipping Details section -->
                                 <div class="col-12 mt-0">
-                                    <h5 class="border-bottom pb-2">{{ __('Shipping Details') }}</h5>
+                                    <h5 class="border-bottom pb-2">{{ __('Shipping Details') }}</h5>        
+                                    <div class="form-group">
+                                        {!! Form::checkbox('same_billing', 'same_billing', null, ['id' => 'same_billing','onchange'=>'billing_shipping_address();']) !!}                                    
+                                        {{ Form::label('same_billing', __('Same as shipping address'), ['class' => 'form-label']) }}
+                                    </div>       
                                 </div>       
                                 <!-- Shipping Address -->
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         {{ Form::label('shipping_address_text', __('Shipping Address'), ['class' => 'form-label']) }}
-                                        {{ Form::textarea('shipping_address_text', ($salesOrder->shipping_address_text?$salesOrder->shipping_address_text:'USA'), ['class' => 'form-control', 'rows' => 2, 'placeholder' => __('Shipping Address')]) }}
+                                        {{ Form::textarea('shipping_address_text', ($salesOrder->shipping_address_text), ['class' => 'form-control', 'rows' => 2, 'placeholder' => __('Shipping Address')]) }}
                                     </div>
                                 </div>
                                 <!-- Shipping Country -->
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         {{ Form::label('shipping_country', __('Country'), ['class' => 'form-label']) }}
-                                        {{ Form::text('shipping_country', $salesOrder->shipping_country, ['class' => 'form-control', 'placeholder' => __('Country')]) }}
+                                        {{ Form::text('shipping_country', $salesOrder->shipping_country?$salesOrder->shipping_country:'USA', ['class' => 'form-control', 'placeholder' => __('Country')]) }}
                                     </div>
                                 </div>
                                 <!-- Shipping City -->
@@ -389,73 +393,40 @@ $plansettings = App\Models\Utility::plansettings();
                             {{ Form::model($salesOrder, ['route' => ['salesorder.save-yard-logs', $salesOrder->id], 'method' => 'POST']) }}        
                             <div class="row">
                                 <!-- Yard Name -->
-                             <div class="col-md-6">
-                                 <label>Yard Name</label>
-    <input type="text" id="yardSearch" class="form-control" placeholder="Search Yard">
+                                <div class="col-md-6">
+                                    <label>Yard Name</label>
+                                    <input type="text" id="yardSearch" class="form-control" placeholder="Search Yard">
 
-    <div id="yardResults" 
-         class="border bg-white" 
-         style="position:absolute;width:100%;z-index:1000;"></div>
-</div>
+                                    <div id="yardResults" 
+                                         class="border bg-white hidden" 
+                                         style="position:absolute;width:auto;z-index:1000;"></div>
+                                </div>
 
-<div class="col-md-6">
-    <label>Email</label>
-    <input type="text" id="yard_email" class="form-control">
-    </div>
-<div class="col-md-6">
-    <label class="mt-3">Contact Person</label>
-    <input type="text" id="yard_person_name" class="form-control">
-    </div>
-<div class="col-md-6">
-    <label class="mt-3">Contact No</label>
-    <input type="text" id="yard_contact" class="form-control">
-
-   
-</div>
-
-                                <!-- <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label">{{ __('Yard Name') }} <span class="text-danger">*</span></label>
-                                        <div class="form-icon-user">
-                                            {{ Form::text('yard_name', $salesOrder->yard->yard_name, ['class' => 'form-control', 'required' => 'required', 'placeholder' => __('Enter Yard Name')]) }}
-                                        </div>
-                                    </div>
-                                </div> -->
-                                <!-- <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label">{{ __('Email') }} <span class="text-danger">*</span></label>
-                                        <div class="form-icon-user">
-                                            {{ Form::email('yard_email', $salesOrder->yard->yard_email, ['class' => 'form-control',  'placeholder' => __('Enter Email')]) }}
-                                        </div>
-                                    </div>
+                                <div class="col-md-6">
+                                    <label>Email</label>
+                                    <input type="text" id="yard_email" class="form-control">
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label">{{ __('Contact Person') }} <span class="text-danger">*</span></label>
-                                        <div class="form-icon-user">
-                                            {{ Form::text('yard_person_name', $salesOrder->yard->yard_person_name, ['class' => 'form-control', 'required' => 'required', 'placeholder' => __('Enter Contact Person Name')]) }}
-                                        </div>
-                                    </div>
+                                    <label class="mt-3">Contact Person</label>
+                                    <input type="text" id="yard_person_name" class="form-control">
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label">{{ __('Phone') }} <span class="text-danger">*</span></label>
-                                        <div class="form-icon-user">
-                                            {{ Form::text('contact', $salesOrder->yard->contact, ['class' => 'form-control', 'required' => 'required', 'placeholder' => __('Enter Contact Number')]) }}
-                                        </div>
-                                    </div>
-                                </div>   -->
+                                    <label class="mt-3">Contact No</label>
+                                    <input type="text" id="yard_contact" class="form-control">
+
+
+                                </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="form-label">{{ __('Address') }} <span class="text-danger">*</span></label>
                                         <div class="form-icon-user">
                                             {{ Form::textarea('yard_address', null, [
-    'id' => 'yard_address',
-    'class' => 'form-control',
-    'required' => 'required',
-    'placeholder' => __('Enter Address'),
-    'rows' => 3
-]) }}
+                                                'id' => 'yard_address',
+                                                'class' => 'form-control',
+                                                'required' => 'required',
+                                                'placeholder' => __('Enter Address'),
+                                                'rows' => 3
+                                            ]) }}
 
                                         </div>
                                     </div>
@@ -610,13 +581,6 @@ $plansettings = App\Models\Utility::plansettings();
     })
 </script>
 <script>
-    $(document).on('click', '#billing_data', function () {
-        $("[name='shipping_address']").val($("[name='billing_address']").val());
-        $("[name='shipping_city']").val($("[name='billing_city']").val());
-        $("[name='shipping_state']").val($("[name='billing_state']").val());
-        $("[name='shipping_country']").val($("[name='billing_country']").val());
-        $("[name='shipping_postalcode']").val($("[name='billing_postalcode']").val());
-    });
     // Display saved yard details
     function displaySavedYardDetails(yardData) {
         $('#display_order_date').text(yardData.yard_order_date || 'Not set');
@@ -687,67 +651,27 @@ $plansettings = App\Models\Utility::plansettings();
             }
         });
     });
-
-   
-        // In your Blade file or a separate JS file
-    
-        $('#searchInput').on('keyup', function() {
-            var query = $(this).val();
-
-            if (query.length > 2) { // Only search if query is long enough
-                $.ajax({
-                    url: "{{ route('yards.search') }}",
-                    method: 'GET',
-                    data: { query: query },
-                    success: function(response) {console.log(response);
-                        $('#searchResults').empty(); // Clear previous results
-                        if (response.length > 0) {
-                            $.each(response, function(index, yard) {alert(yard);
-                                $('#searchResults').append('<div class="search-result-item" data-id="' + yard.id + '">' + yard.yard_name + '</div>');
-                            });
-                        } else {
-                            $('#searchResults').append('<div>No results found.</div>');
-                        }
-                    }
-                });
-            } else {
-                $('#searchResults').empty();
-            }
-        });
-
-        // Optional: Handle selection from the dropdown
-        $(document).on('click', '.search-result-item', function() {
-            var selectedId = $(this).data('id');
-            var selectedName = $(this).text();
-
-            $('#searchInput').val(selectedName); // Set selected item in input
-            $('#searchResults').empty(); // Hide results
-            // You can also store the selectedId in a hidden input field
-            // $('#selectedItemId').val(selectedId);
-        });
 </script>
 <script>
-$(document).ready(function(){
+    $(document).ready(function () {
+        $("#yardSearch").keyup(function () {
+            let query = $(this).val();
 
-    $("#yardSearch").keyup(function(){
+            if (query.length < 1) {
+                $("#yardResults").html('');
+                return;
+            }
 
-        let query = $(this).val();
+            $.ajax({
+                url: "{{ route('yards.search') }}",
+                type: "GET",
+                data: {term: query},
+                success: function (res) {
+                    let html = "";
 
-        if (query.length < 1) {
-            $("#yardResults").html('');
-            return;
-        }
-
-        $.ajax({
-            url: "{{ route('yard.autosearch') }}",
-            type: "GET",
-            data: { term: query },
-            success: function(res) {
-                let html = "";
-
-                if (res.length > 0) {
-                    res.forEach(row => {
-                        html += `
+                    if (res.length > 0) {
+                        res.forEach(row => {
+                            html += `
                             <div class="p-2 border-bottom yard-item" 
                                 style="cursor:pointer;"
                                 data-name="${row.yard_name}"
@@ -760,29 +684,44 @@ $(document).ready(function(){
                                 <small>${row.yard_email}</small>
                             </div>
                         `;
-                    });
-                } else {
-                    html = '<div class="p-2 text-muted">No results found</div>';
+                        });
+                    } else {
+                        html = '<div class="p-2 text-muted">No results found</div>';
+                    }
+                    $("#yardResults").removeClass('hidden');
+                    $("#yardResults").html(html);
                 }
+            });
+        });
 
-                $("#yardResults").html(html);
-            }
+        // When user clicks on result
+        $(document).on("click", ".yard-item", function () {
+            $("#yardSearch").val($(this).data("name"));
+            $("#yard_email").val($(this).data("email"));
+            $("#yard_person_name").val($(this).data("person"));
+            $("#yard_contact").val($(this).data("contact"));
+            $("#yard_address").val($(this).data("address"));
+
+            $("#yardResults").html(""); // hide dropdown
         });
     });
-
-    // When user clicks on result
-    $(document).on("click", ".yard-item", function(){
-
-        $("#yardSearch").val($(this).data("name"));
-        $("#yard_email").val($(this).data("email"));
-        $("#yard_person_name").val($(this).data("person"));        
-        $("#yard_contact").val($(this).data("contact"));
-        $("#yard_address").val($(this).data("address"));
-
-        $("#yardResults").html(""); // hide dropdown
-    });
-
-});
+    
+    // added for click on checkbox then fill all shippinng address same as billing address
+    function billing_shipping_address() {
+        if ($('#same_billing').is(':checked')) {
+            $("#shipping_country").val($('#billing_country').val());
+            $("#shipping_city").val($('#billing_city').val());
+            $("#shipping_state").val($('#billing_state').val());
+            $("#shipping_zipcode").val($('#billing_zipcode').val());
+            $("#shipping_address_text").val($('#billing_address_text').val());
+        } else {
+            $("#shipping_country").val('{{($salesOrder->shipping_country?$salesOrder->shipping_country:"USA")}}');
+            $("#shipping_city").val('{{$salesOrder->shipping_city}}');
+            $("#shipping_state").val('{{$salesOrder->shipping_state}}');
+            $("#shipping_zipcode").val('{{$salesOrder->shipping_zipcode}}');
+            $("#shipping_address_text").val('{{$salesOrder->shipping_address_text}}');
+        }
+    }
 </script>
 
 @endpush

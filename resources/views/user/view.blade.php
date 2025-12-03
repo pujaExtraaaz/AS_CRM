@@ -48,6 +48,12 @@
                             <span class="text-md">{{ $user->gender }}</span>
                         </div>
                         <div class="col-md-4">
+                            <small class="h6 text-md mb-3 mb-md-0">{{__('Monthly Target')}}</small>
+                        </div>
+                        <div class="col-md-5">
+                            <span class="text-md">{{ $user->monthly_target }}</span>
+                        </div>
+                        <div class="col-md-4">
                             <small class="h6 text-md mb-3 mb-md-0">{{__('Created At :')}} </small>
                         </div>
                         <div class="col-md-5">

@@ -137,4 +137,7 @@ class Lead extends Model {
     public function statusLogs() {
         return $this->hasMany('App\Models\LeadStatuses','id', 'lead_id' );
     }
+     public function dispositions() {
+        return $this->hasOne('App\Models\Disposition', 'id', 'disposition');
+    }
 }

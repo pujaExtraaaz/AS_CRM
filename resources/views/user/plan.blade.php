@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="col ml-n2">
-                <a href="#!" class="d-block h6 mb-0">{{__('Profile Setting')}}</a>
+                <a href="#!" class="d-block h6 mb-0">{{__('Users Setting')}}</a>
                 <div>
                     <span class="text-sm">{{$plan->max_user}}</span>
                 </div>

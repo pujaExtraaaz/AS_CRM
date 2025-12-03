@@ -3,7 +3,7 @@
 {{ __('Product') }}
 @endsection
 @section('title')
-{{ __('Edit Dispute / Service') }} {{ '(' . $product->part_name . ')' }}
+{{ __('Edit Products / Service') }} {{ '(' . $product->part_name . ')' }}
 @endsection
 @php
 $plansettings = App\Models\Utility::plansettings();
@@ -44,7 +44,7 @@ $plansettings = App\Models\Utility::plansettings();
 @endsection
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('Home') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('product.index') }}">{{ __('Dispute') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('product.index') }}">{{ __('Products') }}</a></li>
 <li class="breadcrumb-item">{{ __('Edit') }}</li>
 @endsection
 @section('content')

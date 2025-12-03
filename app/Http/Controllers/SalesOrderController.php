@@ -282,27 +282,12 @@ class SalesOrderController extends Controller {
      */
     public function edit(SalesOrder $salesOrder, $id) {
         if (\Auth::user()->can('Edit SalesOrder')) {
-            $lastSaleId = str_pad($id, 6, '0', STR_PAD_LEFT);
+            $lastSaleId = str_pad((4000 + $id), 6, '0', STR_PAD_LEFT);
 
             $salesOrder = SalesOrder::with(['yard', 'salesUser', 'sourceAgent', 'lead.leadType', 'yardLogs', 'yardLogs.createdBy'])->find($id);
-//            $opportunity = Opportunities::where('created_by', \Auth::user()->creatorId())->get()->pluck('name', 'id');
-//            $opportunity->prepend('--', 0);
-//            $quotes = Quote::where('created_by', \Auth::user()->creatorId())->get();
-//            $quote = ['' => '--'];
-//            foreach ($quotes as $quote_value) {
-//                $quote[$quote_value['id']] = $quote_value['name'] . ' (' . \Auth::user()->quoteNumberFormat($quote_value['salesorder_id']) . ')';
-//            }
-//            $account = Account::where('created_by', \Auth::user()->creatorId())->get()->pluck('name', 'id');
-//            $account->prepend('--', 0);
-//            $billing_contact = Contact::where('created_by', \Auth::user()->creatorId())->get()->pluck('name', 'id');
-//            $billing_contact->prepend('--', 0);
-//            $tax = ProductTax::where('created_by', \Auth::user()->creatorId())->get()->pluck('tax_name', 'id');
-//            $tax->prepend('No Tax', 0);
             $shipping_provider = ShippingProvider::where('created_by', \Auth::user()->creatorId())->get()->pluck('name', 'id');
             $user = User::where('created_by', \Auth::user()->creatorId())->where('type', 'Source Agent')->get()->pluck('name', 'id');
             $user->prepend('--', 0);
-//            $invoices = Invoice::where('salesorder', $salesOrder->id)->get();
-//            $status = SalesOrder::$status;
             // New fields for the updated form
             $yards = Yard::get()->pluck('yard_name', 'id');
             $yards->prepend('--', 0);
@@ -319,10 +304,6 @@ class SalesOrderController extends Controller {
             // Part type options
             $partTypes = PartType::pluck('part_type_name', 'id');
             $partTypes->prepend('--', '');
-            // get previous user id
-//            $previous = Quote::where('id', '<', $salesOrder->id)->max('id');
-            // get next user id
-//            $next = Quote::where('id', '>', $salesOrder->id)->min('id');
 
             return view('salesorder.edit', compact('salesOrder', 'shipping_provider', 'user', 'leadTypes', 'sourceTypes', 'paymentGateways', 'partTypes', 'lastSaleId', 'yards'));
         } else {
@@ -345,8 +326,8 @@ class SalesOrderController extends Controller {
             $validator = \Validator::make(
                     $request->all(),
                     [
-                        'part_number' => 'required',
-                        'part_type' => 'required',
+                        'sale_invoice_number' => 'required',
+//                        'part_type' => 'required',
                     ]
             );
             if ($validator->fails()) {
@@ -360,6 +341,7 @@ class SalesOrderController extends Controller {
             $salesOrder['source_date'] = $request->user ? date('Y-m-d') : null;
             // $salesOrder['lead_type_id'] = $request->lead_type_id ?: null; // Prevent update
             $salesOrder['vin_number'] = $request->vin_number;
+            $salesOrder['sale_invoice_number'] = $request->sale_invoice_number;
             $salesOrder['part_number'] = $request->part_number;
             $salesOrder['part_type'] = $request->part_type;
             $salesOrder['source_type'] = $request->source_type;
@@ -461,7 +443,6 @@ class SalesOrderController extends Controller {
             return redirect()->back()->with('success', __('Yard log Successfully Updated.'));
         } catch (\Exception $e) {
             \Log::error('Error creating yard and log', ['error' => $e->getMessage()]);
-
         }
     }
 
@@ -1139,16 +1120,41 @@ class SalesOrderController extends Controller {
             return response()->json(['success' => false, 'message' => __('Permission denied')]);
         }
     }
-    public function yardAutoSearch(Request $request)
-{
-    $search = $request->get('term');
 
-    $yards = Yard::where('yard_name', 'LIKE', "%{$search}%")
-        ->select('id', 'yard_name', 'yard_email', 'yard_person_name', 'contact','yard_address')
-        ->limit(10)
-        ->get();
+    public function SaleAutoSearch(Request $request) {
+        $search = $request->get('term');
+        $yards = SalesOrder::leftJoin('part_type', 'sales_orders.part_type', '=', 'part_type.id')
+                ->where(function($query) use ($search) {
+                    $query->where('sales_orders.sale_invoice_number', 'LIKE', "%{$search}%")
+                          ->orWhere('sales_orders.part_number', 'LIKE', "%{$search}%")
+                          ->orWhere('part_type.part_type_name', 'LIKE', "%{$search}%");
+                })
+                ->select('sales_orders.id', 'sales_orders.sale_invoice_number', 'sales_orders.part_number', 'sales_orders.total_amount_quoted','part_type.part_type_name')
+                ->limit(10)
+                ->get();
+        return response()->json($yards);
+    }
 
-    return response()->json($yards);
-}
+    public function getSalesOrderById(Request $request, $id) {
+        $salesOrder = SalesOrder::with([
+                'lead',
+                'yard',
+                'sourceAgent',
+                'salesUser',
+                'sourceType'
+            ])
+            ->leftJoin('part_type', 'sales_orders.part_type', '=', 'part_type.id')
+            ->where('sales_orders.id', $id)
+            ->select(
+                'sales_orders.*',
+                'part_type.part_type_name'
+            )
+            ->first();
 
+        if (!$salesOrder) {
+            return response()->json(['error' => 'Sales order not found'], 404);
+        }
+
+        return response()->json($salesOrder);
+    }
 }

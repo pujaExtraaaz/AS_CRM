@@ -21,6 +21,7 @@ use App\Models\User;
 use App\Models\SalesOrder;
 use App\Models\LeadStatuses;
 use App\Models\UserDefualtView;
+use App\Models\Disposition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\LeadExport;
@@ -38,14 +39,14 @@ class LeadController extends Controller {
     public function index() {
         if (\Auth::user()->can('Manage Lead')) {
             if (\Auth::user()->type == 'owner') {
-                $leads = Lead::with('assign_user', 'leadType', 'product', 'LeadSource')->where('disposition', '!=', 1)->where('user_id', \Auth::user()->id)->latest()->get();
+                $leads = Lead::with('assign_user', 'leadType', 'product', 'LeadSource', 'dispositions')->where('disposition', '!=', 2)->where('user_id', \Auth::user()->id)->latest()->get();
                 $defualtView = new UserDefualtView();
                 $defualtView->route = \Request::route()->getName();
                 $defualtView->module = 'lead';
                 $defualtView->view = 'list';
                 User::userDefualtView($defualtView);
             } else {
-                $leads = Lead::with('assign_user', 'leadType', 'product', 'LeadSource')->where('disposition', '!=', 1)->where('user_id', \Auth::user()->id)->latest()->get();
+                $leads = Lead::with('assign_user', 'leadType', 'product', 'LeadSource', 'dispositions')->where('disposition', '!=', 2)->where('user_id', \Auth::user()->id)->latest()->get();
                 $defualtView = new UserDefualtView();
                 $defualtView->route = \Request::route()->getName();
                 $defualtView->module = 'lead';
@@ -300,9 +301,8 @@ class LeadController extends Controller {
     public function show(Lead $lead) {
 
         if (\Auth::user()->can('Show Lead')) {
-            $status = collect(Lead::$disposition);
-            $lead->load('leadType', 'product', 'assign_user');
-            return view('lead.view', compact('lead', 'status'));
+            $lead->load('leadType', 'product', 'assign_user', 'dispositions');
+            return view('lead.view', compact('lead'));
         } else {
             return redirect()->back()->with('error', 'permission Denied');
         }
@@ -317,7 +317,7 @@ class LeadController extends Controller {
      */
     public function edit(Lead $lead) {
         if (\Auth::user()->can('Edit Lead')) {
-            $status = Lead::$disposition;
+            $status = Disposition::pluck('name', 'id');
             $source = LeadSource::where('created_by', \Auth::user()->creatorId())->get()->pluck('name', 'id');
             $user = User::where('created_by', \Auth::user()->creatorId())->get()->pluck('name', 'id');
             $user->prepend('--', 0);
@@ -335,32 +335,17 @@ class LeadController extends Controller {
             $products = Product::all();
             $product = [];
             foreach ($products as $product_value) {
-                $product[$product_value['id']] = $product_value->year.' - '.$product_value->make.' - ( '.$product_value->model . ' ' . $product_value->part_name . ' )';
+                $product[$product_value['id']] = $product_value->year . ' - ' . $product_value->make . ' - ( ' . $product_value->model . ' ' . $product_value->part_name . ' )';
             }
             $leadTypes = LeadType::pluck('name', 'id');
             $leadTypes->prepend('--', 0);
-
-            // Add part types
-            $partTypes = collect([
-                'Engine Parts' => 'Engine Parts',
-                'Transmission Parts' => 'Transmission Parts',
-                'Electronic' => 'Electronic',
-                'Wiring' => 'Wiring',
-                'Mechanical' => 'Mechanical',
-                'Electrical' => 'Electrical',
-                'Body Parts' => 'Body Parts',
-                'Interior Parts' => 'Interior Parts',
-                'Body Part' => 'Body Part',
-                'Other' => 'Other'
-            ]);
-            $partTypes->prepend('--', '');
 
             // get previous user id
             $previous = Lead::where('id', '<', $lead->id)->max('id');
             // get next user id
             $next = Lead::where('id', '>', $lead->id)->min('id');
 
-            return view('lead.edit', compact('lead', 'account', 'product', 'user', 'source', 'industry', 'status', 'tasks', 'streams', 'campaign', 'leadTypes', 'partTypes', 'previous', 'next'));
+            return view('lead.edit', compact('lead', 'account', 'product', 'user', 'source', 'industry', 'status', 'tasks', 'streams', 'campaign', 'leadTypes', 'previous', 'next'));
         } else {
             return redirect()->back()->with('error', 'permission Denied');
         }
@@ -379,6 +364,7 @@ class LeadController extends Controller {
             $validator = \Validator::make(
                     $request->all(),
                     [
+                        'product' => 'required',
                         'cust_name' => 'required|max:120',
                         'contact' => 'required|numeric',
                     ]
@@ -391,7 +377,7 @@ class LeadController extends Controller {
                 $lead['cust_name'] = $request->cust_name;
                 $lead['lead_type_id'] = ($request->lead_type_id && $request->lead_type_id != '0') ? $request->lead_type_id : null;
                 $lead['contact'] = $request->contact;
-//                $lead['product_id'] = $request->product;
+                $lead['product_id'] = $request->product;
                 $lead['email'] = $request->email;
                 $lead['date'] = $request->date;
                 $lead['disposition'] = $request->disposition;
@@ -422,15 +408,15 @@ class LeadController extends Controller {
                             'followup_note' => $request->note
                         ]
                 );
-                if ($request->disposition == 1) {
-                    SalesOrder::create(
+                if ($request->disposition == 2) {
+                    $salesOrder = SalesOrder::create(
                             [
                                 'sale_date' => date("Y-m-d"),
                                 'lead_id' => $lead->id,
                                 'sales_user_id' => \Auth::user()->id,
                             ]
                     );
-                    return redirect('/lead');
+                    return redirect('/salesorder/' . $salesOrder->id . '/edit');
                 }
                 return redirect()->back()->with('success', __('Lead Successfully Updated.'));
             } catch (\Exception $e) {

@@ -1,0 +1,6 @@
+INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) 
+VALUES (NULL, 'Manage Part Type', 'web', NULL, NULL), 
+(NULL, 'Create Part Type', 'web', NULL, NULL), 
+(NULL, 'Edit Part Type', 'web', NULL, NULL),
+ (NULL, 'Show Part Type', 'web', NULL, NULL), 
+ (NULL, 'Delete Part Type', 'web', NULL, NULL);

@@ -41,15 +41,14 @@
                     <table class="table datatable" id="datatable" style="min-width: 1200px;">
                         <thead>
                             <tr>
-                                <th scope="col" class="sort" data-sort="name" style="width: 100px;">{{ __('ID') }}</th>
+                                <th scope="col" class="sort" data-sort="name" style="width: 100px;">{{ __('Order ID') }}</th>
+                                <th scope="col" class="sort" data-sort="name" style="width: 150px;">{{ __('Invoice No') }}</th>
                                 <th scope="col" class="sort" data-sort="name" style="width: 150px;">{{ __('Name') }}</th>
                                 <th scope="col" class="sort" data-sort="sale_date" style="width: 120px;">{{ __('Sale Date') }}</th>
                                 <th scope="col" class="sort" data-sort="sale_status" style="width: 120px;">{{ __('Sale Status') }}</th>
-                                <!--<th scope="col" class="sort" data-sort="lead_id" style="width: 100px;">{{ __('Lead ID') }}</th>-->
-                                <th scope="col" class="sort" data-sort="source_type" style="width: 130px;">{{ __('Sourcing Type') }}</th>
                                 <th scope="col" class="sort" data-sort="yard" style="width: 120px;">{{ __('Yard') }}</th>
-                                <th scope="col" class="sort" data-sort="payment_gateway" style="width: 140px;">{{ __('Payment Gateway') }}</th>
-                                <th scope="col" class="sort" data-sort="status" style="width: 100px;">{{ __('Status') }}</th>
+                                <th scope="col" class="sort" data-sort="tracking_no" style="width: 100px;">{{ __('Tracking No') }}</th>
+                                <th scope="col" class="sort" data-sort="delivery_date" style="width: 100px;">{{ __('Delivery Date') }}</th>
                                 <th scope="col" class="sort" data-sort="completion" style="width: 120px;">{{ __('Gross Profit') }}</th>
                                 <th scope="col" class="sort" data-sort="completion" style="width: 150px;">{{ __('Source User') }}</th>
                                 @if (Gate::check('Show SalesOrder') || Gate::check('Edit SalesOrder') || Gate::check('Delete SalesOrder'))
@@ -63,9 +62,10 @@
                                 <td>
                                     <a href="{{ route('salesorder.edit', $salesorder->id) }}"
                                        class="btn btn-outline-primary" data-title="{{ __('Sales Order Details') }}">
-                                        {{ 'SO-' . str_pad($salesorder->id, 6, '0', STR_PAD_LEFT) }}
+                                        {{ \Auth::user()->salesorderNumberFormat($salesorder->id) }}
                                     </a>
                                 </td>
+                                <td> {{ ucfirst($salesorder->sale_invoice_number) }} </td>
                                 <td> {{ ucfirst($salesorder->lead->cust_name) }} </td>
                                 <td>
                                     <span class="budget">{{ $salesorder->sale_date ? \Auth::user()->dateFormat($salesorder->sale_date) : ($salesorder->created_at ? \Auth::user()->dateFormat($salesorder->created_at) : '--') }}</span>
@@ -73,43 +73,18 @@
                                 <td>
                                     <span class="badge bg-primary p-2 px-3 rounded">{{ $salesorder->sale_status ?? 'Open' }}</span>
                                 </td>
-<!--                                        <td>
-                                    <span class="budget">{{ $salesorder->lead_id ?? '--' }}</span>
-                                </td>-->
                                 <td>
-                                    <span class="budget">{{ ucfirst($salesorder->sourceType ?$salesorder->sourceType->name: '--') }}</span>
+                                    <span class="budget">{{ $salesorder->yard ? $salesorder->yard->yard_name : '--' }}</span>
                                 </td>
                                 <td>
-                                    <span class="budget">{{ $salesorder->yard ? $salesorder->yard->yardname : '--' }}</span>
+                                    <span class="budget">{{ $salesorder->tracking_no ? $salesorder->tracking_no : '--' }}</span>
                                 </td>
-                                <td>
-                                    <span class="badge bg-info p-2 px-3 rounded">{{ ucfirst($salesorder->payment_gateway_name ?? '--') }}</span>
-                                </td>
-                                <td>
-                                    @if (isset($salesorder->status))
-                                    @php
-                                    $statusText = \App\Models\SalesOrder::statuss($salesorder->status);
-                                    @endphp
-                                    @if ($salesorder->status == 0)
-                                    <span class="badge bg-secondary p-2 px-3 rounded" style="width: 79px;">{{ __($statusText) }}</span>
-                                    @elseif($salesorder->status == 1)
-                                    <span class="badge bg-info p-2 px-3 rounded" style="width: 79px;">{{ __($statusText) }}</span>
-                                    @elseif($salesorder->status == 2)
-                                    <span class="badge bg-warning p-2 px-3 rounded" style="width: 79px;">{{ __($statusText) }}</span>
-                                    @elseif($salesorder->status == 3)
-                                    <span class="badge bg-success p-2 px-3 rounded" style="width: 79px;">{{ __($statusText) }}</span>
-                                    @elseif($salesorder->status == 4)
-                                    <span class="badge bg-danger p-2 px-3 rounded" style="width: 79px;">{{ __($statusText) }}</span>
-                                    @else
-                                    <span class="badge bg-secondary p-2 px-3 rounded" style="width: 79px;">{{ __('Unknown') }}</span>
-                                    @endif
-                                    @else
-                                    <span class="badge bg-secondary p-2 px-3 rounded" style="width: 79px;">{{ __('--') }}</span>
-                                    @endif
+                                 <td>
+                                    <span class="budget">{{  $salesorder->delivery_date ? \Auth::user()->dateFormat($salesorder->delivery_date): '-' }}</span>
                                 </td>
                                 <td>
                                     <span class="budget">{{ \Auth::user()->priceFormat($salesorder->gross_profit) }}</span>
-                                </td>
+                                </td>                               
                                 <td>
                                     <span class="budget">{{ ucfirst(!empty($salesorder->sourceAgent) ? $salesorder->sourceAgent->name : '-') }}</span>
                                 </td>

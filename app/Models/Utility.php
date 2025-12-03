@@ -68,6 +68,7 @@ class Utility extends Model {
             "quote_prefix" => "#QUO",
             "salesorder_prefix" => "#SOP",
             "salesreturn_prefix" => "#SOR",
+            "dispute_prefix" => "#DSP",
             "vender_prefix" => "#VEND",
             "footer_title" => "",
             "footer_notes" => "",

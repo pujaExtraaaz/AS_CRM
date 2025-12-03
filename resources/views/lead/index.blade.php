@@ -46,7 +46,7 @@
                                 <th scope="col" class="sort" data-sort="completion">{{__('Make')}}</th> 
                                 <th scope="col" class="sort" data-sort="completion">{{__('Model')}}</th> 
                                 <th scope="col" class="sort" data-sort="cust_name">{{__('Customer Name')}}</th>
-                                 <th scope="col" class="sort" data-sort="date">{{__('Date')}}</th>
+                                <th scope="col" class="sort" data-sort="date">{{__('Date')}}</th>
                                 <th scope="col" class="sort" data-sort="contact">{{__('Contact')}}</th>
                                 <th scope="col" class="sort" data-sort="completion">{{__('Disposition')}}</th>
                                 <!-- <th scope="col" class="sort" data-sort="lead_type">{{__('Lead Type')}}</th> -->
@@ -74,16 +74,16 @@
                                 <td>
                                     <span class="budget">{{ ucfirst($lead->cust_name ?: '--') }}</span>
                                 </td>
-                                 <td>
+                                <td>
                                     <span class="budget">{{ \Auth::user()->dateFormat($lead->date) }}</a></span>
                                 </td>
                                 <td>
                                     <span class="budget">{{ ucfirst($lead->contact ?: '--') }}</span>
                                 </td>
                                 <td>
-                                    <span class="col-sm-12"><span class="text-sm">{{ __(\App\Models\Lead::$disposition[$lead->disposition]) }}</span></span>
+                                    <span class="col-sm-12"><span class="text-sm">{{ __((!empty($lead->dispositions))?$lead->dispositions->name:'') }}</span></span>
                                 </td>
-                               <td>
+                                <td>
                                     <span class="col-sm-12"><span class="text-sm">{{ ucfirst(!empty($lead->assign_user)?$lead->assign_user->name:'--')}}</span></span>
                                 </td>
                                 @if(Gate::check('Show Lead') || Gate::check('Edit Lead') || Gate::check('Delete Lead'))

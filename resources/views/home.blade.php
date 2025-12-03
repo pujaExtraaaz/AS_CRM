@@ -227,7 +227,7 @@
                                     </div>
                                     <p class="text-muted text-sm mt-4 mb-2"></p>
                                     <h6 class="mb-3">{{ __('Total Return') }}</h6>
-                                    <h3 class="mb-0">{{ $data['totalSalesReturn'] ?? 0 }}</h3>
+                                    <h3 class="mb-0">{{ $data['totalReturn'] ?? 0 }}</h3>
                                 </div>
                             </div>
                         </a>

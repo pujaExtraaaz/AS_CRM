@@ -51,10 +51,10 @@ class DashboardController extends Controller {
 
                 // Calculate total_sales_return and total_dispute counts - filter by user if not owner
                 if (\Auth::user()->type == 'owner') {
-                    $data['totalSalesReturn'] = SalesReturn::count();
+                    $data['totalReturn'] = SalesReturn::count();
                     $data['totalDispute'] = SalesDispute::count();
                 } else {
-                    $data['totalSalesReturn'] = SalesReturn::where('user_id', \Auth::user()->id)->count();
+                    $data['totalReturn'] = SalesReturn::where('user_id', \Auth::user()->id)->count();
                     $data['totalDispute'] = SalesDispute::where('user_id', \Auth::user()->id)->count();
 
                     // Calculate total deduction amounts for regular user

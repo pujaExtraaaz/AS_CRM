@@ -111,8 +111,8 @@ class DashboardController extends Controller {
                                 return $order->gross_profit ?? 0;
                             });
                     $totalSales = SalesOrder::where('sales_user_id', $currentUserId)->sum('charge_amount');
-                    $totalSalesReturn = SalesReturn::where('sales_user_id', $currentUserId)->sum('refund_received');
-                    $totalSalesDispute = SalesDispute::where('sales_user_id', $currentUserId)->sum('disputed_amount');
+                    $totalSalesReturn = SalesReturn::where('user_id', $currentUserId)->sum('refund_received');
+                    $totalSalesDispute = SalesDispute::where('user_id', $currentUserId)->sum('disputed_amount');
                     $currentMonthSales = SalesOrder::where('sales_user_id', $currentUserId)
                             ->whereNotNull('sale_date')
                             ->whereBetween('sale_date', [$currentMonth->format('Y-m-d'), $currentMonthEnd->format('Y-m-d')])

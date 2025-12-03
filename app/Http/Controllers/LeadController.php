@@ -39,14 +39,14 @@ class LeadController extends Controller {
     public function index() {
         if (\Auth::user()->can('Manage Lead')) {
             if (\Auth::user()->type == 'owner') {
-                $leads = Lead::with('assign_user', 'leadType', 'product', 'LeadSource', 'dispositions')->where('disposition', '!=', 2)->where('user_id', \Auth::user()->id)->latest()->get();
+                $leads = Lead::with('sales_order','assign_user', 'leadType', 'product', 'LeadSource', 'dispositions')->where('disposition', '!=', 2)->where('user_id', \Auth::user()->id)->latest()->get();
                 $defualtView = new UserDefualtView();
                 $defualtView->route = \Request::route()->getName();
                 $defualtView->module = 'lead';
                 $defualtView->view = 'list';
                 User::userDefualtView($defualtView);
             } else {
-                $leads = Lead::with('assign_user', 'leadType', 'product', 'LeadSource', 'dispositions')->where('disposition', '!=', 2)->where('user_id', \Auth::user()->id)->latest()->get();
+                $leads = Lead::with('sales_order','assign_user', 'leadType', 'product', 'LeadSource', 'dispositions')->where('disposition', '!=', 2)->where('user_id', \Auth::user()->id)->latest()->get();
                 $defualtView = new UserDefualtView();
                 $defualtView->route = \Request::route()->getName();
                 $defualtView->module = 'lead';
@@ -650,7 +650,7 @@ class LeadController extends Controller {
     public function getLeadforNotify() {
         if (\Auth::user()->can('Manage Lead')) {
             $hasLeads = Lead::where('user_id', \Auth::user()->id)
-                    ->where('disposition', '!=', 1)
+                    ->where('disposition', 1)
                     ->exists();
             if (!$hasLeads) {
                 $lead = Lead::with('product')->where('user_id', NULL)->where('disposition', 0)->first();
@@ -668,7 +668,7 @@ class LeadController extends Controller {
             try {
                 $lead = Lead::find($id);
                 $lead['user_id'] = \Auth::user()->id;
-//            $lead['disposition'] = 1;
+                $lead['disposition'] = 1;
                 $lead->update();
 
                 LeadStatuses::create(

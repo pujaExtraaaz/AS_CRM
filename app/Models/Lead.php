@@ -135,9 +135,14 @@ class Lead extends Model {
     }
 
     public function statusLogs() {
-        return $this->hasMany('App\Models\LeadStatuses','id', 'lead_id' );
+        return $this->hasMany('App\Models\LeadStatuses', 'id', 'lead_id');
     }
-     public function dispositions() {
+
+    public function dispositions() {
         return $this->hasOne('App\Models\Disposition', 'id', 'disposition');
+    }
+
+    public function sales_order() {
+        return $this->belongsTo('App\Models\SalesOrder', 'id', 'lead_id');
     }
 }

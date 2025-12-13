@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 21, 2025 at 04:46 AM
+-- Generation Time: Dec 13, 2025 at 08:51 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -509,6 +509,31 @@ CREATE TABLE `coupons` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dispositions`
+--
+
+CREATE TABLE `dispositions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(191) DEFAULT NULL,
+  `created_by` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `dispositions`
+--
+
+INSERT INTO `dispositions` (`id`, `name`, `created_by`, `created_at`, `updated_at`) VALUES
+(1, 'New', 3, '2025-11-28 04:46:11', '2025-11-28 04:46:11'),
+(2, 'Sales Done', 3, '2025-11-28 04:46:31', '2025-11-28 04:46:31'),
+(3, 'Not Interested', 3, '2025-11-28 04:46:49', '2025-11-28 04:47:04'),
+(4, 'Potential Callback', 3, '2025-11-28 04:47:16', '2025-11-28 04:47:16'),
+(5, 'Spanish Customer', 3, '2025-11-28 04:47:31', '2025-11-28 04:47:31');
 
 -- --------------------------------------------------------
 
@@ -1161,7 +1186,9 @@ CREATE TABLE `leads` (
 --
 
 INSERT INTO `leads` (`id`, `date`, `cust_name`, `contact`, `email`, `lead_type_id`, `product_id`, `disposition`, `note`, `user_id`, `created_at`, `updated_at`) VALUES
-(1, '2025-10-20', 'Puja', '9552212556', NULL, 1, 1, '1', 'erwerwer', 10, NULL, '2025-10-20 07:36:35');
+(1, '2025-10-20', 'Puja', '9552212556', 'test@extraaazpos.com', 1, 1, '1', 'erwerwer', 3, NULL, '2025-12-10 02:17:26'),
+(2, '2025-11-21', 'Rahul', '8596748596', NULL, 1, 1, '1', 'sale done for test', 10, '2025-11-21 05:15:05', '2025-11-24 03:08:03'),
+(3, '2025-11-27', 'Rishabh', '9874562581', NULL, NULL, 4, '0', NULL, 10, '2025-11-27 06:47:14', '2025-11-27 06:48:13');
 
 -- --------------------------------------------------------
 
@@ -1199,6 +1226,7 @@ CREATE TABLE `lead_statuses` (
   `created_by` bigint(20) UNSIGNED DEFAULT NULL,
   `lead_id` bigint(20) UNSIGNED NOT NULL,
   `lead_status` varchar(191) NOT NULL,
+  `followup_note` text DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1207,10 +1235,18 @@ CREATE TABLE `lead_statuses` (
 -- Dumping data for table `lead_statuses`
 --
 
-INSERT INTO `lead_statuses` (`id`, `created_by`, `lead_id`, `lead_status`, `created_at`, `updated_at`) VALUES
-(1, NULL, 1, '3', '2025-10-20 07:35:42', '2025-10-20 07:35:42'),
-(2, NULL, 1, '4', '2025-10-20 07:36:18', '2025-10-20 07:36:18'),
-(3, NULL, 1, '1', '2025-10-20 07:39:39', '2025-10-20 07:39:39');
+INSERT INTO `lead_statuses` (`id`, `created_by`, `lead_id`, `lead_status`, `followup_note`, `created_at`, `updated_at`) VALUES
+(1, NULL, 1, '3', NULL, '2025-10-20 07:35:42', '2025-10-20 07:35:42'),
+(2, NULL, 1, '4', NULL, '2025-10-20 07:36:18', '2025-10-20 07:36:18'),
+(3, NULL, 1, '1', NULL, '2025-10-20 07:39:39', '2025-10-20 07:39:39'),
+(4, 10, 2, '0', NULL, '2025-11-21 05:54:42', '2025-11-21 05:54:42'),
+(5, 10, 2, '2', NULL, '2025-11-21 06:20:42', '2025-11-21 06:20:42'),
+(6, 10, 2, '2', 'dfgdfgdfg', '2025-11-21 08:32:33', '2025-11-21 08:32:33'),
+(7, 10, 2, '3', 'etertwretre', '2025-11-21 16:08:15', '2025-11-21 16:08:15'),
+(8, 10, 2, '3', 'etertwretre', '2025-11-21 16:09:24', '2025-11-21 16:09:24'),
+(9, 10, 2, '1', 'sale done for test', '2025-11-24 03:08:03', '2025-11-24 03:08:03'),
+(10, 10, 3, '0', NULL, '2025-11-27 06:48:13', '2025-11-27 06:48:13'),
+(11, 3, 1, '1', 'erwerwer', '2025-12-10 02:17:26', '2025-12-10 02:17:26');
 
 -- --------------------------------------------------------
 
@@ -1279,7 +1315,24 @@ INSERT INTO `login_details` (`id`, `user_id`, `ip`, `date`, `details`, `created_
 (19, 10, '::1', '2025-10-20 11:08:22', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-10-20 05:38:22', '2025-10-20 05:38:22'),
 (20, 10, '::1', '2025-10-20 12:12:50', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-10-20 06:42:50', '2025-10-20 06:42:50'),
 (21, 10, '::1', '2025-10-20 18:20:19', '{\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-10-20 12:50:19', '2025-10-20 12:50:19'),
-(22, 11, '::1', '2025-10-21 00:36:44', '{\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-10-20 19:06:44', '2025-10-20 19:06:44');
+(22, 11, '::1', '2025-10-21 00:36:44', '{\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-10-20 19:06:44', '2025-10-20 19:06:44'),
+(23, 10, '::1', '2025-10-24 12:46:51', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-10-24 07:16:51', '2025-10-24 07:16:51'),
+(24, 11, '::1', '2025-10-24 14:54:18', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-10-24 09:24:18', '2025-10-24 09:24:18'),
+(25, 10, '::1', '2025-11-19 12:40:00', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-11-19 07:10:00', '2025-11-19 07:10:00'),
+(26, 10, '::1', '2025-11-19 12:44:29', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-11-19 07:14:29', '2025-11-19 07:14:29'),
+(27, 10, '::1', '2025-11-21 11:24:22', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-11-21 05:54:22', '2025-11-21 05:54:22'),
+(28, 10, '::1', '2025-11-21 11:24:33', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-11-21 05:54:33', '2025-11-21 05:54:33'),
+(29, 10, '::1', '2025-11-21 12:21:56', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-11-21 06:51:56', '2025-11-21 06:51:56'),
+(30, 11, '::1', '2025-11-21 15:35:27', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-11-21 10:05:27', '2025-11-21 10:05:27'),
+(31, 10, '::1', '2025-11-21 19:52:46', '{\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-11-21 14:22:46', '2025-11-21 14:22:46'),
+(32, 11, '::1', '2025-11-21 21:31:25', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-11-21 16:01:25', '2025-11-21 16:01:25'),
+(33, 10, '::1', '2025-11-21 21:32:19', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-11-21 16:02:19', '2025-11-21 16:02:19'),
+(34, 10, '::1', '2025-11-24 08:34:46', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-11-24 03:04:46', '2025-11-24 03:04:46'),
+(35, 11, '::1', '2025-11-24 08:40:44', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-11-24 03:10:44', '2025-11-24 03:10:44'),
+(36, 10, '::1', '2025-11-24 09:01:27', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-11-24 03:31:27', '2025-11-24 03:31:27'),
+(37, 10, '::1', '2025-11-27 12:17:55', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-11-27 06:47:55', '2025-11-27 06:47:55'),
+(38, 10, '::1', '2025-12-10 07:23:55', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-12-10 01:53:55', '2025-12-10 01:53:55'),
+(39, 10, '::1', '2025-12-10 07:51:27', '{\"status\":\"fail\",\"message\":\"reserved range\",\"query\":\"::1\",\"browser_name\":\"Chrome\",\"os_name\":\"Windows\",\"browser_language\":\"en\",\"device_type\":\"desktop\",\"referrer_host\":true,\"referrer_path\":true}', 3, '2025-12-10 02:21:27', '2025-12-10 02:21:27');
 
 -- --------------------------------------------------------
 
@@ -1433,7 +1486,19 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (138, '2025_10_17_094814_recreate_sales_order_table', 20),
 (139, '2025_10_19_105321_create_yard_logs_table', 20),
 (140, '2025_10_20_105122_add_created_by_to_lead_statuses_table', 20),
-(141, '2025_10_20_193423_add_col_source_date_in__sales_order__table', 20);
+(141, '2025_10_20_193423_add_col_source_date_in__sales_order__table', 20),
+(142, '2025_11_19_130545_add_col_lead_status_table', 21),
+(144, '2025_11_21_110926_add-col-sale-invoice-no-in-sales-order', 22),
+(145, '2025_11_21_152348_add-col-yards-table', 23),
+(146, '2025_11_20_061754_create_table_name_table', 24),
+(147, '2025_11_20_061859_part_type', 24),
+(148, '2025_11_21_052546_payment_type', 24),
+(150, '2025_11_27_075825_add-col-monthly_target-users-table', 25),
+(151, '2025_11_27_123923_create_dispositions_table', 26),
+(152, '2025_12_01_005450_add-col-sales_return_table', 27),
+(153, '2025_12_01_115416_create_sales_dispute_table', 27),
+(154, '2025_12_01_133510_add_missing_fields_to_sales_dispute_table', 27),
+(155, '2025_12_02_100000_add_dispute_type_and_status_to_sales_dispute_table', 27);
 
 -- --------------------------------------------------------
 
@@ -1743,6 +1808,33 @@ CREATE TABLE `orders` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `part_type`
+--
+
+CREATE TABLE `part_type` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `part_type_name` varchar(191) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `part_type`
+--
+
+INSERT INTO `part_type` (`id`, `part_type_name`, `created_at`, `updated_at`) VALUES
+(1, 'Engine', '2025-11-21 16:46:27', '2025-11-21 16:46:27'),
+(2, 'Transmission', '2025-11-21 16:46:43', '2025-11-21 16:46:43'),
+(3, 'Electronic', '2025-11-21 16:46:56', '2025-11-21 16:46:56'),
+(4, 'Wiring', '2025-11-21 16:47:10', '2025-11-21 16:47:10'),
+(5, 'Mechanical', '2025-11-21 16:47:21', '2025-11-21 16:47:21'),
+(6, 'Electrical', '2025-11-21 16:47:33', '2025-11-21 16:47:33'),
+(7, 'Interior Part', '2025-11-21 16:47:45', '2025-11-21 16:47:45'),
+(8, 'Body Part', '2025-11-21 16:48:00', '2025-11-21 16:48:00');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `password_resets`
 --
 
@@ -1765,6 +1857,30 @@ CREATE TABLE `payments` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_type`
+--
+
+CREATE TABLE `payment_type` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `paymentType` varchar(191) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `payment_type`
+--
+
+INSERT INTO `payment_type` (`id`, `paymentType`, `created_at`, `updated_at`) VALUES
+(1, 'Card', '2025-11-21 16:48:23', '2025-11-21 16:48:23'),
+(2, 'PayPal', '2025-11-21 16:48:33', '2025-11-21 16:48:33'),
+(3, 'Zelle', '2025-11-21 16:48:47', '2025-11-21 16:48:47'),
+(4, 'Bank Transfer', '2025-11-21 16:49:00', '2025-11-21 16:49:00'),
+(5, 'ACH', '2025-11-21 16:49:10', '2025-11-21 16:49:10');
 
 -- --------------------------------------------------------
 
@@ -1964,7 +2080,32 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at
 (177, 'Create Yard', 'web', '2025-10-20 22:00:52', '2025-10-20 22:00:55'),
 (178, 'Edit Yard', 'web', '2025-10-20 22:01:04', '2025-10-20 22:01:04'),
 (179, 'Delete Yard', 'web', '2025-10-20 22:01:04', '2025-10-20 22:01:04'),
-(180, 'Show Yard', 'web', '2025-10-20 22:05:29', '2025-10-20 22:05:29');
+(180, 'Show Yard', 'web', '2025-10-20 22:05:29', '2025-10-20 22:05:29'),
+(181, 'Manage Part Type', 'web', NULL, NULL),
+(182, 'Create Part Type', 'web', NULL, NULL),
+(183, 'Edit Part Type', 'web', NULL, NULL),
+(184, 'Show Part Type', 'web', NULL, NULL),
+(185, 'Delete Part Type', 'web', NULL, NULL),
+(186, 'Manage Payment Gateway', 'web', NULL, NULL),
+(187, 'Create Payment Gateway', 'web', NULL, NULL),
+(188, 'Edit Payment Gateway', 'web', NULL, NULL),
+(189, 'Show Payment Gateway', 'web', NULL, NULL),
+(190, 'Delete Payment Gateway', 'web', NULL, NULL),
+(191, 'Manage Disposition', 'web', NULL, NULL),
+(192, 'Create Disposition', 'web', NULL, NULL),
+(193, 'Edit Disposition', 'web', NULL, NULL),
+(194, 'Show Disposition', 'web', NULL, NULL),
+(195, 'Delete Disposition', 'web', NULL, NULL),
+(196, 'Manage SalesReturn', 'web', NULL, NULL),
+(197, 'Create SalesReturn', 'web', NULL, NULL),
+(198, 'Edit SalesReturn', 'web', NULL, NULL),
+(199, 'Show SalesReturn', 'web', NULL, NULL),
+(200, 'Delete SalesReturn', 'web', NULL, NULL),
+(201, 'Manage Dispute', 'web', NULL, NULL),
+(202, 'Create Dispute', 'web', NULL, NULL),
+(203, 'Edit Dispute', 'web', NULL, NULL),
+(204, 'Show Dispute', 'web', NULL, NULL),
+(205, 'Delete Dispute', 'web', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2062,7 +2203,9 @@ CREATE TABLE `products` (
 
 INSERT INTO `products` (`id`, `year`, `make`, `model`, `part_name`, `is_active`, `created_at`, `updated_at`) VALUES
 (1, '2020', 'Honda', 'M1', 'Engine', 1, '2025-10-20 09:44:19', '2025-10-20 09:44:19'),
-(2, '2002', 'Maruti', 'M22', 'Breakk', 1, '2025-10-20 04:34:56', '2025-10-20 04:35:41');
+(2, '2002', 'Maruti', 'M22', 'Breakk', 1, '2025-10-20 04:34:56', '2025-10-20 04:35:41'),
+(3, '2018', 'TVS', 'M5', 'Parts', 1, '2025-11-21 05:15:05', '2025-11-21 05:15:05'),
+(4, '2015', 'TVS', 'M5', 'Sit Cover', 1, '2025-11-27 06:47:14', '2025-11-27 06:47:14');
 
 -- --------------------------------------------------------
 
@@ -2727,7 +2870,56 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (179, 5),
 (180, 3),
 (180, 4),
-(180, 5);
+(180, 5),
+(181, 2),
+(182, 2),
+(183, 2),
+(184, 2),
+(185, 2),
+(186, 2),
+(187, 2),
+(188, 2),
+(189, 2),
+(190, 2),
+(191, 2),
+(192, 2),
+(193, 2),
+(194, 2),
+(195, 2),
+(196, 2),
+(197, 2),
+(198, 2),
+(199, 2),
+(200, 2),
+(201, 2),
+(202, 2),
+(203, 2),
+(204, 2),
+(205, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sales_dispute`
+--
+
+CREATE TABLE `sales_dispute` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` int(11) DEFAULT 0,
+  `salesorder_id` int(11) DEFAULT 0,
+  `dispute_id` int(11) DEFAULT 0,
+  `dispute_date` date NOT NULL,
+  `dispute_type` varchar(191) DEFAULT NULL,
+  `dispute_status` varchar(191) DEFAULT NULL,
+  `disputed_amount` decimal(30,2) NOT NULL DEFAULT 0.00,
+  `gp_deduction` decimal(30,2) NOT NULL DEFAULT 0.00,
+  `loss` decimal(30,2) NOT NULL DEFAULT 0.00,
+  `total_deduction` decimal(30,2) NOT NULL DEFAULT 0.00,
+  `reason` text DEFAULT NULL,
+  `created_by` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -2737,6 +2929,7 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 
 CREATE TABLE `sales_orders` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `sale_invoice_number` text DEFAULT NULL,
   `sale_date` date DEFAULT NULL,
   `sale_status` varchar(191) DEFAULT NULL,
   `lead_id` bigint(20) UNSIGNED DEFAULT NULL,
@@ -2752,10 +2945,12 @@ CREATE TABLE `sales_orders` (
   `billing_country` varchar(191) DEFAULT NULL,
   `billing_state` varchar(191) DEFAULT NULL,
   `billing_city` varchar(191) DEFAULT NULL,
+  `billing_zipcode` text DEFAULT NULL,
   `shipping_address_text` text DEFAULT NULL,
   `shipping_country` varchar(191) DEFAULT NULL,
   `shipping_state` varchar(191) DEFAULT NULL,
   `shipping_city` varchar(191) DEFAULT NULL,
+  `shipping_zipcode` text DEFAULT NULL,
   `payment_gateway_name` varchar(191) DEFAULT NULL,
   `name_on_card` varchar(191) DEFAULT NULL,
   `card_number` varchar(191) DEFAULT NULL,
@@ -2780,8 +2975,9 @@ CREATE TABLE `sales_orders` (
 -- Dumping data for table `sales_orders`
 --
 
-INSERT INTO `sales_orders` (`id`, `sale_date`, `sale_status`, `lead_id`, `yard_id`, `sales_user_id`, `source_id`, `source_date`, `vin_number`, `part_number`, `part_type`, `source_type`, `billing_address_text`, `billing_country`, `billing_state`, `billing_city`, `shipping_address_text`, `shipping_country`, `shipping_state`, `shipping_city`, `payment_gateway_name`, `name_on_card`, `card_number`, `expiration`, `cvv_number`, `part_price`, `shipping_price`, `gross_profit`, `charge_amount`, `total_amount_quoted`, `agent_note`, `yard_order_date`, `comment`, `card_used`, `tracking_no`, `delivery_date`, `created_at`, `updated_at`) VALUES
-(1, '2025-10-20', 'Completed', 1, 2, 10, 11, '2025-10-21', '22', '1111', 'electronic', '5', 'Pune', 'India', 'Mahashtra', 'Pune', 'Mumbai', 'India', 'Maharashtra', 'Mumbai', 'card', 'Puja', '1234', '11/29', '101', 1000.00, 100.00, 100.00, 50.00, 1150.00, 'dsfsdfasdf', '2025-10-22', NULL, 'wwwwwwwwwwww', NULL, '2025-10-24', '2025-10-20 07:36:35', '2025-10-20 21:09:23');
+INSERT INTO `sales_orders` (`id`, `sale_invoice_number`, `sale_date`, `sale_status`, `lead_id`, `yard_id`, `sales_user_id`, `source_id`, `source_date`, `vin_number`, `part_number`, `part_type`, `source_type`, `billing_address_text`, `billing_country`, `billing_state`, `billing_city`, `billing_zipcode`, `shipping_address_text`, `shipping_country`, `shipping_state`, `shipping_city`, `shipping_zipcode`, `payment_gateway_name`, `name_on_card`, `card_number`, `expiration`, `cvv_number`, `part_price`, `shipping_price`, `gross_profit`, `charge_amount`, `total_amount_quoted`, `agent_note`, `yard_order_date`, `comment`, `card_used`, `tracking_no`, `delivery_date`, `created_at`, `updated_at`) VALUES
+(1, 'INV-VAS-004001', '2025-11-20', 'Completed', 1, 3, 10, 11, '2025-12-10', '22', '1111', NULL, '5', 'Pune', 'India', 'Mahashtra', 'Pune', NULL, 'Mumbai', 'India', 'Maharashtra', 'Mumbai', NULL, NULL, NULL, '1234', '11/29', '101', 1000.00, 100.00, 100.00, 50.00, 1150.00, 'dsfsdfasdf', '2025-10-23', NULL, '4234', NULL, '2025-10-25', '2025-10-20 07:36:35', '2025-12-10 02:31:52'),
+(2, NULL, '2025-11-24', 'Sourcing', 2, NULL, 11, NULL, NULL, NULL, '34', '2', '2', NULL, 'USA', NULL, NULL, NULL, 'USA', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1520.00, 500.00, 600.00, 650.00, 2670.00, 'Testing', NULL, NULL, NULL, NULL, NULL, '2025-11-24 03:08:03', '2025-11-24 03:10:12');
 
 -- --------------------------------------------------------
 
@@ -2816,8 +3012,14 @@ CREATE TABLE `sales_return` (
   `lead_id` int(11) DEFAULT 0,
   `salesorder_id` int(11) DEFAULT 0,
   `salesreturn_id` int(11) DEFAULT 0,
+  `salesreturn_tracknumber` varchar(191) DEFAULT NULL,
+  `case_status` varchar(191) DEFAULT NULL,
   `request_type` varchar(191) DEFAULT '0',
-  `refund_amount` decimal(30,2) DEFAULT NULL,
+  `refund_received` decimal(30,2) DEFAULT NULL,
+  `refund_issued` decimal(30,2) NOT NULL DEFAULT 0.00,
+  `gp_deduction` decimal(30,2) NOT NULL DEFAULT 0.00,
+  `loss` decimal(30,2) NOT NULL DEFAULT 0.00,
+  `total_deduction` decimal(30,2) NOT NULL DEFAULT 0.00,
   `reason` text DEFAULT NULL,
   `return_date` date NOT NULL,
   `created_by` int(11) NOT NULL DEFAULT 0,
@@ -2829,9 +3031,9 @@ CREATE TABLE `sales_return` (
 -- Dumping data for table `sales_return`
 --
 
-INSERT INTO `sales_return` (`id`, `user_id`, `lead_id`, `salesorder_id`, `salesreturn_id`, `request_type`, `refund_amount`, `reason`, `return_date`, `created_by`, `created_at`, `updated_at`) VALUES
-(1, 3, NULL, 2, 1, '1', 1230.00, 'eteererwe', '2025-10-17', 3, '2025-10-17 05:43:56', '2025-10-17 05:43:56'),
-(2, 3, NULL, 3, 2, '2', 4562.00, 'Reason sdfdfsdsdfsdfsd', '2025-10-18', 3, '2025-10-18 04:38:26', '2025-10-18 05:01:20');
+INSERT INTO `sales_return` (`id`, `user_id`, `lead_id`, `salesorder_id`, `salesreturn_id`, `salesreturn_tracknumber`, `case_status`, `request_type`, `refund_received`, `refund_issued`, `gp_deduction`, `loss`, `total_deduction`, `reason`, `return_date`, `created_by`, `created_at`, `updated_at`) VALUES
+(1, 3, NULL, 2, 1, NULL, NULL, '1', 1230.00, 0.00, 0.00, 0.00, 0.00, 'eteererwe', '2025-10-17', 3, '2025-10-17 05:43:56', '2025-10-17 05:43:56'),
+(2, 3, NULL, 3, 2, NULL, NULL, '2', 4562.00, 0.00, 0.00, 0.00, 0.00, 'Reason sdfdfsdsdfsdfsd', '2025-10-18', 3, '2025-10-18 04:38:26', '2025-10-18 05:01:20');
 
 -- --------------------------------------------------------
 
@@ -2872,8 +3074,8 @@ INSERT INTO `settings` (`id`, `name`, `value`, `created_by`, `created_at`, `upda
 (17, 'gdpr_cookie', 'off', 1, NULL, NULL),
 (18, 'cust_darklayout', 'off', 1, NULL, NULL),
 (19, 'SITE_RTL', 'off', 1, NULL, NULL),
-(46, 'site_currency', 'INR', 3, '2024-04-07 16:01:03', '2024-04-07 16:01:03'),
-(47, 'site_currency_symbol', '₹', 3, '2024-04-07 16:01:03', '2024-04-07 16:01:03'),
+(46, 'site_currency', 'USD', 3, '2024-04-07 16:01:03', '2024-04-07 16:01:03'),
+(47, 'site_currency_symbol', '$', 3, '2024-04-07 16:01:03', '2024-04-07 16:01:03'),
 (48, 'site_currency_symbol_position', 'pre', 3, '2024-04-07 16:01:03', '2024-04-07 16:01:03'),
 (49, 'site_date_format', 'M j, Y', 3, '2024-04-07 16:01:03', '2024-04-07 16:01:03'),
 (50, 'site_time_format', 'g:i A', 3, '2024-04-07 16:01:03', '2024-04-07 16:01:03'),
@@ -3025,7 +3227,31 @@ INSERT INTO `streams` (`id`, `user_id`, `log_type`, `file_upload`, `remark`, `cr
 (81, 10, 'updated', NULL, '{\"owner_name\":\"info@extraaazpos.com\",\"title\":\"lead\",\"stream_comment\":\"\",\"user_name\":\"Puja\"}', 0, '2025-10-20 07:39:39', '2025-10-20 07:39:39'),
 (82, 3, 'updated', NULL, '{\"owner_name\":\"shubham@extraaaz.com\",\"title\":\"salesOrder\",\"stream_comment\":\"\",\"user_name\":\"1111\"}', 3, '2025-10-20 18:36:04', '2025-10-20 18:36:04'),
 (83, 11, 'updated', NULL, '{\"owner_name\":\"adikhanofficial@gmail.com\",\"title\":\"salesOrder\",\"stream_comment\":\"\",\"user_name\":\"1111\"}', 3, '2025-10-20 19:37:25', '2025-10-20 19:37:25'),
-(84, 11, 'updated', NULL, '{\"owner_name\":\"adikhanofficial@gmail.com\",\"title\":\"salesOrder\",\"stream_comment\":\"\",\"user_name\":\"1111\"}', 3, '2025-10-20 20:02:42', '2025-10-20 20:02:42');
+(84, 11, 'updated', NULL, '{\"owner_name\":\"adikhanofficial@gmail.com\",\"title\":\"salesOrder\",\"stream_comment\":\"\",\"user_name\":\"1111\"}', 3, '2025-10-20 20:02:42', '2025-10-20 20:02:42'),
+(85, 11, 'updated', NULL, '{\"owner_name\":\"adikhanofficial@gmail.com\",\"title\":\"salesOrder\",\"stream_comment\":\"\",\"user_name\":\"1111\"}', 3, '2025-10-24 09:57:29', '2025-10-24 09:57:29'),
+(86, 10, 'updated', NULL, '{\"owner_name\":\"info@extraaazpos.com\",\"title\":\"lead\",\"stream_comment\":\"\",\"user_name\":\"Rahul\"}', 0, '2025-11-21 06:20:42', '2025-11-21 06:20:42'),
+(87, 10, 'updated', NULL, '{\"owner_name\":\"info@extraaazpos.com\",\"title\":\"lead\",\"stream_comment\":\"\",\"user_name\":\"Rahul\"}', 0, '2025-11-21 08:32:33', '2025-11-21 08:32:33'),
+(88, 3, 'updated', NULL, '{\"owner_name\":\"shubham@extraaaz.com\",\"title\":\"salesOrder\",\"stream_comment\":\"\",\"user_name\":\"1111\"}', 3, '2025-11-21 15:23:43', '2025-11-21 15:23:43'),
+(89, 10, 'updated', NULL, '{\"owner_name\":\"info@extraaazpos.com\",\"title\":\"lead\",\"stream_comment\":\"\",\"user_name\":\"Rahul\"}', 0, '2025-11-21 16:08:15', '2025-11-21 16:08:15'),
+(90, 10, 'updated', NULL, '{\"owner_name\":\"info@extraaazpos.com\",\"title\":\"lead\",\"stream_comment\":\"\",\"user_name\":\"Rahul\"}', 0, '2025-11-21 16:09:24', '2025-11-21 16:09:24'),
+(91, 10, 'updated', NULL, '{\"owner_name\":\"info@extraaazpos.com\",\"title\":\"lead\",\"stream_comment\":\"\",\"user_name\":\"Rahul\"}', 0, '2025-11-24 03:08:03', '2025-11-24 03:08:03'),
+(92, 10, 'updated', NULL, '{\"owner_name\":\"info@extraaazpos.com\",\"title\":\"salesOrder\",\"stream_comment\":\"\",\"user_name\":\"34\"}', 3, '2025-11-24 03:10:12', '2025-11-24 03:10:12'),
+(93, 3, 'updated', NULL, '{\"owner_name\":\"shubham@extraaaz.com\",\"title\":\"user\",\"stream_comment\":\"\",\"user_name\":\"Pratiksha\"}', 3, '2025-11-27 06:21:41', '2025-11-27 06:21:41'),
+(94, 3, 'updated', NULL, '{\"owner_name\":\"shubham@extraaaz.com\",\"title\":\"user\",\"stream_comment\":\"\",\"user_name\":\"Pratiksha\"}', 3, '2025-11-27 06:26:04', '2025-11-27 06:26:04'),
+(95, 3, 'updated', NULL, '{\"owner_name\":\"shubham@extraaaz.com\",\"title\":\"lead\",\"stream_comment\":\"\",\"user_name\":\"Puja\"}', 0, '2025-12-10 02:17:26', '2025-12-10 02:17:26'),
+(96, 10, 'updated', NULL, '{\"owner_name\":\"info@extraaazpos.com\",\"title\":\"salesOrder\",\"stream_comment\":\"\",\"user_name\":\"1111\"}', 3, '2025-12-10 02:31:52', '2025-12-10 02:31:52');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `table_name`
+--
+
+CREATE TABLE `table_name` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -3192,6 +3418,7 @@ CREATE TABLE `users` (
   `storage_limit` double(8,2) NOT NULL DEFAULT 0.00,
   `phone` varchar(191) DEFAULT NULL,
   `gender` varchar(191) DEFAULT NULL,
+  `monthly_target` decimal(30,2) NOT NULL DEFAULT 0.00,
   `type` varchar(20) DEFAULT NULL,
   `is_active` int(11) NOT NULL DEFAULT 1,
   `is_enable_login` int(11) NOT NULL DEFAULT 1,
@@ -3219,18 +3446,18 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `name`, `title`, `plan_is_active`, `email`, `email_verified_at`, `storage_limit`, `phone`, `gender`, `type`, `is_active`, `is_enable_login`, `user_roles`, `lang`, `password`, `mode`, `avatar`, `plan`, `plan_expire_date`, `is_trial_done`, `requested_plan`, `trial_expire_date`, `created_by`, `active_status`, `remember_token`, `created_at`, `updated_at`, `dark_mode`, `messenger_color`, `is_disable`) VALUES
-(1, 'Super Admin', 'Super Admin', NULL, 1, 'superadmin@example.com', '2024-04-04 13:40:47', 0.00, NULL, NULL, 'super admin', 1, 1, NULL, 'en', '$2y$10$g5MKdeMyDOQzDrUtZ8b8POA8Yl.30K7qAzHzXohpzcPydVtL41sq.', 'light', 'avatar.png', NULL, NULL, '0', 0, NULL, 0, 0, NULL, '2024-04-04 13:40:47', '2024-04-04 13:40:47', 0, NULL, 1),
-(2, 'owner', 'owner', '-', 1, 'company@example.com', '2024-04-04 13:40:47', 0.00, NULL, NULL, 'owner', 1, 1, NULL, 'en', '$2y$10$JRL/AdbjTgXvJ8kjIeyXM.5c14OgQCIJf9HXU7UMi1bvFsPeEKh4u', 'light', 'avatar.png', 1, NULL, '0', 0, NULL, 1, 0, NULL, '2024-04-04 13:40:47', '2024-04-04 13:40:47', 0, NULL, 1),
-(3, 'shubham@extraaaz.com', 'Shubham Sachin Dhayalkar', NULL, 1, 'info@extraaazpos.com', '2024-04-04 13:53:47', 0.42, NULL, NULL, 'owner', 1, 1, '4', 'en', '$2y$10$vy6HMNMN6Q2D/rGcfrOzXeTnEllUwen0Op2idQOu5eIouR3lqQd8m', 'light', NULL, 1, NULL, '0', 0, NULL, 1, 0, NULL, '2024-04-04 13:53:47', '2025-10-08 06:42:10', 0, NULL, 1),
-(4, 'Mahesh', 'Mahesh Zemase', 'Laravel Developer', 1, 'mahesh.zemase@extraaazpos.com', '2024-04-04 14:12:22', 0.00, '8087780445', 'male', 'User', 1, 1, '3', 'en', '$2y$10$KsxdXtFkiGR8wvjgSm2Ax.FROD16FguozQw3vXyxLlfLQPfROvjji', 'light', NULL, NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2024-04-04 14:12:23', '2024-04-04 14:12:23', 0, NULL, 1),
-(5, 'Yuvraj', 'Yuvraj Shelke', 'Front End Developer', 1, 'yuvraj.shelke@extraaazpos.com', '2024-04-04 14:14:33', 0.00, '8459628112', 'male', 'User', 1, 1, '3', 'en', '$2y$10$PFFHYkvt/8OsV435Bo.uw.82MEvYZSnYvLjfNKVlz2Wq/MhA9TMZi', 'light', NULL, NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2024-04-04 14:14:33', '2024-04-04 14:14:33', 0, NULL, 1),
-(6, 'Yogesh', 'Yogesh Salve', 'Technical Head', 1, 'yogesh.salve@extraaazpos.com', '2024-04-04 14:17:58', 0.00, '9422082780', 'male', 'Admin', 1, 1, '4', 'en', '$2y$10$4RAOoTI7lSX.FB13Xs5c6e23cwectkSQ/On4v2XdnxO2KLH.3yvs6', 'light', '1604329372224_1712240278.jfif', NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2024-04-04 14:17:58', '2024-04-04 14:17:58', 0, NULL, 1),
-(7, 'pallavijagdhane', 'Pallavi Kiran Jagdhane', 'Pune Branch Director', 1, 'pallavi.j@extraaaz.com', '2025-08-17 07:31:35', 0.00, '7722003376', 'female', 'Branch Director', 1, 1, '5', 'en', '$2y$10$9KksMwdydk9eTscLfLccxOijKl0tyJj8SgW6.T/M0s90fY5XSLuuW', 'light', NULL, NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2025-08-17 07:31:35', '2025-08-17 07:31:35', 0, NULL, 1),
-(8, 'jagjeet.bhatia@extraaaz.com', 'Jagjeet Bhatia', 'Narisinghpur Branch Director', 1, 'jagjeet.bhatia@extraaaz.com', '2025-08-23 08:41:40', 0.00, '91313 47373', 'male', 'Branch Director', 1, 1, '5', 'en', '$2y$10$SvmsRD8xQa1WmYYlDWRIae7aeHAQRL1LC/Ut0ngKeh47xLX3atVLe', 'light', NULL, NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2025-08-23 08:41:40', '2025-08-23 08:41:40', 0, NULL, 1),
-(9, 'sujata.bhandarkar@extraaaz.com', 'Sujata Bhandarkar', 'Borivali Branch Director', 1, 'sujata.bhandarkar@extraaaz.com', '2025-09-08 15:50:59', 0.00, '90293 77301', 'female', 'Branch Director', 1, 1, '5', 'en', '$2y$10$oRQxwwgj6BBUbzpFPbFb.u16XuFOSTXNtFtZDpXWx0S2Jj7SEY3iS', 'light', NULL, NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2025-09-08 15:50:59', '2025-09-22 19:15:09', 0, NULL, 1),
-(10, 'info@extraaazpos.com', 'Puja Khandagale', 'Dev Team', 1, 'puja@extraaazpos.com', '2025-10-14 11:14:28', 0.00, '5555555555', 'female', 'Sales Agent', 1, 1, '6', 'en', '$2y$10$2YLYhHW3Ua496Mo69hWv5OS.987tL20Xwa3ZiWKBIFwRkIHCHP0Cu', 'light', 'users_1760440468.jpg', NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2025-10-14 05:44:28', '2025-10-20 04:28:36', 0, NULL, 1),
-(11, 'adikhanofficial@gmail.com', 'Pratiksha', 'Pratiksha', 1, 'pratiksha@extraaazpos.com', '2025-10-20 09:57:59', 0.00, '9999999999', 'female', 'Source Agent', 1, 1, '7', 'en', '$2y$10$qk4ileabEpbmlNb3KrRq/eEQ27cTWBWEG.pybxat1ZBhVBIiJjYYG', 'light', NULL, NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2025-10-20 04:27:59', '2025-10-20 04:27:59', 0, NULL, 1);
+INSERT INTO `users` (`id`, `username`, `name`, `title`, `plan_is_active`, `email`, `email_verified_at`, `storage_limit`, `phone`, `gender`, `monthly_target`, `type`, `is_active`, `is_enable_login`, `user_roles`, `lang`, `password`, `mode`, `avatar`, `plan`, `plan_expire_date`, `is_trial_done`, `requested_plan`, `trial_expire_date`, `created_by`, `active_status`, `remember_token`, `created_at`, `updated_at`, `dark_mode`, `messenger_color`, `is_disable`) VALUES
+(1, 'Super Admin', 'Super Admin', NULL, 1, 'superadmin@example.com', '2024-04-04 13:40:47', 0.00, NULL, NULL, 0.00, 'super admin', 1, 1, '1', 'en', '$2y$10$g5MKdeMyDOQzDrUtZ8b8POA8Yl.30K7qAzHzXohpzcPydVtL41sq.', 'light', 'avatar.png', NULL, NULL, '0', 0, NULL, 0, 0, NULL, '2024-04-04 13:40:47', '2024-04-04 13:40:47', 0, NULL, 1),
+(2, 'owner', 'owner', '-', 1, 'company@example.com', '2024-04-04 13:40:47', 0.00, NULL, NULL, 0.00, 'owner', 1, 1, '1', 'en', '$2y$10$JRL/AdbjTgXvJ8kjIeyXM.5c14OgQCIJf9HXU7UMi1bvFsPeEKh4u', 'light', 'avatar.png', 1, NULL, '0', 0, NULL, 1, 0, NULL, '2024-04-04 13:40:47', '2024-04-04 13:40:47', 0, NULL, 1),
+(3, 'shubham@extraaaz.com', 'Shubham Sachin Dhayalkar', NULL, 1, 'info@extraaazpos.com', '2024-04-04 13:53:47', 0.42, NULL, NULL, 0.00, 'owner', 1, 1, '4', 'en', '$2y$10$vy6HMNMN6Q2D/rGcfrOzXeTnEllUwen0Op2idQOu5eIouR3lqQd8m', 'light', NULL, 1, NULL, '0', 0, NULL, 1, 0, NULL, '2024-04-04 13:53:47', '2025-10-08 06:42:10', 0, NULL, 1),
+(4, 'Mahesh', 'Mahesh Zemase', 'Laravel Developer', 1, 'mahesh.zemase@extraaazpos.com', '2024-04-04 14:12:22', 0.00, '8087780445', 'male', 0.00, 'User', 1, 1, '3', 'en', '$2y$10$KsxdXtFkiGR8wvjgSm2Ax.FROD16FguozQw3vXyxLlfLQPfROvjji', 'light', NULL, NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2024-04-04 14:12:23', '2024-04-04 14:12:23', 0, NULL, 1),
+(5, 'Yuvraj', 'Yuvraj Shelke', 'Front End Developer', 1, 'yuvraj.shelke@extraaazpos.com', '2024-04-04 14:14:33', 0.00, '8459628112', 'male', 0.00, 'User', 1, 1, '3', 'en', '$2y$10$PFFHYkvt/8OsV435Bo.uw.82MEvYZSnYvLjfNKVlz2Wq/MhA9TMZi', 'light', NULL, NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2024-04-04 14:14:33', '2024-04-04 14:14:33', 0, NULL, 1),
+(6, 'Yogesh', 'Yogesh Salve', 'Technical Head', 1, 'yogesh.salve@extraaazpos.com', '2024-04-04 14:17:58', 0.00, '9422082780', 'male', 0.00, 'Admin', 1, 1, '4', 'en', '$2y$10$4RAOoTI7lSX.FB13Xs5c6e23cwectkSQ/On4v2XdnxO2KLH.3yvs6', 'light', '1604329372224_1712240278.jfif', NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2024-04-04 14:17:58', '2024-04-04 14:17:58', 0, NULL, 1),
+(7, 'pallavijagdhane', 'Pallavi Kiran Jagdhane', 'Pune Branch Director', 1, 'pallavi.j@extraaaz.com', '2025-08-17 07:31:35', 0.00, '7722003376', 'female', 0.00, 'Branch Director', 1, 1, '5', 'en', '$2y$10$9KksMwdydk9eTscLfLccxOijKl0tyJj8SgW6.T/M0s90fY5XSLuuW', 'light', NULL, NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2025-08-17 07:31:35', '2025-08-17 07:31:35', 0, NULL, 1),
+(8, 'jagjeet.bhatia@extraaaz.com', 'Jagjeet Bhatia', 'Narisinghpur Branch Director', 1, 'jagjeet.bhatia@extraaaz.com', '2025-08-23 08:41:40', 0.00, '91313 47373', 'male', 0.00, 'Branch Director', 1, 1, '5', 'en', '$2y$10$SvmsRD8xQa1WmYYlDWRIae7aeHAQRL1LC/Ut0ngKeh47xLX3atVLe', 'light', NULL, NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2025-08-23 08:41:40', '2025-08-23 08:41:40', 0, NULL, 1),
+(9, 'sujata.bhandarkar@extraaaz.com', 'Sujata Bhandarkar', 'Borivali Branch Director', 1, 'sujata.bhandarkar@extraaaz.com', '2025-09-08 15:50:59', 0.00, '90293 77301', 'female', 0.00, 'Branch Director', 1, 1, '5', 'en', '$2y$10$oRQxwwgj6BBUbzpFPbFb.u16XuFOSTXNtFtZDpXWx0S2Jj7SEY3iS', 'light', NULL, NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2025-09-08 15:50:59', '2025-09-22 19:15:09', 0, NULL, 1),
+(10, 'info@extraaazpos.com', 'Puja Khandagale', 'Dev Team', 1, 'puja@extraaazpos.com', '2025-10-14 11:14:28', 0.00, '5555555555', 'female', 0.00, 'Sales Agent', 1, 1, '6', 'en', '$2y$10$2YLYhHW3Ua496Mo69hWv5OS.987tL20Xwa3ZiWKBIFwRkIHCHP0Cu', 'light', 'users_1760440468.jpg', NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2025-10-14 05:44:28', '2025-10-20 04:28:36', 0, NULL, 1),
+(11, 'adikhanofficial@gmail.com', 'Pratiksha', 'Pratiksha', 1, 'pratiksha@extraaazpos.com', '2025-10-20 09:57:59', 0.00, '9999999999', 'female', 12000.00, 'Source Agent', 1, 1, '7', 'en', '$2y$10$qk4ileabEpbmlNb3KrRq/eEQ27cTWBWEG.pybxat1ZBhVBIiJjYYG', 'light', NULL, NULL, NULL, '0', 0, NULL, 3, 0, NULL, '2025-10-20 04:27:59', '2025-11-27 06:26:04', 0, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -3456,6 +3683,7 @@ CREATE TABLE `yards` (
   `yard_email` varchar(191) DEFAULT NULL,
   `yard_person_name` varchar(191) DEFAULT NULL,
   `contact` varchar(191) DEFAULT NULL,
+  `created_by` text DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3464,9 +3692,10 @@ CREATE TABLE `yards` (
 -- Dumping data for table `yards`
 --
 
-INSERT INTO `yards` (`id`, `yard_name`, `yard_address`, `yard_email`, `yard_person_name`, `contact`, `created_at`, `updated_at`) VALUES
-(1, 'Pune', 'gdfgdf', 'pune@gmail.com', 'Raj', '8877448855', '2025-10-20 17:22:24', '2025-10-20 17:22:24'),
-(2, 'Mumbai', 'dgfsdfsdfsdfsdfsdfsdfsd', 'mumbai@gmail.com', 'Sahil', '7894561230', '2025-10-20 20:40:59', '2025-10-20 20:40:59');
+INSERT INTO `yards` (`id`, `yard_name`, `yard_address`, `yard_email`, `yard_person_name`, `contact`, `created_by`, `created_at`, `updated_at`) VALUES
+(1, 'Pune', 'gdfgdf', 'pune@gmail.com', 'Raj', '8877448855', NULL, '2025-10-20 17:22:24', '2025-10-20 17:22:24'),
+(2, 'Mumbai', 'dgfsdfsdfsdfsdfsdfsdfsd', 'mumbai@gmail.com', 'Sahil', '7894561230', NULL, '2025-10-20 20:40:59', '2025-10-20 20:40:59'),
+(3, 'USA', 'Usa', 'usadd@gmail.com', 'Ishan', '7777777777', '3', '2025-11-21 15:32:20', '2025-11-21 15:32:20');
 
 -- --------------------------------------------------------
 
@@ -3493,7 +3722,8 @@ CREATE TABLE `yard_logs` (
 
 INSERT INTO `yard_logs` (`id`, `sales_order_id`, `yard_id`, `comments`, `card_used`, `created_by`, `yard_order_date`, `delivery_date`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 'dfsdfsdfdsfsdfiyuiuyiuy', 'efsdfsd', 11, '2025-10-23', '2025-10-25', '2025-10-20 20:46:03', '2025-10-20 20:46:03'),
-(2, 1, 2, 'dddddddddddddddddddd', 'wwwwwwwwwwww', 11, '2025-10-22', '2025-10-24', '2025-10-20 20:46:23', '2025-10-20 20:46:23');
+(2, 1, 2, 'dddddddddddddddddddd', 'wwwwwwwwwwww', 11, '2025-10-22', '2025-10-24', '2025-10-20 20:46:23', '2025-10-20 20:46:23'),
+(3, 1, 3, 'wwrqwerwer', '4234', 3, '2025-10-23', '2025-10-25', '2025-11-21 15:32:20', '2025-11-21 15:32:20');
 
 --
 -- Indexes for dumped tables
@@ -3613,6 +3843,12 @@ ALTER TABLE `contract_types`
 -- Indexes for table `coupons`
 --
 ALTER TABLE `coupons`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `dispositions`
+--
+ALTER TABLE `dispositions`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3813,6 +4049,12 @@ ALTER TABLE `orders`
   ADD UNIQUE KEY `orders_order_id_unique` (`order_id`);
 
 --
+-- Indexes for table `part_type`
+--
+ALTER TABLE `part_type`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
@@ -3822,6 +4064,12 @@ ALTER TABLE `password_resets`
 -- Indexes for table `payments`
 --
 ALTER TABLE `payments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `payment_type`
+--
+ALTER TABLE `payment_type`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3907,6 +4155,12 @@ ALTER TABLE `role_has_permissions`
   ADD KEY `role_has_permissions_role_id_foreign` (`role_id`);
 
 --
+-- Indexes for table `sales_dispute`
+--
+ALTER TABLE `sales_dispute`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `sales_orders`
 --
 ALTER TABLE `sales_orders`
@@ -3945,6 +4199,12 @@ ALTER TABLE `shipping_providers`
 -- Indexes for table `streams`
 --
 ALTER TABLE `streams`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `table_name`
+--
+ALTER TABLE `table_name`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -4147,6 +4407,12 @@ ALTER TABLE `coupons`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `dispositions`
+--
+ALTER TABLE `dispositions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `documents`
 --
 ALTER TABLE `documents`
@@ -4252,7 +4518,7 @@ ALTER TABLE `languages`
 -- AUTO_INCREMENT for table `leads`
 --
 ALTER TABLE `leads`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `lead_sources`
@@ -4264,7 +4530,7 @@ ALTER TABLE `lead_sources`
 -- AUTO_INCREMENT for table `lead_statuses`
 --
 ALTER TABLE `lead_statuses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `lead_type`
@@ -4276,7 +4542,7 @@ ALTER TABLE `lead_type`
 -- AUTO_INCREMENT for table `login_details`
 --
 ALTER TABLE `login_details`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `meetings`
@@ -4288,7 +4554,7 @@ ALTER TABLE `meetings`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
 
 --
 -- AUTO_INCREMENT for table `notification_templates`
@@ -4321,16 +4587,28 @@ ALTER TABLE `orders`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `part_type`
+--
+ALTER TABLE `part_type`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `payment_type`
+--
+ALTER TABLE `payment_type`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=181;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -4354,7 +4632,7 @@ ALTER TABLE `plan_requests`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `product_brands`
@@ -4402,13 +4680,19 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `role_has_permissions`
 --
 ALTER TABLE `role_has_permissions`
-  MODIFY `permission_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=181;
+  MODIFY `permission_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
+
+--
+-- AUTO_INCREMENT for table `sales_dispute`
+--
+ALTER TABLE `sales_dispute`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sales_orders`
 --
 ALTER TABLE `sales_orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `sales_order_items`
@@ -4426,7 +4710,7 @@ ALTER TABLE `sales_return`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
 
 --
 -- AUTO_INCREMENT for table `shipping_providers`
@@ -4438,7 +4722,13 @@ ALTER TABLE `shipping_providers`
 -- AUTO_INCREMENT for table `streams`
 --
 ALTER TABLE `streams`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+
+--
+-- AUTO_INCREMENT for table `table_name`
+--
+ALTER TABLE `table_name`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `target_lists`
@@ -4498,13 +4788,13 @@ ALTER TABLE `warehouses`
 -- AUTO_INCREMENT for table `yards`
 --
 ALTER TABLE `yards`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `yard_logs`
 --
 ALTER TABLE `yard_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

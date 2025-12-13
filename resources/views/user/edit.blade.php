@@ -152,7 +152,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         {{ Form::label('monthly_target', __('Monthly Target'), ['class' => 'form-label']) }}
-                                        {{ Form::text('monthly_target', $user->monthly_target, ['class' => 'form-control', 'placeholder' => __('Enter Monthly Target'), 'required' => 'required']) }}
+                                        {{ Form::text('monthly_target', $user->monthly_target, ['class' => 'form-control', 'placeholder' => __('Enter Monthly Target')]) }}
                                         @error('monthly_target')
                                         <span class="invalid-name" role="alert">
                                             <strong class="text-danger">{{ $message }}</strong>

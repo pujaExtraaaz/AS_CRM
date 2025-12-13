@@ -105,6 +105,10 @@ $plansettings = App\Models\Utility::plansettings();
                                                 <th>{{ __('Contact') }}</th><td>{{($salesOrder->lead)?$salesOrder->lead->contact:''}}</td>
                                             </tr>
                                             <tr>
+                                                <th>{{ __('Email') }}</th><td>{{$salesOrder->lead->email ? $salesOrder->lead->email : ''}}</td>
+                                                <th></th><td></td>                                                    
+                                            </tr>
+                                            <tr>
                                                 <th>{{ __('Lead Type') }}</th><td>{{$salesOrder->lead->leadType ? $salesOrder->lead->leadType->name : ''}}</td>
                                                 <th>{{ __('Sales Agent') }}</th><td>{{($salesOrder->salesUser)?$salesOrder->salesUser->name:''}}</td>                                                    
                                             </tr>
@@ -196,14 +200,7 @@ $plansettings = App\Models\Utility::plansettings();
                                         {{ Form::label('billing_address_text', __('Streat Address'), ['class' => 'form-label']) }}
                                         {{ Form::textarea('billing_address_text', $salesOrder->billing_address_text, ['class' => 'form-control', 'rows' => 2, 'placeholder' => __('Billing Address')]) }}
                                     </div>
-                                </div>
-                                <!-- Billing Country -->
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        {{ Form::label('billing_country', __('Country'), ['class' => 'form-label']) }}
-                                        {{ Form::text('billing_country', ($salesOrder->billing_country?$salesOrder->billing_country:'USA'), ['class' => 'form-control', 'placeholder' => __('Country')]) }}
-                                    </div>
-                                </div>
+                                </div>                                
                                 <!-- Billing City -->
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -225,6 +222,13 @@ $plansettings = App\Models\Utility::plansettings();
                                         {{ Form::text('billing_zipcode', $salesOrder->billing_zipcode, ['class' => 'form-control', 'placeholder' => __('Zipcode')]) }}
                                     </div>
                                 </div>
+                                <!-- Billing Country -->
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        {{ Form::label('billing_country', __('Country'), ['class' => 'form-label']) }}
+                                        {{ Form::text('billing_country', ($salesOrder->billing_country?$salesOrder->billing_country:'USA'), ['class' => 'form-control', 'placeholder' => __('Country')]) }}
+                                    </div>
+                                </div>
                                 <!-- Shipping Details section -->
                                 <div class="col-12 mt-0">
                                     <h5 class="border-bottom pb-2">{{ __('Shipping Details') }}</h5>        
@@ -238,13 +242,6 @@ $plansettings = App\Models\Utility::plansettings();
                                     <div class="form-group">
                                         {{ Form::label('shipping_address_text', __('Shipping Address'), ['class' => 'form-label']) }}
                                         {{ Form::textarea('shipping_address_text', ($salesOrder->shipping_address_text), ['class' => 'form-control', 'rows' => 2, 'placeholder' => __('Shipping Address')]) }}
-                                    </div>
-                                </div>
-                                <!-- Shipping Country -->
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        {{ Form::label('shipping_country', __('Country'), ['class' => 'form-label']) }}
-                                        {{ Form::text('shipping_country', $salesOrder->shipping_country?$salesOrder->shipping_country:'USA', ['class' => 'form-control', 'placeholder' => __('Country')]) }}
                                     </div>
                                 </div>
                                 <!-- Shipping City -->
@@ -267,7 +264,15 @@ $plansettings = App\Models\Utility::plansettings();
                                         {{ Form::label('shipping_zipcode', __('Zipcode'), ['class' => 'form-label']) }}
                                         {{ Form::text('shipping_zipcode', $salesOrder->shipping_zipcode, ['class' => 'form-control', 'placeholder' => __('Zipcode')]) }}
                                     </div>
-                                </div>                                  
+                                </div>  
+
+                                <!-- Shipping Country -->
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        {{ Form::label('shipping_country', __('Country'), ['class' => 'form-label']) }}
+                                        {{ Form::text('shipping_country', $salesOrder->shipping_country?$salesOrder->shipping_country:'USA', ['class' => 'form-control', 'placeholder' => __('Country')]) }}
+                                    </div>
+                                </div>                                
                                 <!-- Payment Information section -->
                                 <div class="col-12 mt-0">
                                     <h5 class="border-bottom pb-2">{{ __('Payment Information') }}</h5>
@@ -285,7 +290,7 @@ $plansettings = App\Models\Utility::plansettings();
                                 <div class="col-md-6 mb-3">
                                     <div class="form-group">
                                         {{ Form::label('name_on_card', __('Name On Card'), ['class' => 'form-label']) }}
-                                        {{ Form::text('name_on_card', $salesOrder->card_number, ['class' => 'form-control', 'placeholder' => __('Name On Card')]) }}
+                                        {{ Form::text('name_on_card', ($salesOrder->name_on_card?$salesOrder->name_on_card:(($salesOrder->lead)?$salesOrder->lead->cust_name:'')), ['class' => 'form-control', 'placeholder' => __('Name On Card')]) }}
                                     </div>
                                 </div>
 
@@ -705,7 +710,7 @@ $plansettings = App\Models\Utility::plansettings();
             $("#yardResults").html(""); // hide dropdown
         });
     });
-    
+
     // added for click on checkbox then fill all shippinng address same as billing address
     function billing_shipping_address() {
         if ($('#same_billing').is(':checked')) {

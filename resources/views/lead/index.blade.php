@@ -101,7 +101,7 @@
                                     </div>
                                     @endcan
                                     @can('Edit Lead')
-                                    @if(!$lead->sales_order)
+                                    @if(\Auth::user()->type == 'owner' || !$lead->sales_order)
                                     <div class="action-btn bg-info ms-2">
                                         <a href="{{ route('lead.edit',$lead->id) }}" class="mx-3 btn btn-sm d-inline-flex align-items-center text-white " data-bs-toggle="tooltip"title="{{__('Details')}}" data-title="{{__('Edit Lead')}}"><i class="ti ti-edit"></i></a>
                                     </div>

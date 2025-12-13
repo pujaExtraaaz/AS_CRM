@@ -69,7 +69,7 @@
          <div class="col-6">
             <div class="form-group">
                 {{ Form::label('monthly_target', __('Monthly Target'), ['class' => 'form-label']) }}
-                {{ Form::text('monthly_target', null, ['class' => 'form-control', 'placeholder' => __('Enter Monthly Target'), 'required' => 'required']) }}
+                {{ Form::text('monthly_target', null, ['class' => 'form-control', 'placeholder' => __('Enter Monthly Target')]) }}
             </div>
         </div>
         <div class="col-12 p-0">

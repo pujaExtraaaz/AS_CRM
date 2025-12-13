@@ -39,14 +39,14 @@ class LeadController extends Controller {
     public function index() {
         if (\Auth::user()->can('Manage Lead')) {
             if (\Auth::user()->type == 'owner') {
-                $leads = Lead::with('sales_order','assign_user', 'leadType', 'product', 'LeadSource', 'dispositions')->where('disposition', '!=', 2)->where('user_id', \Auth::user()->id)->latest()->get();
+                $leads = Lead::with('sales_order', 'assign_user', 'leadType', 'product', 'LeadSource', 'dispositions')->where('disposition', '!=', 2)->where('user_id', \Auth::user()->id)->latest()->get();
                 $defualtView = new UserDefualtView();
                 $defualtView->route = \Request::route()->getName();
                 $defualtView->module = 'lead';
                 $defualtView->view = 'list';
                 User::userDefualtView($defualtView);
             } else {
-                $leads = Lead::with('sales_order','assign_user', 'leadType', 'product', 'LeadSource', 'dispositions')->where('disposition', '!=', 2)->where('user_id', \Auth::user()->id)->latest()->get();
+                $leads = Lead::with('sales_order', 'assign_user', 'leadType', 'product', 'LeadSource', 'dispositions')->where('disposition', '!=', 2)->where('user_id', \Auth::user()->id)->latest()->get();
                 $defualtView = new UserDefualtView();
                 $defualtView->route = \Request::route()->getName();
                 $defualtView->module = 'lead';
@@ -317,6 +317,7 @@ class LeadController extends Controller {
      */
     public function edit(Lead $lead) {
         if (\Auth::user()->can('Edit Lead')) {
+            $lead = Lead::with('product')->where('id', $lead->id)->first();
             $status = Disposition::pluck('name', 'id');
             $source = LeadSource::where('created_by', \Auth::user()->creatorId())->get()->pluck('name', 'id');
             $user = User::where('created_by', \Auth::user()->creatorId())->get()->pluck('name', 'id');
@@ -332,11 +333,11 @@ class LeadController extends Controller {
             $campaign->prepend('--', 0);
 
             // Updated product selection to match create method
-            $products = Product::all();
-            $product = [];
-            foreach ($products as $product_value) {
-                $product[$product_value['id']] = $product_value->year . ' - ' . $product_value->make . ' - ( ' . $product_value->model . ' ' . $product_value->part_name . ' )';
-            }
+//            $products = Product::all();
+//            $product = [];
+//            foreach ($products as $product_value) {
+//                $product[$product_value['id']] = $product_value->year . ' - ' . $product_value->make . ' - ( ' . $product_value->model . ' ' . $product_value->part_name . ' )';
+//            }
             $leadTypes = LeadType::pluck('name', 'id');
             $leadTypes->prepend('--', 0);
 
@@ -345,7 +346,7 @@ class LeadController extends Controller {
             // get next user id
             $next = Lead::where('id', '>', $lead->id)->min('id');
 
-            return view('lead.edit', compact('lead', 'account', 'product', 'user', 'source', 'industry', 'status', 'tasks', 'streams', 'campaign', 'leadTypes', 'previous', 'next'));
+            return view('lead.edit', compact('lead', 'account', 'user', 'source', 'industry', 'status', 'tasks', 'streams', 'campaign', 'leadTypes', 'previous', 'next'));
         } else {
             return redirect()->back()->with('error', 'permission Denied');
         }
@@ -364,7 +365,7 @@ class LeadController extends Controller {
             $validator = \Validator::make(
                     $request->all(),
                     [
-                        'product' => 'required',
+//                        'product' => 'required',
                         'cust_name' => 'required|max:120',
                         'contact' => 'required|numeric',
                     ]
@@ -377,7 +378,7 @@ class LeadController extends Controller {
                 $lead['cust_name'] = $request->cust_name;
                 $lead['lead_type_id'] = ($request->lead_type_id && $request->lead_type_id != '0') ? $request->lead_type_id : null;
                 $lead['contact'] = $request->contact;
-                $lead['product_id'] = $request->product;
+//                $lead['product_id'] = $request->product;
                 $lead['email'] = $request->email;
                 $lead['date'] = $request->date;
                 $lead['disposition'] = $request->disposition;
@@ -385,6 +386,13 @@ class LeadController extends Controller {
                 $lead['user_id'] = \Auth::user()->id;
                 $lead->update();
 
+                $product = Product::find($lead->product_id);
+                $product['year'] = $request->year;
+                $product['make'] = $request->make;
+                $product['model'] = $request->model;
+                $product['part_name'] = $request->part_name;
+                $product->update();
+                
                 Stream::create(
                         [
                             'user_id' => \Auth::user()->id,
